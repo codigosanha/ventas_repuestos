@@ -22,7 +22,7 @@
     </button>
     <div class="profile__form">
       <div class="profile__fields">
-        <form action="<?php echo base_url();?>Auth/login" method="POST" id="form-login">
+        <form action="<?php echo base_url();?>auth/login" method="POST" id="form-login">
           <div class="field">
             <input type="text" name="username" id="fieldUser" class="input" required pattern=.*\S.* />
             <label for="fieldUser" class="label">Usuario</label>
@@ -30,6 +30,14 @@
           <div class="field">
             <input type="password" name="password" id="fieldPassword" class="input" required pattern=.*\S.* />
             <label for="fieldPassword" class="label">Contraseña</label>
+          </div>
+          <div class="field">
+            <select name="sucursal" id="sucursal" class="input" required >
+                <option value="">Seleccione...</option>
+              <option value="">Sucursal 1</option>
+              <option value="">Sucursal 1</option>
+            </select>
+            <label for="sucursal" class="label">Sucursal</label>
           </div>
           <div class="profile__footer">
             <button type="submit" class="btn">Login</button>

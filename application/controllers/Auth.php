@@ -13,7 +13,7 @@ class Auth extends CI_Controller {
 			redirect(base_url()."dashboard");
 		}
 		else{
-			$this->load->view("admin/login");
+			$this->load->view("auth/login");
 		}
 		
 
