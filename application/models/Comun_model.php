@@ -27,7 +27,7 @@ class Comun_model extends CI_Model {
             $this->db->where($where);
         }
         $query=$this->db->get($table);
-        if($query->num_rows>0)
+        if($query->num_rows() > 0)
         {
             return $query->row();
         }
