@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Categorias
+        Sucursales
         <small>Nuevo</small>
         </h1>
     </section>
@@ -22,15 +22,32 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>almacen/categorias/store" method="POST">
+                        <form action="<?php echo base_url();?>administrador/sucursales/store" method="POST">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error':''?>">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:''?>" required="required">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:'';?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group">
-                                <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:''?>">
+                                <label for="ubicacion">Ubicacion:</label>
+                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" value="<?php echo set_value('ubicacion') ?: '';?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Telefono:</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo set_value('telefono') ?: '';?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo set_value('email') ?: '';?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="correo_remitente">Correo Remitente:</label>
+                                <input type="text" class="form-control" id="correo_remitente" name="correo_remitente" value="<?php echo set_value('correo_remitente') ?: '';?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="clave_especial">clave_especial:</label>
+                                <input type="text" class="form-control" id="clave_especial" name="clave_especial" value="<?php echo set_value('clave_especial') ?: '';?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

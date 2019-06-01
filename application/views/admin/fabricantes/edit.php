@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Subcategorias
+        Fabricantes
         <small>Editar</small>
         </h1>
     </section>
@@ -22,36 +22,16 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>almacen/subcategorias/update" method="POST">
-                            <input type="hidden" value="<?php echo $subcategoria->id;?>" name="idSubcategoria">
+                        <form action="<?php echo base_url();?>almacen/fabricantes/update" method="POST">
+                            <input type="hidden" value="<?php echo $fabricante->id;?>" name="idFabricante">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error': '';?>">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$subcategoria->nombre?>">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$fabricante->nombre?>" required="required">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion') ?: $subcategoria->descripcion;?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="categoria_id">Categoria:</label>
-                                <select name="categoria_id" id="categoria_id" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($categorias as $categoria): ?>
-
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('categoria_id') && $categoria->id == set_value('categoria_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($categoria->id == $subcategoria->categoria_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $categoria->id;?>" <?php echo $selected;?>><?php echo $categoria->nombre;?></option>
-                                    <?php endforeach ?>
-                                </select>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$fabricante->descripcion?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

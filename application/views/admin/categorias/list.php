@@ -13,19 +13,19 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="categorias">
+                <input type="hidden" id="modulo" value="almacen/categorias">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if($permisos->insert == 1):?>
-                        <a href="<?php echo base_url();?>mantenimiento/categorias/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Categoria</a>
-                        <?php endif;?>
+                      
+                        <a href="<?php echo base_url();?>almacen/categorias/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Categoria</a>
+                      
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="exampleSimple" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -46,12 +46,10 @@
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $categoria->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    <?php if($permisos->update == 1):?>
+                                                    
                                                     <a href="<?php echo base_url()?>mantenimiento/categorias/edit/<?php echo $categoria->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php endif;?>
-                                                    <?php if($permisos->delete == 1):?>
                                                     <a href="<?php echo base_url();?>mantenimiento/categorias/delete/<?php echo $categoria->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php endif;?>
+                                                  
                                                 </div>
                                             </td>
                                         </tr>

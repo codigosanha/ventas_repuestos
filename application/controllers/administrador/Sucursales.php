@@ -58,7 +58,7 @@ class Sucursales extends CI_Controller {
 				'estado' => "1"
 			);
 
-			if ($this->Comun->insert('sucursales', $data)) {
+			if ($this->Comun_model->insert('sucursales', $data)) {
 				redirect(base_url()."administrador/sucursales");
 			}
 			else{

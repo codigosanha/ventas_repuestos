@@ -666,7 +666,7 @@ $(document).ready(function () {
         modulo = $("#modulo").val();
         var id = $(this).val();
         $.ajax({
-            url: base_url + "mantenimiento/"+modulo+"/view/" + id,
+            url: base_url + modulo+"/view/" + id,
             type:"POST",
             success:function(resp){
                 $("#modal-default .modal-body").html(resp);
@@ -849,7 +849,7 @@ $(document).ready(function () {
         }
     });
  
-    $('#example1').DataTable({
+    $('#tableSimple').DataTable({
         "pageLength": 25,
         "language": {
             "lengthMenu": "Mostrar _MENU_ registros por pagina",

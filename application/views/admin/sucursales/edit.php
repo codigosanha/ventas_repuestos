@@ -4,8 +4,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Subcategorias
-        <small>Nuevo</small>
+        Sucursales
+        <small>Editar</small>
         </h1>
     </section>
     <!-- Main content -->
@@ -22,31 +22,33 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>almacen/subcategorias/store" method="POST">
+                        <form action="<?php echo base_url();?>administrador/sucursales/update" method="POST">
+                            <input type="hidden" name="idSucursal" value="<?php echo $sucursal->id;?>">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error':''?>">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:'';?>" required="required">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$sucursal->nombre;?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group">
-                                <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:''?>">
+                                <label for="ubicacion">Ubicacion:</label>
+                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" value="<?php echo set_value('ubicacion') ?: $sucursal->ubicacion;?>">
                             </div>
                             <div class="form-group">
-                                <label for="descripcion">Categoria:</label>
-                                <select name="categoria_id" id="categoria_id" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($categorias as $categoria): ?>
+                                <label for="telefono">Telefono:</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo set_value('telefono') ?: $sucursal->telefono;?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo set_value('email') ?: $sucursal->email;?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="correo_remitente">Correo Remitente:</label>
+                                <input type="text" class="form-control" id="correo_remitente" name="correo_remitente" value="<?php echo set_value('correo_remitente') ?: $sucursal->correo_remitente;?>">
+                            </div>
 
-                                        <?php 
-                                            $selected = '';
-                                            if (set_value('categoria_id') && $categoria->id == set_value('categoria_id')){
-                                                $selected = 'selected';
-                                            }
-                                        ?>
-                                        <option value="<?php echo $categoria->id;?>" <?php echo $selected;?>><?php echo $categoria->nombre;?></option>
-                                    <?php endforeach ?>
-                                </select>
+                            <div class="form-group">
+                                <label for="clave_especial">clave_especial:</label>
+                                <input type="text" class="form-control" id="clave_especial" name="clave_especial" value="<?php echo set_value('clave_especial') ?: $sucursal->clave_especial;?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

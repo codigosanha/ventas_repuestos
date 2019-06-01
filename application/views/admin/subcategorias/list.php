@@ -14,22 +14,24 @@
         <div class="box box-solid">
             <div class="box-body">
                 <div class="row">
-                    <input type="hidden" id="modulo" value="subcategorias">
+                    <input type="hidden" id="modulo" value="almacen/subcategorias">
                     <div class="col-md-12">
-                        <?php if($permisos->insert == 1):?>
-                        <a href="<?php echo base_url();?>mantenimiento/subcategorias/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Subcategoria</a>
-                        <?php endif;?>
+                       
+                        <a href="<?php echo base_url();?>almacen/subcategorias/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Subcategoria</a>
+                        
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="tableSimple" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>opciones</th>
+                                    <th>Descripcion</th>
+                                    <th>Categoria</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,17 +40,18 @@
                                         <tr>
                                             <td><?php echo $sc->id;?></td>
                                             <td><?php echo $sc->nombre;?></td>
+                                            <td><?php echo $sc->descripcion;?></td>
+                                            <td><?php echo getCategoria($sc->categoria_id)->nombre;?></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $sc->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    <?php if($permisos->update == 1):?>
-                                                    <a href="<?php echo base_url()?>mantenimiento/subcategorias/edit/<?php echo $sc->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php endif;?>
-                                                    <?php if($permisos->delete == 1):?>
-                                                    <a href="<?php echo base_url();?>mantenimiento/subcategorias/delete/<?php echo $sc->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php endif;?>
+                                                    
+                                                    <a href="<?php echo base_url()?>almacen/subcategorias/edit/<?php echo $sc->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
+                                                    
+                                                    <a href="<?php echo base_url();?>almacen/subcategorias/delete/<?php echo $sc->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                  
                                                 </div>
                                             </td>
                                         </tr>

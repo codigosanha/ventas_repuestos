@@ -22,12 +22,16 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>mantenimiento/marcas/update" method="POST">
-                            <input type="hidden" value="<?php echo $marca->id;?>" name="idCategoria">
+                        <form action="<?php echo base_url();?>almacen/marcas/update" method="POST">
+                            <input type="hidden" value="<?php echo $marca->id;?>" name="idMarca">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error': '';?>">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $marca->nombre?>">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$marca->nombre?>" required="required">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripcion:</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$marca->descripcion?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>
