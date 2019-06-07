@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="proveedor">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if($permisos->insert == 1):?>
-                        <a href="<?php echo base_url();?>mantenimiento/proveedor/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Proveedor</a>
-                        <?php endif;?>
+           
+                        <a href="<?php echo base_url();?>almacen/proveedores/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Proveedor</a>
+                        
                     </div>
                 </div>
                 <hr>

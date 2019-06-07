@@ -22,7 +22,7 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>mantenimiento/proveedor/store" method="POST">
+                        <form action="<?php echo base_url();?>almacen/proveedores/store" method="POST">
                             
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error':''?>">
                                 <label for="nombre">Nombre:</label>
@@ -32,48 +32,21 @@
 
                              <div class="form-group <?php echo form_error('nombre') == true ? 'has-error':''?>">
                                 <label for="nit">Nit:</label>
-                                <input type="text" class="form-control" id="nit" name="nit" required="required">
+                                <input type="text" class="form-control" id="nit" name="nit" required="required" value="<?php set_value('nit')?:'';?>">
                                 <?php echo form_error("nit","<span class='help-block'>","</span>");?>
-                            </div>
-
-                             <div class="form-group <?php echo form_error("tipo_contribuyente") != false ? 'has-error':'';?>">
-                                <label for="tipo_contribuyente">Tipo de Contribuyente:</label>
-                                <select name="tipo_contribuyente" id="tipo_contribuyente" class="form-control" required="required">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($tipo_contribuyentes as $tipo_contribuyente) :?>
-                                        <option value="<?php echo $tipo_contribuyente->id;?>" <?php echo set_select("tipo_contribuyente",$tipo_contribuyente->id);?>><?php echo $tipo_contribuyente->nombre ?></option>
-                                    <?php endforeach;?>
-                                </select>
-                                <?php echo form_error("tipo_contribuyente","<span class='help-block'>","</span>");?>
                             </div>
 
                              <div class="form-group">
                                 <label for="direccion">Direccion:</label>
-                                <input type="text" class="form-control" id="direccion" name="direccion">
+                                <input type="text" class="form-control" id="direccion" name="direccion" value="<?php set_value('direccion')?:'';?>">
                             </div>
                              <div class="form-group">
                                 <label for="telefono">Telefono:</label>
-                                <input type="text" class="form-control" id="telefono" name="telefono">
+                                <input type="text" class="form-control" id="telefono" name="telefono" value="<?php set_value('telefono')?:'';?>">
                             </div>
                              <div class="form-group">
                                 <label for="email">E-mail:</label>
-                                <input type="text" class="form-control" id="email" name="email">
-                            </div>
-                             <div class="form-group">
-                                <label for="contacto">Contacto:</label>
-                                <input type="text" class="form-control" id="contacto" name="contacto">
-                            </div>
-                             <div class="form-group">
-                                <label for="tel_contacto">Telefono de Contacto:</label>
-                                <input type="text" class="form-control" id="tel_contacto" name="tel_contacto">
-                            </div>
-                             <div class="form-group">
-                                <label for="banco">Banco:</label>
-                                <input type="text" class="form-control" id="banco" name="banco">
-                            </div>
-                             <div class="form-group">
-                                <label for="no_cuenta">No. de Cuenta:</label>
-                                <input type="text" class="form-control" id="no_cuenta" name="no_cuenta">
+                                <input type="text" class="form-control" id="email" name="email" value="<?php set_value('email')?:'';?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

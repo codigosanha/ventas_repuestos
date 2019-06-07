@@ -153,10 +153,12 @@
                             <li><a href="<?php echo base_url();?>almacen/devoluciones"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
                             <li><a href="<?php echo base_url();?>almacen/productos"><i class="fa fa-circle-o"></i> Productos</a></li>
                             <li><a href="<?php echo base_url();?>almacen/categorias"><i class="fa fa-circle-o"></i> Categorias</a></li>
+                            <li><a href="<?php echo base_url();?>almacen/calidades"><i class="fa fa-circle-o"></i> Calidades</a></li>
                             <li><a href="<?php echo base_url();?>almacen/subcategorias"><i class="fa fa-circle-o"></i> Subcategorias</a></li>
                             <li><a href="<?php echo base_url();?>almacen/marcas"><i class="fa fa-circle-o"></i> Marcas</a></li>
                             <li><a href="<?php echo base_url();?>almacen/fabricantes"><i class="fa fa-circle-o"></i> Fabricantes</a></li>
                             <li><a href="<?php echo base_url();?>almacen/modelos"><i class="fa fa-circle-o"></i> Modelos</a></li>
+                            <li><a href="<?php echo base_url();?>almacen/años"><i class="fa fa-circle-o"></i> Años</a></li>
                             <li><a href="<?php echo base_url();?>almacen/presentaciones"><i class="fa fa-circle-o"></i> Presentaciones</a></li>
                             <li><a href="<?php echo base_url();?>almacen/proveedores"><i class="fa fa-circle-o"></i> Proveedores</a></li>
                             <li><a href="<?php echo base_url();?>almacen/ajuste"><i class="fa fa-circle-o"></i> Ajuste de Inventario</a></li>
