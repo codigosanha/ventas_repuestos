@@ -14,7 +14,7 @@ class Usuarios extends CI_Controller {
 	public function index()
 	{
 		
-$contenido_interno  = array(
+		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"usuarios" => $this->Comun_model->get_records("usuarios"), 
 		);
