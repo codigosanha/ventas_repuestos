@@ -13,7 +13,7 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="proveedor">
+                <input type="hidden" id="modulo" value="almacen/proveedores">
                 <div class="row">
                     <div class="col-md-12">
            
@@ -31,14 +31,9 @@
                                     <th>#</th>
                                     <th>Nombre</th>
                                     <th>Nit</th>
-                                    <th>Tipo de Contribuyente</th>
                                     <th>Direccion</th>
                                     <th>Telefono</th>
                                     <th>E-mail</th>
-                                    <th>Contacto</th>
-                                    <th>Tel. Contacto</th>
-                                    <th>Banco</th>
-                                    <th>No. Cuenta</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -49,25 +44,19 @@
                                             <td><?php echo $proveedor->id;?></td>
                                             <td><?php echo $proveedor->nombre;?></td>
                                             <td><?php echo $proveedor->nit;?></td>
-                                            <td><?php echo $proveedor->tipocontribuyente;?></td>
                                             <td><?php echo $proveedor->direccion;?></td>
                                             <td><?php echo $proveedor->telefono;?></td>
                                             <td><?php echo $proveedor->email;?></td>
-                                            <td><?php echo $proveedor->contacto;?></td>
-                                            <td><?php echo $proveedor->tel_contacto;?></td>
-                                            <td><?php echo $proveedor->banco;?></td>
-                                            <td><?php echo $proveedor->no_cuenta;?></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $proveedor->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    <?php if($permisos->update == 1):?>
-                                                    <a href="<?php echo base_url()?>mantenimiento/proveedor/edit/<?php echo $proveedor->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php endif;?>
-                                                    <?php if($permisos->delete == 1):?>
-                                                    <a href="<?php echo base_url();?>mantenimiento/proveedor/delete/<?php echo $proveedor->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php endif;?>
+                                                    
+                                                    <a href="<?php echo base_url()?>almacen/proveedores/edit/<?php echo $proveedor->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
+                                                    
+                                                    <a href="<?php echo base_url();?>almacen/proveedores/delete/<?php echo $proveedor->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                 
                                                 </div>
                                             </td>
                                         </tr>

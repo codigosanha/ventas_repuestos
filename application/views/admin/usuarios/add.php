@@ -25,33 +25,41 @@
                         <form action="<?php echo base_url();?>administrador/usuarios/store" method="POST">
                             <div class="form-group">
                                 <label for="nombres">Nombres:</label>
-                                <input type="text" id="nombres" name="nombres" class="form-control">
+                                <input type="text" id="nombres" name="nombres" class="form-control" <?php echo set_value('') ?: '';?>>
                             </div>
                             <div class="form-group">
                                 <label for="apellidos">Apellidos:</label>
-                                <input type="text" id="apellidos" name="apellidos" class="form-control">
+                                <input type="text" id="apellidos" name="apellidos" class="form-control" <?php echo set_value('') ?: '';?>>
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Telefono:</label>
-                                <input type="text" id="telefono" name="telefono" class="form-control">
+                                <input type="text" id="telefono" name="telefono" class="form-control" <?php echo set_value('') ?: '';?>>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="text" id="email" name="email" class="form-control">
+                                <input type="text" id="email" name="email" class="form-control" <?php echo set_value('') ?: '';?>>
                             </div>
                             <div class="form-group">
                                 <label for="username">Usuario:</label>
-                                <input type="text" id="username" name="username" class="form-control">
+                                <input type="text" id="username" name="username" class="form-control" <?php echo set_value('') ?: '';?>>
                             </div>
                             <div class="form-group">
                                 <label for="password">Contraseña:</label>
                                 <input type="password" id="password" name="password" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="rol">Roles:</label>
-                                <select name="rol" id="rol" class="form-control">
+                                <label for="rol_id">Roles:</label>
+                                <select name="rol_id" id="rol_id" class="form-control">
                                     <?php foreach($roles as $rol):?>
                                         <option value="<?php echo $rol->id;?>"><?php echo $rol->nombre;?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sucursal_id">Sucursales:</label>
+                                <select name="sucursal_id" id="sucursal_id" class="form-control">
+                                    <?php foreach($sucusales as $sucursal):?>
+                                        <option value="<?php echo $sucursal->id;?>"><?php echo $sucursal->nombre;?></option>
                                     <?php endforeach;?>
                                 </select>
                             </div>
