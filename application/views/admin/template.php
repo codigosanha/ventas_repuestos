@@ -225,6 +225,7 @@
                             <li><a href="<?php echo base_url();?>administrador/comprobantes"><i class="fa fa-circle-o"></i> Comprobantes</a></li>
                             <li><a href="<?php echo base_url();?>administrador/sucursales"><i class="fa fa-circle-o"></i> Sucursales</a></li>
                             <li><a href="<?php echo base_url();?>administrador/roles"><i class="fa fa-circle-o"></i> Roles</a></li>
+                            <li><a href="<?php echo base_url();?>administrador/menus"><i class="fa fa-circle-o"></i> Menús</a></li>
                         </ul>
                     </li>
                 </ul>

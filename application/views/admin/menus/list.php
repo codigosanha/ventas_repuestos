@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Tipo de Comprobantes
+        Menús
         <small>Listado</small>
         </h1>
     </section>
@@ -13,11 +13,11 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="administrador/tipo_comprobantes">
+                <input type="hidden" id="modulo" value="administrador/menus">
                 <div class="row">
                     <div class="col-md-12">
                       
-                        <a href="<?php echo base_url();?>administrador/tipo_comprobantes/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tipo de Comprobante</a>
+                        <a href="<?php echo base_url();?>administrador/menus/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Menú</a>
                       
                     </div>
                 </div>
@@ -30,27 +30,31 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>Descripcion</th>
-                                    <th>Permitir Anulación</th>
+                                    <th>URL</th>
+                                    <th>Icono</th>
+                                    <th>Menú Padre</th>
+                                    <th>Orden</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if(!empty($comprobantes)):?>
-                                    <?php foreach($comprobantes as $comprobante):?>
+                                <?php if(!empty($menus)):?>
+                                    <?php foreach($menus as $menu):?>
                                         <tr>
-                                            <td><?php echo $comprobante->id;?></td>
-                                            <td><?php echo $comprobante->nombre;?></td>
-                                            <td><?php echo $comprobante->descripcion;?></td>
-                                            <td><?php echo $comprobante->permitir_anular ? 'SI':'NO';?></td>
+                                            <td><?php echo $menu->id;?></td>
+                                            <td><?php echo $menu->nombre;?></td>
+                                            <td><?php echo $menu->url;?></td>
+                                            <td><?php echo $menu->icono;?></td>
+                                            <td><?php echo $menu->parent ? get_record("menus","id=$menu->parent")->nombre : '';?></td>
+                                            <td><?php echo $menu->orden;?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $comprobante->id;?>">
+                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $menu->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
                                                     
-                                                    <a href="<?php echo base_url()?>administrador/tipo_comprobantes/edit/<?php echo $comprobante->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>administrador/tipo_comprobantes/delete/<?php echo $comprobante->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <a href="<?php echo base_url()?>administrador/menus/edit/<?php echo $menu->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
+                                                    <a href="<?php echo base_url();?>administrador/menus/delete/<?php echo $menu->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
                                                   
                                                 </div>
                                             </td>
@@ -78,7 +82,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Informacion del Tipo de Comprobante</h4>
+        <h4 class="modal-title">Informacion de la Menú</h4>
       </div>
       <div class="modal-body">
         

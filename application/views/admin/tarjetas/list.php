@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Tipo de Comprobantes
+        Tarjetas
         <small>Listado</small>
         </h1>
     </section>
@@ -13,11 +13,11 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="administrador/tipo_comprobantes">
+                <input type="hidden" id="modulo" value="administrador/tarjetas">
                 <div class="row">
                     <div class="col-md-12">
                       
-                        <a href="<?php echo base_url();?>administrador/tipo_comprobantes/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tipo de Comprobante</a>
+                        <a href="<?php echo base_url();?>administrador/tarjetas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tarjeta</a>
                       
                     </div>
                 </div>
@@ -31,26 +31,24 @@
                                     <th>#</th>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>
-                                    <th>Permitir Anulación</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if(!empty($comprobantes)):?>
-                                    <?php foreach($comprobantes as $comprobante):?>
+                                <?php if(!empty($tarjetas)):?>
+                                    <?php foreach($tarjetas as $tarjeta):?>
                                         <tr>
-                                            <td><?php echo $comprobante->id;?></td>
-                                            <td><?php echo $comprobante->nombre;?></td>
-                                            <td><?php echo $comprobante->descripcion;?></td>
-                                            <td><?php echo $comprobante->permitir_anular ? 'SI':'NO';?></td>
+                                            <td><?php echo $tarjeta->id;?></td>
+                                            <td><?php echo $tarjeta->nombre;?></td>
+                                            <td><?php echo $tarjeta->descripcion;?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $comprobante->id;?>">
+                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $tarjeta->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
                                                     
-                                                    <a href="<?php echo base_url()?>administrador/tipo_comprobantes/edit/<?php echo $comprobante->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>administrador/tipo_comprobantes/delete/<?php echo $comprobante->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <a href="<?php echo base_url()?>administrador/tarjetas/edit/<?php echo $tarjeta->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
+                                                    <a href="<?php echo base_url();?>administrador/tarjetas/delete/<?php echo $tarjeta->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
                                                   
                                                 </div>
                                             </td>
@@ -78,7 +76,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Informacion del Tipo de Comprobante</h4>
+        <h4 class="modal-title">Informacion de la Tarjeta</h4>
       </div>
       <div class="modal-body">
         

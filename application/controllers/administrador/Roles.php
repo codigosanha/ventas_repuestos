@@ -54,8 +54,23 @@ class Roles extends CI_Controller {
 				"total_access" => $total_access,
 				"estado" => "1"
 			);
-
-			if ($this->Comun_model->insert("roles", $data)) {
+			$rol = $this->Comun_model->insert("roles", $data);
+			if ($rol) {
+				if ($total_access) {
+					$menus = $this->Comun_model->get_records("menus", "estado=1");
+					foreach ($menus as $menu) {
+						$data  = array(
+							'menu_id' => $menu->id, 
+							'rol_id' => $rol->id,
+							'read' => 1,
+							'insert' => 1,
+							'update' => 1,
+							'delete' => 1
+						);
+						$this->Comun_model->insert("permisos",$data);
+					}
+				}
+				
 				redirect(base_url()."administrador/roles");
 			}
 			else{

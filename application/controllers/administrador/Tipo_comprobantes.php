@@ -19,7 +19,7 @@ class Tipo_comprobantes extends CI_Controller {
 		);
 
 		$contenido_externo = array(
-			"title" => "comprobantes", 
+			"title" => " Tipos de Comprobantes", 
 			"contenido" => $this->load->view("admin/tipo_comprobantes/list", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
@@ -28,7 +28,7 @@ class Tipo_comprobantes extends CI_Controller {
 
 	public function add(){
 		$contenido_externo = array(
-			"title" => "Comprobantes", 
+			"title" => "Tipos de Comprobantes", 
 			"contenido" => $this->load->view("admin/tipo_comprobantes/add","", TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
@@ -74,7 +74,7 @@ class Tipo_comprobantes extends CI_Controller {
 		);
 
 		$contenido_externo = array(
-			"title" => "comprobantes", 
+			"title" => "Tipo de Comprobantes", 
 			"contenido" => $this->load->view("admin/tipo_comprobantes/edit", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);

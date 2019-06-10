@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Calidades
+        Tipo de Comprobantes
         <small>Editar</small>
         </h1>
     </section>
@@ -22,16 +22,19 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>almacen/calidades/update" method="POST">
-                            <input type="hidden" value="<?php echo $categoria->id;?>" name="idCalidad">
+                        <form action="<?php echo base_url();?>administrador/tipo_comprobantes/update" method="POST">
+                            <input type="hidden" value="<?php echo $comprobante->id;?>" name="idComprobante">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error': '';?>">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$categoria->nombre?>">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$comprobante->nombre?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$categoria->descripcion?>">
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$comprobante->descripcion?>">
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-inline"><input type="checkbox" name="permitir_anular" id="permitir_anular" <?php echo $comprobante->permitir_anular ? 'checked':'';?>>Permitir la anulación de las ventas que poseen este tipo de comprobante</label>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

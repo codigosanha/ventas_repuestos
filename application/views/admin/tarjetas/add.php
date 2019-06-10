@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Tipo de Comprobantes
+        Tarjetas
         <small>Nuevo</small>
         </h1>
     </section>
@@ -22,7 +22,7 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>administrador/tipo_comprobantes/store" method="POST">
+                        <form action="<?php echo base_url();?>administrador/tarjetas/store" method="POST">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error':''?>">
                                 <label for="nombre">Nombre:</label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:''?>" required="required">
@@ -31,9 +31,6 @@
                             <div class="form-group">
                                 <label for="descripcion">Descripcion:</label>
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:''?>">
-                            </div>
-                            <div class="form-group">
-                                <label class="checkbox-inline"><input type="checkbox" name="permitir_anular" id="permitir_anular">Permitir la anulación de las ventas que poseen este tipo de comprobante</label>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>
