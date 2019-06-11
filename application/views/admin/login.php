@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Sistema de Compras y Ventas | Log in</title>
+  <title>Sistema de Ventas | Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   
@@ -30,14 +30,6 @@
           <div class="field">
             <input type="password" name="password" id="fieldPassword" class="input" required pattern=.*\S.* />
             <label for="fieldPassword" class="label">Contraseña</label>
-          </div>
-          <div class="field">
-            <select name="sucursal" id="sucursal" class="input" required >
-                <option value="">Seleccione...</option>
-              <option value="">Sucursal 1</option>
-              <option value="">Sucursal 1</option>
-            </select>
-            <label for="sucursal" class="label">Sucursal</label>
           </div>
           <div class="profile__footer">
             <button type="submit" class="btn">Login</button>

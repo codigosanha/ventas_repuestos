@@ -33,7 +33,7 @@ class Backend_model extends CI_Model {
 		$this->db->where("m.parent","0");
 
 		$this->db->where("m.estado",1);
-		$this->db->order_by("m.orden");
+		$this->db->order_by("m.orden","asc");
 		$resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->result();
@@ -52,6 +52,7 @@ class Backend_model extends CI_Model {
 		$this->db->where("p.read","1");
 		$this->db->where("m.parent",$idMenu);
 		$this->db->where("m.estado",1);
+		$this->db->order_by("m.orden","asc");
 		$resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->result();

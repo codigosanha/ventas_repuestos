@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="tableSimple" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -46,8 +46,8 @@
                                     <?php foreach($permisos as $permiso):?>
                                         <tr>
                                             <td><?php echo $permiso->id;?></td>
-                                            <td><?php echo $permiso->menu;?></td>
-                                            <td><?php echo $permiso->rol;?></td>
+                                            <td><?php echo get_record("menus","id=".$permiso->menu_id)->nombre;?></td>
+                                            <td><?php echo get_record("roles","id=".$permiso->rol_id)->nombre;?></td>
                                             <td>
                                                 <?php if($permiso->read == 0 ):?>
                                                     <span class="fa fa-times"></span>
@@ -78,12 +78,10 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <?php if($permits->update == 1):?>
+                                                    
                                                     <a href="<?php echo base_url()?>administrador/permisos/edit/<?php echo $permiso->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php endif;?>
-                                                    <?php if($permits->delete == 1):?>
+                                                    
                                                     <a href="<?php echo base_url();?>administrador/permisos/delete/<?php echo $permiso->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php endif;?>
                                                 </div>
                                             </td>
                                         </tr>

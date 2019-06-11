@@ -1,83 +1,97 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined("BASEPATH") OR exit("No direct script access allowed");
 
 class Permisos extends CI_Controller {
-	private $permisos;
+
+	//private $permisos;
 	public function __construct(){
 		parent::__construct();
-		$this->permisos = $this->backend_lib->control();
-		$this->load->model("Permisos_model");
-		$this->load->model("Usuarios_model");
-		$this->load->model("Ventas_model");
+		//$this->permisos = $this->backend_lib->control();
+		$this->load->model("Comun_model");
+		
 	}
 
-	public function index(){
-		$data  = array(
-			'permits' => $this->permisos,
-			'permisos' => $this->Permisos_model->getPermisos(), 
+	public function index()
+	{
+		$contenido_interno  = array(
+			//"permisos" => $this->permisos,
+			"permisos" => $this->Comun_model->get_records("permisos"), 
 		);
 
-		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/permisos/list",$data);
-		$this->load->view("layouts/footer");
+		$contenido_externo = array(
+			"title" => "Permisos", 
+			"contenido" => $this->load->view("admin/permisos/list", $contenido_interno, TRUE)
+		);
+		$this->load->view("admin/template",$contenido_externo);
+
 	}
 
 	public function add(){
-		$data  = array(
-			'roles' => $this->Usuarios_model->getRoles(), 
-			'menus' => $this->Permisos_model->getMenus(), 
+		$contenido_interno  = array(
+			//"permisos" => $this->permisos,
+			"menus" => $this->Comun_model->get_records("menus","estado=1"), 
+			"roles" => $this->Comun_model->get_records("roles","estado=1"), 
 		);
-		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/permisos/add",$data);
-		$this->load->view("layouts/footer");
+		$contenido_externo = array(
+			"title" => "permisos", 
+			"contenido" => $this->load->view("admin/permisos/add",$contenido_interno, TRUE)
+		);
+		$this->load->view("admin/template",$contenido_externo);
 	}
 
 	public function store(){
-		$menu = $this->input->post("menu");
-		$rol = $this->input->post("rol");
-		$insert = $this->input->post("insert");
+
+		$menu_id = $this->input->post("menu_id");
+		$rol_id = $this->input->post("rol_id");
 		$read = $this->input->post("read");
+		$insert = $this->input->post("insert");
 		$update = $this->input->post("update");
 		$delete = $this->input->post("delete");
 
-		$data = array(
-			"menu_id" => $menu,
-			"rol_id" => $rol,
-			"read" => $read,
-			"insert" => $insert,
-			"update" => $update,
-			"delete" => $delete,
-		);
+		$existe_permiso_rol = $this->Comun_model->get_record("permisos","menu_id='$menu_id' && rol_id='$rol_id'");
 
-		if ($this->Permisos_model->save($data)) {
-			redirect(base_url()."administrador/permisos");
+		if ($existe_permiso_rol) {
+			$this->session->set_flashdata("error","El permiso ya fue registrado");
+			redirect(base_url()."administrador/permisos/add");
 		}else{
-			$this->session->set_flashdata("error","No se pudo guardar la informacion");
-			redirect(base_url()."administrado/permisos/add");
+			$data = array(
+				'menu_id' => $menu_id, 
+				'rol_id' => $rol_id,
+				'read' => $read,
+				'insert' => $insert,
+				'update' => $update,
+				'delete' => $delete,
+			);
+			if ($this->Comun_model->insert("permisos", $data)) {
+				redirect(base_url()."administrador/permisos");
+			}
+			else{
+				$this->session->set_flashdata("error","No se pudo guardar la informacion");
+				redirect(base_url()."administrador/permisos/add");
+			}
 		}
+
+		
 		
 	}
 
 	public function edit($id){
-		$data  = array(
-			'roles' => $this->Usuarios_model->getRoles(), 
-			'menus' => $this->Permisos_model->getMenus(), 
-			'permiso' => $this->Permisos_model->getPermiso($id)
+		$contenido_interno  = array(
+			//"permisos" => $this->permisos,
+			"permiso" => $this->Comun_model->get_record("permisos","id=$id"), 
 		);
-		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/permisos/edit",$data);
-		$this->load->view("layouts/footer");
+
+		$contenido_externo = array(
+			"title" => "permisos", 
+			"contenido" => $this->load->view("admin/permisos/edit", $contenido_interno, TRUE)
+		);
+		$this->load->view("admin/template",$contenido_externo);
 	}
 
 	public function update(){
-		$idpermiso = $this->input->post("idpermiso");
-		$menu = $this->input->post("menu");
-		$rol = $this->input->post("rol");
-		$insert = $this->input->post("insert");
+		$idPermiso = $this->input->post("idPermiso");
 		$read = $this->input->post("read");
+		$insert = $this->input->post("insert");
 		$update = $this->input->post("update");
 		$delete = $this->input->post("delete");
 
@@ -88,43 +102,38 @@ class Permisos extends CI_Controller {
 			"delete" => $delete,
 		);
 
-		if ($this->Permisos_model->update($idpermiso,$data)) {
+		if ($this->Comun_model->update("permisos","id=$idPermiso",$data)) {
 			redirect(base_url()."administrador/permisos");
-		}else{
-			$this->session->set_flashdata("error","No se pudo guardar la informacion");
-			redirect(base_url()."administrador/permisos/edit/".$idpermiso);
 		}
+		else{
+			$this->session->set_flashdata("error","No se pudo actualizar la informacion");
+			redirect(base_url()."administrador/permisos/edit/".$idPermiso);
+		}
+
+
+		
 	}
 
-	public function delete($id){
-		$this->Permisos_model->delete($id);
-		redirect(base_url()."administrador/permisos");
-	}
-
-	public function clavePermiso(){
-		$data = array(
-			"clave" => $this->Permisos_model->clave()
-		);
-		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/permisos/clave", $data);
-		$this->load->view("layouts/footer");
-	}
-
-	public function setClave(){
-		$idClave = $this->input->post("idClave");
-		$clave = $this->input->post("clave");
+	public function view($id){
 		$data  = array(
-			'clave_permiso' => $clave, 
+			"permiso" => $this->Comun_model->get_record("permisos", "id=$id"), 
 		);
-		if (!empty($idClave)) {
-			
-			$this->Permisos_model->updateClave($idClave, $data);
-		}else{
-			$this->Permisos_model->saveClave($data);
-		}
-		$this->session->set_flashdata("success", "La clave de permiso fue guardada");
-		redirect(base_url()."administrador/clave-permiso");
+		$this->load->view("admin/permisos/view",$data);
+	}
 
+	public function habilitar($id){
+		$data  = array(
+			"estado" => "1", 
+		);
+		$this->Comun_model->update("permisos","id=$id",$data);
+		echo "administrador/permisos";
+	}
+
+	public function deshabilitar($id){
+		$data  = array(
+			"estado" => "0", 
+		);
+		$this->Comun_model->update("permisos","id=$id",$data);
+		echo "administrador/permisos";
 	}
 }

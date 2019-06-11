@@ -25,16 +25,16 @@
                         <form action="<?php echo base_url();?>administrador/permisos/store" method="POST">
                                                        
                             <div class="form-group">
-                                <label for="rol">Roles:</label>
-                                <select name="rol" id="rol" class="form-control">
+                                <label for="rol_id">Roles:</label>
+                                <select name="rol_id" id="rol_id" class="form-control">
                                     <?php foreach($roles as $rol):?>
                                         <option value="<?php echo $rol->id;?>"><?php echo $rol->nombre;?></option>
                                     <?php endforeach;?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="menu">Menus:</label>
-                                <select name="menu" id="menu" class="form-control">
+                                <label for="menu_id">Menus:</label>
+                                <select name="menu_id" id="menu_id" class="form-control">
                                     <?php foreach($menus as $menu):?>
                                         <option value="<?php echo $menu->id;?>"><?php echo $menu->nombre;?></option>
                                     <?php endforeach;?>

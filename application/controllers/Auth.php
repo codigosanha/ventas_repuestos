@@ -19,32 +19,32 @@ class Auth extends CI_Controller {
 
 	}
 
-	public function login(){
+	public function validar(){
 		$username = $this->input->post("username");
 		$password = $this->input->post("password");
 		$res = $this->Usuarios_model->login($username, sha1($password));
 
 		if (!$res) {
-			/*$this->session->set_flashdata("error","El usuario y/o contraseña son incorrectos");*/
-			//redirect(base_url());
-			echo "0";
+			$this->session->set_flashdata("error","El usuario y/o contraseña son incorrectos");
+			redirect(base_url());
+			//echo "0";
 		}
 		else{
 			$data  = array(
 				'id' => $res->id, 
-				'nombre' => $res->nombres,
+				'username' => $res->username,
 				'rol' => $res->rol_id,
+				'sucursal' => $res->sucursal_id,
+				'total_access' => get_record("roles","id=".$res->rol_id)->total_access,
 				'login' => TRUE
 			);
 			$this->session->set_userdata($data);
-			$this->backend_lib->savelog($this->modulo,"Inicio de sesión");
-			//redirect(base_url()."dashboard");
-			echo "1";
+			redirect(base_url()."backend/dashboard");
+			//echo "1";
 		}
 	}
 
 	public function logout(){
-		$this->backend_lib->savelog($this->modulo,"Cierre de sesión");
 		$this->session->sess_destroy();
 		redirect(base_url());
 	}

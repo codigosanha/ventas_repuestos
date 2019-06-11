@@ -98,13 +98,13 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="<?php echo base_url()?>assets/template/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs"><?php echo $this->session->userdata("nombre")?></span>
+                                <span class="hidden-xs"><?php echo $this->session->userdata("username")?></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header">
                                     <img src="<?php echo base_url()?>assets/template/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" text-align="center">
                 <p>
-                 <span text-align="center" class="hidden-xs"><?php echo $this->session->userdata("nombre")?></span>  
+                 <span text-align="center" class="hidden-xs"><?php echo $this->session->userdata("username")?></span>  
                 </p>
                  <p><small>Sistema de Compras y Ventas con Control de Inventario</small></p>
                 <br>
@@ -135,99 +135,11 @@
                              <img src="<?php echo base_url();?>img/cloud.png" alt="Avatar" /> 
                         </div>
                         <div class="pull-left info">
-                            <p><?php echo $this->session->userdata("nombre")?></p>
+                            <p><?php echo $this->session->userdata("username")?></p>
                             <p><i class="fa fa-circle text-success"></i> En Linea</p>
                         </div>
                     </div>
-                    <li><a href="<?php echo base_url();?>backend/dashboard"></i> Dashboard</a></li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-database"></i> <span>Almacén</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url();?>almacen/bodegas"><i class="fa fa-circle-o"></i> Bodegas</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/traslados"><i class="fa fa-circle-o"></i> Traslados</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/devoluciones"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/productos"><i class="fa fa-circle-o"></i> Productos</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/categorias"><i class="fa fa-circle-o"></i> Categorias</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/calidades"><i class="fa fa-circle-o"></i> Calidades</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/subcategorias"><i class="fa fa-circle-o"></i> Subcategorias</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/marcas"><i class="fa fa-circle-o"></i> Marcas</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/fabricantes"><i class="fa fa-circle-o"></i> Fabricantes</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/modelos"><i class="fa fa-circle-o"></i> Modelos</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/years"><i class="fa fa-circle-o"></i> Años</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/presentaciones"><i class="fa fa-circle-o"></i> Presentaciones</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/proveedores"><i class="fa fa-circle-o"></i> Proveedores</a></li>
-                            <li><a href="<?php echo base_url();?>almacen/ajuste"><i class="fa fa-circle-o"></i> Ajuste de Inventario</a></li>
-
-                        </ul>
-                    </li>
-
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-calculator"></i> <span>Caja</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url();?>caja/apertura_cierre"><i class="fa fa-circle-o"></i> Aperturas y Cierre</a></li>
-                            <li><a href="<?php echo base_url();?>caja/gastos"><i class="fa fa-circle-o"></i> Gastos</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-cart-plus"></i> <span>Movimientos</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url();?>movimientos/compras"><i class="fa fa-circle-o"></i> Compras</a></li>
-                            <li><a href="<?php echo base_url();?>movimientos/ventas"><i class="fa fa-circle-o"></i> Ventas</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-print"></i> <span>Reportes</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url();?>reportes/reportes_ventas"><i class="fa fa-circle-o"></i> Reportes de Ventas x Fecha</a></li>
-                            <li><a href="<?php echo base_url();?>reportes/productos_vendidos"><i class="fa fa-circle-o"></i> Reporte de Productos Vendidos x Fecha</a></li>
-                            <li><a href="<?php echo base_url();?>reportes/reportes_compras"><i class="fa fa-circle-o"></i> Reporte de Compras x Fecha</a></li>
-                            <li><a href="<?php echo base_url();?>reportes/reportes_ganancias"><i class="fa fa-circle-o"></i> Reporte de Ganancias</a></li>
-                            <li><a href="<?php echo base_url();?>reportes/reportes_inventario"><i class="fa fa-circle-o"></i> Reporte de Inventario con indicador de stock critico</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="<?php echo base_url();?>backend/cuentas_cobrar"><i class="fa fa-money"></i> Cuentas por Cobrar</a></li>
-                    <li><a href="<?php echo base_url();?>backend/cuentas_pagar"><i class="fa fa-money"></i> Cuentas por Pagar</a></li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-user"></i> <span>Administrador</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url();?>administrador/usuarios"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/permisos"><i class="fa fa-circle-o"></i> Permisos</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/clave_permiso"><i class="fa fa-circle-o"></i> Clave de Permiso Especial</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/correos"><i class="fa fa-circle-o"></i> Correos</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/cupones"><i class="fa fa-circle-o"></i> Cupones</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/tarjetas"><i class="fa fa-circle-o"></i> Tarjetas</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/tipo_comprobantes"><i class="fa fa-circle-o"></i> Tipo Comprobantes</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/comprobantes"><i class="fa fa-circle-o"></i> Comprobantes</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/sucursales"><i class="fa fa-circle-o"></i> Sucursales</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/roles"><i class="fa fa-circle-o"></i> Roles</a></li>
-                            <li><a href="<?php echo base_url();?>administrador/menus"><i class="fa fa-circle-o"></i> Menús</a></li>
-                        </ul>
-                    </li>
+                    <?php echo $this->backend_lib->getMenu();?>
                 </ul>
             </section>
             <!-- /.sidebar -->

@@ -33,24 +33,24 @@ class Backend_lib{
 		$parents = $this->CI->Backend_model->getParents($this->CI->session->userdata("rol"));
 		foreach ($parents as $parent) {
 			$children = $this->CI->Backend_model->getChildren($this->CI->session->userdata("rol"),$parent->id);
-			$linkParent = $parent->link == '#' ? '#': base_url($parent->link);
+			$urlParent = $parent->url == '#' ? '#': base_url($parent->url);
 			if (!$children) {
 				$menu .= '<li>
-                        <a href="'.$linkParent.'">
-                            <i class="fa fa-home"></i> <span>'.$parent->nombre.'</span>
+                        <a href="'.$urlParent.'">
+                            <i class="'.$parent->icono.'"></i> <span>'.$parent->nombre.'</span>
                         </a>
                     </li>';
 			} else {
 				$menu .= '<li class="treeview">
 	                        <a href="#">
-	                            <i class="fa fa-cogs"></i> <span>'.$parent->nombre.'</span>
+	                            <i class="'.$parent->icono.'"></i> <span>'.$parent->nombre.'</span>
 	                            <span class="pull-right-container">
 	                                <i class="fa fa-angle-left pull-right"></i>
 	                            </span>
 	                        </a><ul class="treeview-menu">';
 
 	            foreach ($children as $child) {
-	            	$menu .= '<li><a href="'.base_url($child->link).'"><i class="fa fa-circle-o"></i>'.$child->nombre.'</a></li>';
+	            	$menu .= '<li><a href="'.base_url($child->url).'"><i class="'.$child->icono.'"></i>'.$child->nombre.'</a></li>';
 	                        
 	            }
 	            $menu .= '</ul></li>';            

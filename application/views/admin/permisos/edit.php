@@ -23,22 +23,15 @@
                              </div>
                         <?php endif;?>
                         <form action="<?php echo base_url();?>administrador/permisos/update" method="POST">
-                            <input type="hidden" name="idpermiso" value="<?php echo $permiso->id;?>">                 
+                            <input type="hidden" name="idPermiso" value="<?php echo $permiso->id;?>">                 
                             <div class="form-group">
-                                <label for="rol">Roles:</label>
-                                <select name="rol" id="rol" class="form-control" disabled="disabled">
-                                    <?php foreach($roles as $rol):?>
-                                        <option value="<?php echo $rol->id;?>" <?php echo $rol->id == $permiso->rol_id ? "selected":"";?>><?php echo $rol->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
+                                <label for="rol_id">Roles:</label> <br>
+                                <?php echo get_record("roles","id=".$permiso->rol_id)->nombre;?>
                             </div>
                             <div class="form-group">
-                                <label for="menu">Menus:</label>
-                                <select name="menu" id="menu" class="form-control" disabled="disabled">
-                                    <?php foreach($menus as $menu):?>
-                                        <option value="<?php echo $menu->id;?>" <?php echo $menu->id == $permiso->menu_id ? "selected":"";?>><?php echo $menu->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
+                                <label for="menu">Menus:</label> <br>
+                                <?php echo get_record("menus","id=".$permiso->menu_id)->nombre;?>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="read">Leer:</label>
