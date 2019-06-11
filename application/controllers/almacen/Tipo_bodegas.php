@@ -48,11 +48,11 @@ class Tipo_bodegas extends CI_Controller {
 			);
 
 			if ($this->Comun_model->insert("bodegas", $data)) {
-				redirect(base_url()."almacen/bodegas");
+				redirect(base_url()."almacen/tipo_bodegas");
 			}
 			else{
 				$this->session->set_flashdata("error","No se pudo guardar la informacion");
-				redirect(base_url()."almacen/bodegas/add");
+				redirect(base_url()."almacen/tipo_bodegas/add");
 			}
 		}
 		else{
@@ -93,11 +93,11 @@ class Tipo_bodegas extends CI_Controller {
 			);
 
 			if ($this->Comun_model->update("bodegas","id=$idBodega",$data)) {
-				redirect(base_url()."almacen/bodegas");
+				redirect(base_url()."almacen/tipo_bodegas");
 			}
 			else{
 				$this->session->set_flashdata("error","No se pudo actualizar la informacion");
-				redirect(base_url()."almacen/bodegas/edit/".$idBodega);
+				redirect(base_url()."almacen/tipo_bodegas/edit/".$idBodega);
 			}
 		}else{
 			$this->edit($idBodega);
@@ -118,7 +118,7 @@ class Tipo_bodegas extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("bodegas","id=$id",$data);
-		echo "almacen/bodegas";
+		echo "almacen/tipo_bodegas";
 	}
 
 	public function deshabilitar($id){
@@ -126,7 +126,7 @@ class Tipo_bodegas extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("bodegas","id=$id",$data);
-		echo "almacen/bodegas";
+		echo "almacen/tipo_bodegas";
 	}
 
 	public function set_bodega_venta(){

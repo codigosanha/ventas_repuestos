@@ -13,9 +13,16 @@ class Bodegas extends CI_Controller {
 
 	public function index()
 	{
+		if ($this->session->userdata("sucursal")) {
+			$bodegas = $this->Comun_model->get_records("bodega_sucursal","sucursal_id=".$this->session->userdata("sucursal"));
+		}else{
+			$bodegas = $this->Comun_model->get_records("bodega_sucursal");
+		}
+
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"bodegas" => $this->Comun_model->get_records("bodegas"), 
+			"bodegas" => $bodegas,
+
 		);
 
 		$contenido_externo = array(

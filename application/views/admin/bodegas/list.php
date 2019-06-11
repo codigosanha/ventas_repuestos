@@ -30,6 +30,9 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
+                                    <?php if (!$this->session->userdata("sucursal")): ?>
+                                        <th>Sucursal</th>
+                                    <?php endif ?>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -39,6 +42,9 @@
                                         <tr>
                                             <td><?php echo $bodega->id;?></td>
                                             <td><?php echo $bodega->nombre;?></td>
+                                            <?php if (!$this->session->userdata("sucursal")): ?>
+                                                <td><?php echo $bodega->sucursal_id?></td>
+                                            <?php endif ?>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $bodega->id;?>">

@@ -22,45 +22,33 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>mantenimiento/clientes/store" method="POST">
-                            <div class="form-group <?php echo form_error("nombre") != false ? 'has-error':'';?>">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value("nombre");?>" required="required">
-                                <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
+                        <form action="<?php echo base_url();?>almacen/clientes/store" method="POST">
+                            <div class="form-group">
+                                <label for="nombres">Nombres:</label>
+                                <input type="text" class="form-control" id="nombres" name="nombres" required="required" value="<?php echo set_value('nombres')?:''?>">
                             </div>
-                            <div class="form-group <?php echo form_error("tipocontribuyente") != false ? 'has-error':'';?>">
-                                <label for="tipocontribuyente">Tipo de Cliente</label>
-                                <select name="tipocontribuyente" id="tipocontribuyente" class="form-control" required="required">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($tipocontribuyentes as $tipocontribuyente) :?>
-                                        <option value="<?php echo $tipocontribuyente->id;?>" <?php echo set_select("tipocontribuyente",$tipocontribuyente->id);?>><?php echo $tipocontribuyente->nombre ?></option>
-                                    <?php endforeach;?>
-                                </select>
-                                <?php echo form_error("tipocontribuyente","<span class='help-block'>","</span>");?>
+                            <div class="form-group">
+                                <label for="apellidos">Apellidos:</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos" required="required" value="<?php echo set_value('apellidos')?:''?>">
                             </div>
-                            <div class="form-group <?php echo form_error("tipodocumento") != false ? 'has-error':'';?>">
-                                <label for="tipodocumento">Tipo de Documento</label>
-                                <select name="tipodocumento" id="tipodocumento" class="form-control" required="required">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($tipodocumentos as $tipodocumento) :?>
-                                        <option value="<?php echo $tipodocumento->id;?>" <?php echo set_select("tipodocumento",$tipodocumento->id);?>><?php echo $tipodocumento->nombre ?></option>
-                                    <?php endforeach;?>
-                                </select>
-                                <?php echo form_error("tipodocumento","<span class='help-block'>","</span>");?>
-                            </div>
-                            <div class="form-group <?php echo form_error("numero") != false ? 'has-error':'';?>">
-                                <label for="numero">No. del Documento:</label>
-                                <input type="text" class="form-control" id="numero" name="numero" value="<?php echo set_value("numero");?>" required="required">
-                                <?php echo form_error("numero","<span class='help-block'>","</span>");?>
+                            <div class="form-group <?php echo form_error("cedula") != false ? 'has-error':'';?>">
+                                <label for="cedula">Cedula:</label>
+                                <input type="text" class="form-control" id="cedula" name="cedula" value="<?php echo set_value("cedula");?>" required="required">
+                                <?php echo form_error("cedula","<span class='help-block'>","</span>");?>
                             </div>
                             
                             <div class="form-group">
                                 <label for="telefono">Telefono:</label>
-                                <input type="text" class="form-control" id="telefono" name="telefono" required="required">
+                                <input type="text" class="form-control" id="telefono" name="telefono" required="required" value="<?php echo set_value('telefono')?:''?>">
                             </div>
                             <div class="form-group">
                                 <label for="direccion">Direccion:</label>
-                                <input type="text" class="form-control" id="direccion" name="direccion" required="required">
+                                <input type="text" class="form-control" id="direccion" name="direccion" required="required" value="<?php echo set_value('direccion')?:''?>">
+                            </div>
+                            <div class="form-group <?php echo form_error("nit") != false ? 'has-error':'';?>">
+                                <label for="nit">NIT:</label>
+                                <input type="text" class="form-control" id="nit" name="nit" value="<?php echo set_value("nit")?:'';?>">
+                                <?php echo form_error("nit","<span class='help-block'>","</span>");?>
                             </div>
                             
                             <div class="form-group">
