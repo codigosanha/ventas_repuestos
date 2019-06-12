@@ -36,8 +36,17 @@ class Productos extends CI_Controller {
 
 	public function store(){
 
-		$nombre = $this->input->post("nombre");
+		$codigo_barras = $this->input->post("codigo_barras");
+		$year_id = $this->input->post("year_id");
+		$fabricante_id = $this->input->post("fabricante_id");
+		$modelo_id = $this->input->post("modelo_id");
+		$calidad_id = $this->input->post("calidad_id");
+		$imagen = $this->input->post("imagen");
+		$categoria_id = $this->input->post("categoria_id");
+		$subcategoria_id = $this->input->post("subcategoria_id");
 		$descripcion = $this->input->post("descripcion");
+		$estanteria = $this->input->post("estanteria");
+		$year_id = $this->input->post("year_id");
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[productos.nombre]");
 
 		if ($this->form_validation->run()==TRUE) {
