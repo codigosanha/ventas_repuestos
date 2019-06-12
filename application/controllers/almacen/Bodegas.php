@@ -34,35 +34,45 @@ class Bodegas extends CI_Controller {
 	}
 
 	public function add(){
+		$bodegas = $this->Comun_model->get_records("bodegas");
+		$sucursales = $this->Comun_model->get_records("sucursales");
+		$contenido_interno  = array(
+			//"permisos" => $this->permisos,
+			"bodegas" => $bodegas,
+			"sucursales" => $sucursales,
+		);
+
 		$contenido_externo = array(
 			"title" => "Bodegas", 
-			"contenido" => $this->load->view("admin/bodegas/add","", TRUE)
+			"contenido" => $this->load->view("admin/bodegas/add",$contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}
 
 	public function store(){
 
-		$nombre = $this->input->post("nombre");
-		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[bodegas.nombre]");
+		$sucursal_id = $this->input->post("sucursal_id");
+		$bodega_id = $this->input->post("bodega_id");
 
-		if ($this->form_validation->run()==TRUE) {
+		$existe_bodega_sucursal = $this->Comun_model->get_record("bodega_sucursal","sucursal_id='$sucursal_id' && bodega_id='$bodega_id'");
 
+		if ($existe_bodega_sucursal) {
+			$this->session->set_flashdata("error","La bodega ".get_record("bodegas","id=$existe_bodega_sucursal->bodega_id")->nombre." ya fue registrado para la sucursal ".get_record("sucursales","id=$existe_bodega_sucursal->sucursal_id")->nombre);
+			redirect(base_url()."almacen/bodegas/add");
+		}else{
 			$data  = array(
-				"nombre" => $nombre, 
+				"sucursal_id" => $sucursal_id, 
+				"bodega_id" => $bodega_id,
 				"estado" => "1"
 			);
 
-			if ($this->Comun_model->insert("bodegas", $data)) {
+			if ($this->Comun_model->insert("bodega_sucursal", $data)) {
 				redirect(base_url()."almacen/bodegas");
 			}
 			else{
 				$this->session->set_flashdata("error","No se pudo guardar la informacion");
 				redirect(base_url()."almacen/bodegas/add");
 			}
-		}
-		else{
-			$this->add();
 		}
 	}
 
@@ -114,7 +124,7 @@ class Bodegas extends CI_Controller {
 
 	public function view($id){
 		$data  = array(
-			"bodega" => $this->Comun_model->get_record("bodegas", "id=$id"), 
+			"bodega" => $this->Comun_model->get_record("bodega_sucursal", "id=$id"), 
 		);
 		$this->load->view("admin/bodegas/view",$data);
 	}

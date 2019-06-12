@@ -29,7 +29,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre</th>
+                                    <th>Bodega</th>
                                     <?php if (!$this->session->userdata("sucursal")): ?>
                                         <th>Sucursal</th>
                                     <?php endif ?>
@@ -41,18 +41,19 @@
                                     <?php foreach($bodegas as $bodega):?>
                                         <tr>
                                             <td><?php echo $bodega->id;?></td>
-                                            <td><?php echo $bodega->nombre;?></td>
+                                            <td><?php echo get_record("bodegas","id=".$bodega->bodega_id)->nombre;?></td>
                                             <?php if (!$this->session->userdata("sucursal")): ?>
-                                                <td><?php echo $bodega->sucursal_id?></td>
+                                                <td><?php echo get_record("sucursales","id=".$bodega->sucursal_id)->nombre;?></td>
                                             <?php endif ?>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $bodega->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
+                                                    <?php if ($this->session->userdata("total_access")): ?>
+                                                        <a href="<?php echo base_url();?>almacen/bodegas/delete/<?php echo $bodega->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php endif ?>
                                                     
-                                                    <a href="<?php echo base_url()?>almacen/bodegas/edit/<?php echo $bodega->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>almacen/bodegas/delete/<?php echo $bodega->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
                                                   
                                                 </div>
                                             </td>

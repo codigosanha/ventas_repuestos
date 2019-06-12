@@ -23,11 +23,29 @@
                              </div>
                         <?php endif;?>
                         <form action="<?php echo base_url();?>almacen/bodegas/store" method="POST">
-                            <div class="form-group <?php echo form_error('nombre') == true ? 'has-error':''?>">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:''?>" required="required">
-                                <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
+                            <div class="form-group">
+                                <label for="bodega_id">Tipo de Bodega:</label>
+                                <select name="bodega_id" id="bodega_id" class="form-control">
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach ($bodegas as $bodega): ?>
+                                        <option value="<?php echo $bodega->id;?>"><?php echo $bodega->nombre;?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
+                            <?php if ($this->session->userdata("sucursal")): ?>
+                                <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>">
+                            <?php else: ?>
+                                <div class="form-group">
+                                    <label for="sucursal_id">Tipo de Bodega:</label>
+                                    <select name="sucursal_id" id="sucursal_id" class="form-control">
+                                        <option value="">Seleccione...</option>
+                                        <?php foreach ($sucursales as $sucursal): ?>
+                                            <option value="<?php echo $sucursal->id;?>"><?php echo $sucursal->nombre;?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            <?php endif ?>
+                            
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>
                                 <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
