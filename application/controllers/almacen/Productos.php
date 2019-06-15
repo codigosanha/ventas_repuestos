@@ -8,7 +8,7 @@ class Productos extends CI_Controller {
 		parent::__construct();
 		//$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
-		
+		$this->load->model("Productos_model");
 	}
 
 	public function index()
@@ -27,9 +27,20 @@ class Productos extends CI_Controller {
 	}
 
 	public function add(){
+		$contenido_interno  = array(
+			//"permisos" => $this->permisos,
+			"categorias" => $this->Comun_model->get_records("categorias"), 
+			"years" => $this->Comun_model->get_records("years"), 
+			"presentaciones" => $this->Comun_model->get_records("presentaciones"), 
+			"modelos" => $this->Comun_model->get_records("modelos"), 
+			"marcas" => $this->Comun_model->get_records("marcas"), 
+			"fabricantes" => $this->Comun_model->get_records("fabricantes"), 
+			"calidades" => $this->Comun_model->get_records("calidades"), 
+
+		);
 		$contenido_externo = array(
 			"title" => "productos", 
-			"contenido" => $this->load->view("admin/productos/add","", TRUE)
+			"contenido" => $this->load->view("admin/productos/add",$contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}
@@ -41,12 +52,17 @@ class Productos extends CI_Controller {
 		$fabricante_id = $this->input->post("fabricante_id");
 		$modelo_id = $this->input->post("modelo_id");
 		$calidad_id = $this->input->post("calidad_id");
-		$imagen = $this->input->post("imagen");
+		$nombre = $this->input->post("nombre");
 		$categoria_id = $this->input->post("categoria_id");
 		$subcategoria_id = $this->input->post("subcategoria_id");
 		$descripcion = $this->input->post("descripcion");
-		$estanteria = $this->input->post("estanteria");
-		$year_id = $this->input->post("year_id");
+		$marca_id = $this->input->post("marca_id");
+		$presentacion_id = $this->input->post("presentacion_id");
+		$stock_minimo = $this->input->post("stock_minimo");
+
+		$modelos = $this->input->post("modelos");
+
+
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[productos.nombre]");
 
 		if ($this->form_validation->run()==TRUE) {
@@ -139,5 +155,25 @@ class Productos extends CI_Controller {
 		);
 		$this->Comun_model->update("productos","id=$id",$data);
 		echo "almacen/productos";
+	}
+
+	public function getSubcategorias(){
+		$categoria_id = $this->input->post("idCategoria");
+		$subcategorias = $this->Comun_model->get_records("subcategorias","categoria_id='$categoria_id'");
+		echo json_encode($subcategorias);
+	}
+
+	public function getProductos(){
+		$valor = $this->input->post("valor");
+		$productos = $this->Productos_model->getProductos($valor);
+		$data  = array();
+
+        foreach ($productos as $p) {
+            $dataProducto['id'] = $p->id;
+            $dataProducto['nombre'] = $p->nombre;
+            $dataProducto['label'] = $p->nombre;
+            $data [] = $dataProducto;
+        }
+        echo json_encode($data);
 	}
 }

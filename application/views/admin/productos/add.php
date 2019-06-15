@@ -15,20 +15,21 @@
             <div class="box-body">
                 
                 <form action="<?php echo base_url();?>mantenimiento/productos/store" method="POST" enctype="multipart/form-data">
+                    <?php if($this->session->flashdata("error")):?>
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <p><i class="icon fa fa-ban"></i><?php echo $this->session->flashdata("error"); ?></p>
+                            
+                         </div>
+                    <?php endif;?>
                     <div class="row">
                         <div class="col-md-4">
-                            <?php if($this->session->flashdata("error")):?>
-                                <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <p><i class="icon fa fa-ban"></i><?php echo $this->session->flashdata("error"); ?></p>
-                                    
-                                 </div>
-                            <?php endif;?>
-                            
                             <div class="form-group">
-                                <label for="categoria">Categoria:</label>
-                                <select name="categoria" id="categoria" class="form-control" required>
+                                <label for="categoria_id">Categoria:</label>
+                                <select name="categoria_id" id="categoria_id" class="form-control" required>
+                                    <option value="">Seleccione...</option>
                                     <?php foreach($categorias as $categoria):?>
+
                                         <option value="<?php echo $categoria->id?>"><?php echo $categoria->nombre;?></option>
                                     <?php endforeach;?>
                                 </select>
@@ -44,17 +45,27 @@
                                 <input type="text" class="form-control" id="nombre" name="nombre" required value="<?php echo set_value('nombre');?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
-                                
-                            <div class="form-group <?php echo !empty(form_error('precio_compra')) ? 'has-error':'';?>">
-                                <label for="precio_compra">Precio Compra:</label>
-                                <input type="text" class="form-control" id="precio_compra" name="precio_compra" required value="<?php echo set_value('precio_compra');?>">
-                                <?php echo form_error("precio_compra","<span class='help-block'>","</span>");?>
+                            <div class="form-group">
+                                <label for="fabricante_id">Fabricante:</label>
+                                <select name="fabricante_id" id="fabricante_id" class="form-control" required>
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($fabricantes as $fabricante):?>
+
+                                        <option value="<?php echo $fabricante->id?>"><?php echo $fabricante->nombre;?></option>
+                                    <?php endforeach;?>
+                                </select>
                             </div>
-                            <div class="form-group <?php echo !empty(form_error('pasillo')) ? 'has-error':'';?>">
-                                <label for="pasillo">Pasillo:</label>
-                                <input type="text" class="form-control" id="pasillo" name="pasillo" required value="<?php echo set_value('pasillo');?>">
-                                <?php echo form_error("pasillo","<span class='help-block'>","</span>");?>
+                            <div class="form-group">
+                                <label for="year_id">Año:</label>
+                                <select name="year_id" id="year_id" class="form-control" required>
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($years as $year):?>
+
+                                        <option value="<?php echo $year->id?>"><?php echo $year->year;?></option>
+                                    <?php endforeach;?>
+                                </select>
                             </div>
+                        
                             <div class="form-group">
                                 <label for="">Imagen del producto:</label>
                                 <input type="file" name="imagen" required="required" class="form-control" accept=".jpg, .png, .gif">
@@ -64,21 +75,13 @@
                                 <label for="stockminimo">Stock Minimo:</label>
                                 <input type="text" class="form-control" id="stockminimo" name="stockminimo">
                             </div>
-                                
-                            
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-flat">Guardar</button>
-                                <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
-                            </div>
-                            
+                        
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="subcategoria">Subcategoria:</label>
-                                <select name="subcategoria" id="subcategoria" class="form-control" required>
-                                    <?php foreach($subcategorias as $sc):?>
-                                        <option value="<?php echo $sc->id?>"><?php echo $sc->nombre;?></option>
-                                    <?php endforeach;?>
+                                <label for="subcategoria_id">Subcategoria:</label>
+                                <select name="subcategoria_id" id="subcategoria_id" class="form-control" required>
+                                    <option value="">Seleccione...</option>
                                 </select>
                             </div>
                             
@@ -86,14 +89,20 @@
                                 <label for="descripcion">Descripcion:</label>
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" required>
                             </div>
-                            <div class="form-group <?php echo !empty(form_error('precio')) ? 'has-error':'';?>">
-                                <label for="precio">Precio:</label>
-                                <input type="text" class="form-control" id="precio" name="precio" required value="<?php echo set_value('precio');?>">
-                                <?php echo form_error("precio","<span class='help-block'>","</span>");?>
+                            <div class="form-group">
+                                <label for="modelo_id">Modelo:</label>
+                                <select name="modelo_id" id="modelo_id" class="form-control" required>
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($modelos as $modelo):?>
+
+                                        <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
+                                    <?php endforeach;?>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="presentacion">Presentacion:</label>
                                 <select name="presentacion" id="presentacion" class="form-control" required>
+                                    <option value="">Seleccione...</option>
                                     <?php foreach($presentaciones as $presentacion):?>
                                         <option value="<?php echo $presentacion->id?>"><?php echo $presentacion->nombre;?></option>
                                     <?php endforeach;?>
@@ -102,15 +111,31 @@
                             <div class="form-group">
                                 <label for="marca">Marca:</label>
                                 <select name="marca" id="marca" class="form-control" required>
+                                    <option value="">Seleccione...</option>
                                     <?php foreach($marcas as $marca):?>
                                         <option value="<?php echo $marca->id?>"><?php echo $marca->nombre;?></option>
                                     <?php endforeach;?>
                                 </select>
                             </div>
-                            <div class="form-group <?php echo !empty(form_error('estanteria')) ? 'has-error':'';?>">
-                                <label for="estanteria">Estanteria:</label>
-                                <input type="text" class="form-control" id="estanteria" name="estanteria" required value="<?php echo set_value('estanteria');?>">
-                                <?php echo form_error("estanteria","<span class='help-block'>","</span>");?>
+                            <div class="form-group">
+                                <label for="calidad_id">Calidad:</label>
+                                <select name="calidad_id" id="calidad_id" class="form-control" required>
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($calidades as $calidad):?>
+
+                                        <option value="<?php echo $calidad->id?>"><?php echo $calidad->nombre;?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="modelos">Compatibilidad:</label>
+                                <select name="modelos[]" id="modelos" class="form-control select2" multiple="multiple">
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($modelos as $modelo):?>
+
+                                        <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
+                                    <?php endforeach;?>
+                                </select>
                             </div>
                             
                         </div>
@@ -132,6 +157,14 @@
                                 </tbody>
                             </table>
 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-flat">Guardar</button>
+                                <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
+                            </div>
                         </div>
                     </div>
                 </form>

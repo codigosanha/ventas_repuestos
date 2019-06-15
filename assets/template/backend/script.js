@@ -404,31 +404,20 @@ $(document).ready(function () {
     });
 
 
-    $("#categoria").on("change", function(){
+    $("#categoria_id").on("change", function(){
         id = $(this).val(); 
         $.ajax({
-            url: base_url + "movimientos/ordenes/getProductosByCategoria",
+            url: base_url + "almacen/productos/getSubcategorias",
             type: "POST", 
-            data:{idcategoria:id},
+            data:{idCategoria:id},
             dataType:"json",
             success:function(resp){
-                html = "";
+                html = "<option value=''>Seleccione...</option>";
                 $.each(resp,function(key, value){
-
-                    if (value.condicion == "1") {
-                        stock = value.stock;
-                    }
-                    else{
-                        stock = "N/A";
-                    }
-                    data = value.id + "*"+ value.codigo+ "*"+ value.nombre+ "*"+ value.precio+ "*"+ stock;
-                    html += "<tr>";
-                    html += "<td>"+value.nombre+"</td>";
-                    html += "<td><button type='button' class='btn btn-success btn-flat btn-selected' value='"+data+"'><span class='fa fa-check'></span></button></td>";
-                    html += "</tr>";
+                    html += "<option value='"+value.id+"'>"+value.nombre+"</option>";
                 });
 
-                $("#tbproductos tbody").html(html);
+                $("#subcategoria_id").html(html);
             }
 
         });
@@ -987,7 +976,7 @@ $(document).ready(function () {
     $("#productosA").autocomplete({
         source:function(request, response){
             $.ajax({
-                url: base_url+"movimientos/ventas/getProductos",
+                url: base_url+"almacen/productos/getProductos",
                 type: "POST",
                 dataType:"json",
                 data:{ valor: request.term},
@@ -1000,8 +989,8 @@ $(document).ready(function () {
         select:function(event, ui){
 
             html =  '<tr>'+
-                        '<td><input type="hidden" name="idproductosA[]" value="'+ ui.item.id +'">'+ ui.item.label +'</td>'+
-                        '<td><input type="number" name="cantidadA[]" class="form-control"  value="1" min="1"></td>'+
+                        '<td><input type="hidden" name="idProductosA[]" value="'+ ui.item.id +'">'+ ui.item.label +'</td>'+
+                        '<td><input type="number" name="cantidadesA[]" class="form-control"  value="1" min="1"></td>'+
                         '<td><button type="button" class="btn btn-danger btn-quitarAsociado"><i class="fa fa-times"></i></button></td>'+
                     '</tr>';
             $("#tbAsociados tbody").append(html);
