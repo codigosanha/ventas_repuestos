@@ -37,3 +37,22 @@ if(!function_exists('get_record'))
 	}
 }
 
+if(!function_exists('get_records'))
+{
+	function get_records($table,$where = '')
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		if ($where) {
+			$ci->db->where($where);
+		}
+		$query = $ci->db->get($table);
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		}
+		return array();
+	 
+	}
+}
+

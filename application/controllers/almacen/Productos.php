@@ -147,7 +147,16 @@ class Productos extends CI_Controller {
 	public function edit($id){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"producto" => $this->Comun_model->get_record("productos","id=$id"), 
+			"producto" => $this->Comun_model->get_record("productos","id=$id"),
+			"categorias" => $this->Comun_model->get_records("categorias"), 
+			"years" => $this->Comun_model->get_records("years"), 
+			"presentaciones" => $this->Comun_model->get_records("presentaciones"), 
+			"modelos" => $this->Comun_model->get_records("modelos"), 
+			"marcas" => $this->Comun_model->get_records("marcas"), 
+			"fabricantes" => $this->Comun_model->get_records("fabricantes"), 
+			"calidades" => $this->Comun_model->get_records("calidades"), 
+			"tipo_precios" => $this->Comun_model->get_records("precios"), 
+			"compatibilidades" => $this->Comun_model->get_records("compatibilidades","producto_id='$id'")
 		);
 
 		$contenido_externo = array(

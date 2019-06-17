@@ -13,9 +13,9 @@
         <div class="box box-solid">
             <div class="box-body">
                 
-                <form action="<?php echo base_url();?>mantenimiento/productos/update" method="POST" enctype="multipart/form-data">
+                <form action="<?php echo base_url();?>almacen/productos/update" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="idProducto" value="<?php echo $producto->id;?>">
-                    <input type="hidden" name="imagen_actual" value="<?php echo $producto->imagen;?>">
+                    <input type="hidden" name="imagen_actual" value="<?php echo $producto->nombre;?>">
                     <div class="row">
                         <div class="col-md-4">
                             <?php if($this->session->flashdata("error")):?>
