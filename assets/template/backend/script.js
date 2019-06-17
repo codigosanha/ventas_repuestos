@@ -997,6 +997,32 @@ $(document).ready(function () {
         },
     });
 
+    $("#tipo_precios").autocomplete({
+        source:function(request, response){
+            $.ajax({
+                url: base_url+"almacen/productos/getPrecios",
+                type: "POST",
+                dataType:"json",
+                data:{ valor: request.term},
+                success:function(data){
+                    response(data);
+                }
+            });
+        },
+        minLength:2,
+        select:function(event, ui){
+
+            html =  '<tr>'+
+                        '<td><input type="hidden" name="idPrecios[]" value="'+ ui.item.id +'">'+ ui.item.label +'</td>'+
+                        '<td><input type="text" name="preciosC[]" class="form-control input-xs" required="required"></td>'+
+                        '<td><input type="text" name="preciosV[]" class="form-control input-xs" required="required"></td>'+
+
+                        '<td><button type="button" class="btn btn-danger btn-quitarAsociado btn-xs"><i class="fa fa-times"></i></button></td>'+
+                    '</tr>';
+            $("#tbPrecios tbody").append(html);
+        },
+    });
+
     $(document).on("click", ".btn-quitarprod", function(){
         data = $(this).val();
         info = data.split("*");

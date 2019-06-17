@@ -36,6 +36,7 @@ class Productos extends CI_Controller {
 			"marcas" => $this->Comun_model->get_records("marcas"), 
 			"fabricantes" => $this->Comun_model->get_records("fabricantes"), 
 			"calidades" => $this->Comun_model->get_records("calidades"), 
+			"tipo_precios" => $this->Comun_model->get_records("precios"), 
 
 		);
 		$contenido_externo = array(
@@ -61,7 +62,11 @@ class Productos extends CI_Controller {
 		$stock_minimo = $this->input->post("stock_minimo");
 
 		$modelos = $this->input->post("modelos");
-
+		$idProductosA = $this->input->post("idProductosA");
+		$cantidadesA = $this->input->post("cantidadesA");
+		$idPrecios = $this->input->post("idPrecios");
+		$preciosC = $this->input->post("preciosC");
+		$preciosV = $this->input->post("preciosV");
 
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[productos.nombre]");
 
@@ -70,10 +75,30 @@ class Productos extends CI_Controller {
 			$data  = array(
 				"nombre" => $nombre, 
 				"descripcion" => $descripcion,
+				"fabricante_id" => $fabricante_id,
+				"year_id" => $year_id,
+				"marca_id" => $marca_id,
+				"modelo_id" => $modelo_id,
+				"calidad_id" => $calidad_id,
+				"presentacion_id" => $presentacion_id,
+				"stock_minimo" => $stock_minimo,
+				"categoria_id" => $categoria_id,
+				"subcategoria_id" => $subcategoria_id,
+				"codigo_barras" => $codigo_barras,
 				"estado" => "1"
 			);
-
-			if ($this->Comun_model->insert("productos", $data)) {
+			$producto = $this->Comun_model->insert("productos", $data);
+			if ($producto) {
+				if (!empty($modelos)) {
+					$this->saveCompatibilidades($producto,$modelos);
+				}
+				if (!empty($idProductosA)) {
+					$this->saveAsociados($producto,$idProductosA,$cantidadesA);
+				}
+				if (!empty($idPrecios)) {
+					$this->savePrecios($producto,$idPrecios,$preciosC,$preciosV);
+				}
+				
 				redirect(base_url()."almacen/productos");
 			}
 			else{
@@ -83,6 +108,39 @@ class Productos extends CI_Controller {
 		}
 		else{
 			$this->add();
+		}
+	}
+	protected function savePrecios($producto,$idPrecios,$preciosC,$preciosV){
+		for ($i=0; $i < count($idPrecios) ; $i++) { 
+			$data = array(
+				'producto_id' => $producto->id, 
+				'precio_id' => $idPrecios[$i],
+				'precio_compra' => $preciosC[$i],
+				'precio_venta' => $preciosV[$i],
+				'estado' => '1'
+			);
+			$this->Comun_model->insert("producto_precio",$data);
+		}
+	}
+
+	protected function saveCompatibilidades($producto,$modelos){
+		for ($i=0; $i < count($modelos) ; $i++) { 
+			$data = array(
+				'producto_id' => $producto->id, 
+				'modelo_id' => $modelos[$i],
+			);
+			$this->Comun_model->insert("compatibilidades",$data);
+		}
+	}
+
+	protected function saveAsociados($producto,$productosA, $cantidadesA){
+		for ($i=0; $i < count($productosA) ; $i++) { 
+			$data = array(
+				'producto_original' => $producto->id, 
+				'producto_asociado' => $productosA[$i],
+				'cantidad' => $cantidadesA[$i]
+			);
+			$this->Comun_model->insert("productos_asociados",$data);
 		}
 	}
 
@@ -165,7 +223,7 @@ class Productos extends CI_Controller {
 
 	public function getProductos(){
 		$valor = $this->input->post("valor");
-		$productos = $this->Productos_model->getProductos($valor);
+		$productos = $this->Comun_model->get_records("productos","nombre LIKE '%".$valor."%' and estado=1");
 		$data  = array();
 
         foreach ($productos as $p) {
@@ -173,6 +231,20 @@ class Productos extends CI_Controller {
             $dataProducto['nombre'] = $p->nombre;
             $dataProducto['label'] = $p->nombre;
             $data [] = $dataProducto;
+        }
+        echo json_encode($data);
+	}
+
+	public function getPrecios(){
+		$valor = $this->input->post("valor");
+		$precios = $this->Comun_model->get_records("precios","nombre LIKE '%".$valor."%' and estado=1");
+		$data  = array();
+
+        foreach ($precios as $p) {
+            $dataPrecio['id'] = $p->id;
+            $dataPrecio['nombre'] = $p->nombre;
+            $dataPrecio['label'] = $p->nombre;
+            $data [] = $dataPrecio;
         }
         echo json_encode($data);
 	}

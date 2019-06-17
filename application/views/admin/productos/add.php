@@ -14,7 +14,7 @@
         <div class="box box-solid">
             <div class="box-body">
                 
-                <form action="<?php echo base_url();?>mantenimiento/productos/store" method="POST" enctype="multipart/form-data">
+                <form action="<?php echo base_url();?>almacen/productos/store" method="POST" enctype="multipart/form-data">
                     <?php if($this->session->flashdata("error")):?>
                         <div class="alert alert-danger alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -72,8 +72,8 @@
                             </div>
                                 
                             <div class="form-group ">
-                                <label for="stockminimo">Stock Minimo:</label>
-                                <input type="text" class="form-control" id="stockminimo" name="stockminimo">
+                                <label for="stock_minimo">Stock Minimo:</label>
+                                <input type="text" class="form-control" id="stock_minimo" name="stock_minimo">
                             </div>
                         
                         </div>
@@ -100,8 +100,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="presentacion">Presentacion:</label>
-                                <select name="presentacion" id="presentacion" class="form-control" required>
+                                <label for="presentacion_id">Presentacion:</label>
+                                <select name="presentacion_id" id="presentacion_id" class="form-control" required>
                                     <option value="">Seleccione...</option>
                                     <?php foreach($presentaciones as $presentacion):?>
                                         <option value="<?php echo $presentacion->id?>"><?php echo $presentacion->nombre;?></option>
@@ -109,8 +109,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="marca">Marca:</label>
-                                <select name="marca" id="marca" class="form-control" required>
+                                <label for="marca_id">Marca:</label>
+                                <select name="marca_id" id="marca_id" class="form-control" required>
                                     <option value="">Seleccione...</option>
                                     <?php foreach($marcas as $marca):?>
                                         <option value="<?php echo $marca->id?>"><?php echo $marca->nombre;?></option>
@@ -156,6 +156,25 @@
                                     
                                 </tbody>
                             </table>
+                            
+                            <div class="form-group">
+                                <label for="">Tipo de Precios</label>
+                                <input type="text" id="tipo_precios" class="form-control">
+                            </div>
+                            <table class="table table-bordered" id="tbPrecios">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo Precio</th>
+                                        <th>P.Compra</th>
+                                        <th>P.Venta</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                            <p class="text-muted">Nota: Si no se declara un tipo de precio para este producto, la información de este no se visualizara en la parte de compras y ventas</p>
 
                         </div>
                     </div>
@@ -176,3 +195,47 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+<div class="modal fade" id="modal-tipo-precios">
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+          		</button>
+        		<h4 class="modal-title">Tipo de Precios</h4>
+      		</div>
+      		<div class="modal-body">
+        		<p>Seleccione los tipo de precios que se va establecer para este producto.</p>
+        		<table class="table table-bordered">
+        			<tbody>
+        				<thead>
+        					<th></th>
+        					<th>Nombre</th>
+        					<th>Descripcion</th>
+        				</thead>
+        				<tbody>
+        					<?php if (!empty($tipo_precios)): ?>
+        						<?php foreach ($tipo_precios as $tp): ?>
+        							<tr>
+        								<td>
+        									<input type="checkbox" name="checkPrecio" class="checkPrecio"> value="<?php echo $tp->id?>">
+        								</td>
+        								<td><?php echo $tp->nombre;?></td>
+        								<td><?php echo $tp->descripcion;?></td>
+        							</tr>
+        						<?php endforeach ?>
+        					<?php endif ?>
+        				</tbody>
+        			</tbody>
+        		</table>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div>
+    	<!-- /.modal-content -->
+  	</div>
+  	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
