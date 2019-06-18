@@ -2,6 +2,55 @@ $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
 
+    $(document).on("click", ".btn-procesar", function(){
+        $("#tableSimple tbody tr input:enabled").each(function(){
+            if($(this).is(':checked')) {  
+                alert($(this).val());
+            } 
+        });
+    });
+
+    $(document).on("change", "#sucursal", function(){
+        var sucursal_id = $(this).val();
+        $.ajax({
+            url: base_url + "inventario/productos/getBodegas",
+            type: "POST",
+            data:{idSucursal:sucursal_id},
+            dataType:"json",
+            success: function(data){
+                bodegas = "<option value=''>Seleccione...</option>";
+
+                $.each(data, function(key, value){
+                    bodegas += "<option value='"+value.bodega_id+"'>"+value.nombre+"</option>";
+                });
+
+                $("#bodega").html(bodegas);
+            }
+        });
+    });
+
+    $(document).on("change", "#bodega", function(){
+        var bodega_id = $(this).val();
+        var sucursal_id = $("#sucursal").val();
+        $.ajax({
+            url: base_url + "inventario/productos/getProductos",
+            type: "POST",
+            data:{idBodega:bodega_id,idSucursal:sucursal_id},
+            dataType:"json",
+            success: function(data){
+                productos = "";
+
+                $.each(data, function(key, value){
+                    productos = "<tr><td>"+value.nombre+"</td></tr>";
+                    $("#p"+value.producto_id).attr("disabled","disabled");
+
+                });
+
+                $("#tbProductosExistentes tbody").html(productos);
+            }
+        });
+    });
+
     $(document).on("click",".btn-view-barcode", function(){
         codigo_barra = $(this).val();
         cantidad = $(this).closest("tr").find("td:eq(9)").text();
