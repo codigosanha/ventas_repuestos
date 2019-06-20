@@ -66,29 +66,22 @@ class Productos extends CI_Controller {
 
 	public function store(){
 
-		$nombre = $this->input->post("nombre");
-		$descripcion = $this->input->post("descripcion");
-		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[calidades.nombre]");
+		$bodega_id = $this->input->post("bodega_id");
+		$sucursal_id = $this->input->post("sucursal_id");
+		$idProductos = $this->input->post("idProductos");
 
-		if ($this->form_validation->run()==TRUE) {
-
+		for ($i=0; $i < count($idProductos); $i++) { 
 			$data  = array(
-				"nombre" => $nombre, 
-				"descripcion" => $descripcion,
+				"bodega_id" => $bodega_id, 
+				"sucursal_id" => $sucursal_id,
+				"producto_id" => $idProductos[$i],
 				"estado" => "1"
 			);
+			$this->Comun_model->insert("bodega_sucursal_producto",$data);
+		}
 
-			if ($this->Comun_model->insert("calidades", $data)) {
-				redirect(base_url()."inventario/productos");
-			}
-			else{
-				$this->session->set_flashdata("error","No se pudo guardar la informacion");
-				redirect(base_url()."inventario/productos/add");
-			}
-		}
-		else{
-			$this->add();
-		}
+		redirect(base_url()."inventario/productos");
+
 	}
 
 	public function edit($id){

@@ -32,7 +32,8 @@
                                     <th>Proveedor</th>
                                     <th>NIT</th>
                                     <th>Tipo de Pago</th>
-                                    <th>Total</th>                                    <th>Opciones</th>
+                                    <th>Total</th>          
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,10 +44,10 @@
                                             <td><?php echo $compra->fecha;?></td>
                                             <td><?php echo $compra->comprobante;?></td>
                                             <td><?php echo $compra->serie." - ".$compra->numero;?></td>
-                                            
-                                            <td><?php echo $compra->proveedor;?></td>
-                                            <td><?php echo $compra->nit;?></td>
-                                            <td><?php echo $compra->tipopago;?></td>
+                                            <?php $proveedor = get_record("proveedores","id=".$compra->proveedor_id);?>
+                                            <td><?php echo $proveedor->nombre;?></td>
+                                            <td><?php echo $proveedor->nit;?></td>
+                                            <td><?php echo $compra->tipo_pago;?></td>
                                             <td><?php echo $compra->total;?></td>
 
                                             <td>

@@ -25,7 +25,7 @@
                     <div class="col-md-8">
                         
                         <?php if ($this->session->userdata("sucursal")): ?>
-                            <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>">
+                            <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>" id="sucursal">
                         <?php else: ?>
                             <div class="form-group">
                                 <label for="sucursal_id">Sucursal:</label>
@@ -40,7 +40,7 @@
                         <?php if ($this->session->userdata("sucursal")): ?>
                             <div class="form-group">
                                 <label for="bodega_id">Bodega:</label>
-                                <select name="bodega_id" id="bodega_id" class="form-control">
+                                <select name="bodega_id" id="bodega" class="form-control">
                                     <option value="">Seleccione...</option>
                                     <?php foreach ($bodegas as $b): ?>
                                         <option value="<?php echo $b->bodega_id;?>"><?php echo get_record("bodegas","id=".$b->bodega_id)->nombre;?></option>
@@ -86,9 +86,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-flat">Guardar</button>
+                            <button type="submit" class="btn btn-success btn-flat" id="btn-guardar">Guardar</button>
                             <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-productos">Seleccionar Productos</button>
+                            <button type="button" class="btn btn-primary btn-select-products" data-toggle="modal" data-target="#modal-productos" disabled="disabled">Seleccionar Productos</button>
                         </div>
                     </div>
                 </div>

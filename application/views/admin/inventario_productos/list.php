@@ -44,10 +44,11 @@
                                         <tr>
                                             <td><?php echo $p->id;?></td>
                                             <?php if (!$this->session->userdata("sucursal")): ?>
-                                                <td><?php echo get_record("sucursales","id=".$c->sucursal_id)->nombre;?></td>
+                                                <td><?php echo get_record("sucursales","id=".$p->sucursal_id)->nombre;?></td>
                                             <?php endif ?>
                                             <td><?php echo get_record("bodegas","id=".$p->bodega_id)->nombre;?></td>
                                             <td><?php echo get_record("productos","id=".$p->producto_id)->nombre;?></td>
+                                            <td><?php echo $p->stock;?></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $p->id;?>">

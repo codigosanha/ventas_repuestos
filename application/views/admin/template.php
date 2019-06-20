@@ -93,6 +93,14 @@
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <!-- Notifications: style can be found in dropdown.less -->
+                        <li style="padding: 15px;">
+                            <b>Sucursal:</b> 
+                            <?php if ($this->session->userdata("sucursal")): ?>
+                                <?php echo get_record("sucursales","id=".$this->session->userdata("sucursal"))->nombre;?>
+                            <?php else: ?>
+                                <?php echo "General";?>
+                            <?php endif ?>
+                        </li>
                     
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">

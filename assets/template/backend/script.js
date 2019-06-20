@@ -1,12 +1,26 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
-
+    $(document).on("click", "#btn-guardar", function(){
+        var totalProductosNuevos = $("#tbProductosNuevos tbody tr").length;
+        if (Number(totalProductosNuevos) == 0 ) {
+            swal("Error","La tabla de productos nuevo debe contar con al menos un producto","error");
+            return false;
+        }
+    });
     $(document).on("click", ".btn-procesar", function(){
         $("#tableSimple tbody tr input:enabled").each(function(){
+            html = "";
             if($(this).is(':checked')) {  
-                alert($(this).val());
+                id = $(this).val();
+                nombre = $(this).closest("tr").children("td:eq(1)").text();
+                html +="<tr>";
+                html +="<td><input type='hidden' name='idProductos[]' value='"+id+"'>"+nombre+"</td>";
+                html +='<td><button type="button" class="btn btn-danger btn-quitarAsociado"><i class="fa fa-times"></i></button></td>';
+
+                html +="</tr>";
             } 
+            $("#tbProductosNuevos tbody").append(html);
         });
     });
 
@@ -39,12 +53,16 @@ $(document).ready(function () {
             dataType:"json",
             success: function(data){
                 productos = "";
-
+                $("input[type=checkbox]").removeAttr("disabled");
+                $("input[type=checkbox]").prop("checked",false);
                 $.each(data, function(key, value){
-                    productos = "<tr><td>"+value.nombre+"</td></tr>";
+                    productos += "<tr><td>"+value.nombre+"</td></tr>";
                     $("#p"+value.producto_id).attr("disabled","disabled");
+                    $("#p"+value.producto_id).prop('checked', true);
 
                 });
+
+                $(".btn-select-products").removeAttr("disabled");
 
                 $("#tbProductosExistentes tbody").html(productos);
             }
