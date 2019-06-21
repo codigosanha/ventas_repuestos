@@ -59,27 +59,41 @@ class Compras extends CI_Controller {
 		$sucursal_id = $this->input->post("sucursal_id");
 		$bodega_id = $this->input->post("bodega_id");
 
-		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[compras.nombre]");
-
-		if ($this->form_validation->run()==TRUE) {
-
-			$data  = array(
-				"nombre" => $nombre, 
-				"descripcion" => $descripcion,
-				"estado" => "1"
-			);
-
-			if ($this->Comun_model->insert("compras", $data)) {
-				redirect(base_url()."movimientos/compras");
+		$data  = array(
+			"fecha" => $fecha, 
+			"serie" => $serie, 
+			"numero_comprobante" => $numero_comprobante, 
+			"comprobante_id" => $comprobante_id, 
+			"subtotal" => $subtotal, 
+			"total" => $total, 
+			"tipo_pago" => $tipo_pago, 
+			"proveedor_id" => $proveedor_id,
+			"sucursal_id" => $sucursal_id,
+			"estado" => "1"
+		);
+		$compra = $this->Comun_model->insert("compras", $data);
+		if ($compra) {
+			if ($tipo_pago == 2) {
+				$this->saveCuentaPagar($compra);
 			}
-			else{
-				$this->session->set_flashdata("error","No se pudo guardar la informacion");
-				redirect(base_url()."movimientos/compras/add");
-			}
+			for
+			redirect(base_url()."movimientos/compras");
 		}
 		else{
-			$this->add();
+			$this->session->set_flashdata("error","No se pudo guardar la informacion");
+			redirect(base_url()."movimientos/compras/add");
 		}
+		
+	}
+
+	protected function saveCuentaPagar($compra){
+		$dataCuenta = array(
+			"compra_id" => $compra->id,
+			"monto" => $compra->total,
+			"fecha" => date("Y-m-d"),
+			"estado" => "0"
+		);
+		$this->Comun_model->insert("cuentas_pagar", $dataCuenta);
 	}
 
 	public function edit($id){

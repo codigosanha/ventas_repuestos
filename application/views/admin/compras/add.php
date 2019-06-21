@@ -111,6 +111,7 @@
                                 <input type="date" class="form-control" name="fecha" value="<?php echo date("Y-m-d");?>" required>
                             </div>
                             <div class="form-group">
+                                <label for="">Proveedor:</label>
                                 <select name="proveedor_id" id="proveedor_id" class="form-control">
                                     <option value="">Seleccione...</option>
                                     <?php foreach ($proveedores as $proveedor): ?>
