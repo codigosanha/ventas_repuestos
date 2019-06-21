@@ -1,6 +1,15 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("change", "#precios", function(){
+        precio_compra = $(this).val();
+        cantidad = $(this).closest("tr").children("td:eq(4)").find("input").val();
+        importe = precio_compra*cantidad;
+        $(this).closest("tr").children("td:eq(3)").find("input").val(precio_compra);
+        $(this).closest("tr").children("td:eq(5)").find("input").val(importe.toFixed(2));
+        $(this).closest("tr").children("td:eq(5)").find("p").text(importe.toFixed(2));
+
+    });
     $(document).on("click", "#btn-guardar", function(){
         var totalProductosNuevos = $("#tbProductosNuevos tbody tr").length;
         if (Number(totalProductosNuevos) == 0 ) {
@@ -237,7 +246,7 @@ $(document).ready(function () {
     }
     $(document).on("keyup mouseup","#tbcompras input.cantidadesCompra", function(){
         cantidad = Number($(this).val());
-        precio = Number($(this).closest("tr").find("td:eq(3)").text());
+        precio = Number($(this).closest("tr").find("td:eq(3)").find("input").val());
         importe = cantidad * precio;
         $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
         $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
@@ -974,11 +983,13 @@ $(document).ready(function () {
     });
     $("#searchProductoCompra").autocomplete({
         source:function(request, response){
+            var sucursal = $("#sucursal").val();
+            var bodega = $("#bodega").val();
             $.ajax({
                 url: base_url+"movimientos/compras/getProductos",
                 type: "POST",
                 dataType:"json",
-                data:{ valor: request.term},
+                data:{ valor: request.term, sucursal_id:sucursal, bodega_id:bodega},
                 success:function(data){
                     response(data);
                 }
@@ -988,17 +999,22 @@ $(document).ready(function () {
         select:function(event, ui){
             
             html = "<tr>";
-            html +="<td><input type='hidden' name='idproductos[]' value='"+ui.item.id+"'>"+ui.item.codigo_barras+"</td>";
+            html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
             html +="<td>"+ui.item.nombre+"</td>";
-            html +="<td>"+ui.item.marca+"</td>";
-            html +="<td><input type='hidden' name='precios[]' value='"+ui.item.precio_compra+"'>"+ui.item.precio_compra+"</td>";
-            html +="<td><input type='text' name='cantidades[]' class='cantidadesCompra' value='1'></td>";
-            html +="<td><input type='hidden' name='importes[]' value='"+ui.item.precio_compra+"'><p>"+ui.item.precio_compra+"</p></td>";
+            precios = "<option value=''>Seleccione</option>";
+            $.each(ui.item.precios, function(key, value){
+                precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
+            });
+            html +="<td><select class='form-control' id='precios'>"+precios+"</select></td>";
+            html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
+
+            html +="<td><input type='text' name='cantidades[]' class='cantidadesCompra' value='1' style='width:60px;'></td>";
+            html +="<td><input type='hidden' name='importes[]'><p></p></td>";
             html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
             html +="</tr>"
 
             $("#tbcompras tbody").append(html);
-            sumarCompra();
+            //sumarCompra();
             this.value = "";
             return false;
 

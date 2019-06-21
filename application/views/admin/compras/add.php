@@ -65,7 +65,8 @@
                                             <th>Codigo</th>
                                             <th>Nombre</th>
                                             
-                                            <th>Precio</th>
+                                            <th>Precios</th>
+                                            <th>P. Compra</th>
                                             <th>Cantidad</th>
                                             <th>Importe</th>
                                             <th></th>

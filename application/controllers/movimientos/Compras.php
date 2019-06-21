@@ -8,7 +8,7 @@ class Compras extends CI_Controller {
 		parent::__construct();
 		//$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
-		
+		$this->load->model("Compras_model");
 	}
 
 	public function index()
@@ -151,5 +151,26 @@ class Compras extends CI_Controller {
 		);
 		$this->Comun_model->update("compras","id=$id",$data);
 		echo "movimientos/compras";
+	}
+
+	public function getProductos(){
+		$valor = $this->input->post("valor");
+		$sucursal_id = $this->input->post("sucursal_id");
+		$bodega_id = $this->input->post("bodega_id");
+		$productos = $this->Compras_model->getProductos($sucursal_id,$bodega_id, $valor);
+		$data = array();
+		foreach ($productos as $p) {
+			$producto = get_record("productos", "id=".$p->producto_id);
+			$data[] = array(
+				"producto_id" => $p->producto_id,
+				"label" => $producto->codigo_barras ." - ".$producto->nombre,
+				"nombre" => $producto->nombre,
+				"codigo_barras" => $producto->codigo_barras,
+				"stock" => $p->stock,
+				"precios" => $this->Compras_model->getPrecios($p->producto_id),
+			);
+		}
+		echo json_encode($data);
+
 	}
 }
