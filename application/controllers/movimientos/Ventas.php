@@ -18,9 +18,11 @@ class Ventas extends CI_Controller {
 		}else{
 			$ventas = $this->Comun_model->get_records("ventas");
 		}
+
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"ventas" => $this->Comun_model->get_records("ventas"), 
+			"ventas" => $ventas,
+			"cajas_abiertas" => count($this->Comun_model->get_records("caja","estado=1")), 
 		);
 
 		$contenido_externo = array(

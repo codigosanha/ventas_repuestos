@@ -13,14 +13,15 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <div class="row">
-                    <!--Inicio Primer Columna-->
-                    <div class="col-md-9">
-                        <input type="hidden" id="modulo" value="ventas">
-                        <form action="<?php echo base_url();?>movimientos/ventas/store" method="POST" class="form-horizontal">
-                         <!--   <input type="hidden" name="estado" value="<?php// echo $estado; ?>">-->
-                        
-                                <div class="col-md-12">
+                <input type="hidden" id="modulo" value="movimientos/ventas">
+                <form action="<?php echo base_url();?>movimientos/ventas/store" >
+                    <div class="row">
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                
+                            </div>
+
                                     <label for="">Producto:</label>
                                     <div class="input-group barcode">
                                     <div class="input-group-addon">

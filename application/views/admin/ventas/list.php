@@ -16,9 +16,9 @@
                 <input type="hidden" id="ventas" value="ventas">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if($permisos->insert == 1):?>
-                        <a href="<?php echo base_url();?>movimientos/ventas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Venta</a>
-                        <?php endif;?>
+                        <?php if ($cajas_abiertas): ?>
+                            <a href="<?php echo base_url();?>movimientos/ventas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Venta</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -35,6 +35,7 @@
                                     <th>Fecha</th>
                                     <th>Total</th>
                                     <th>Estado</th>
+                                    <th>Sucursal</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -44,32 +45,28 @@
 
                                             <tr>
                                                 <td><?php echo $venta->id;?></td>
-                                                <td><?php echo $venta->nombre;?></td>
-                                                <td><?php echo $venta->tipocomprobante;?></td>
-                                                <td><?php echo $venta->num_documento;?></td>
+                                                <td><?php echo get_record("clientes","id=".$venta->cliente_id)->nombres;?></td>
+                                                <td><?php echo get_record("comprobantes","id=".$venta->comprobante_id)->nombre;?></td>
+                                                <td><?php echo $venta->numero_comprobante;?></td>
                                                 <td><?php echo $venta->fecha;?></td>
                                                 <td><?php echo $venta->total;?></td>
                                                 <td>
                                                     <?php if ($venta->estado == "1") {
-                                                        echo '<span class="label label-success">Pagado</span>';
-                                                    }else if($venta->estado == "2"){
-                                                        echo '<span class="label label-warning">Pendiente</span>';
-                                                    }else{
+                                                        echo '<span class="label label-success">Procesada</span>';
+                                                    } else {
                                                         echo '<span class="label label-danger">Anulado</span>';
                                                     } ?>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info btn-info-venta" value="<?php echo $venta->id;?>" data-toggle="modal" data-target="#modal-venta"><span class="fa fa-search"></span></button>
-                                                    <?php if ($venta->estado != 0): ?>
+                                                    
                                                         
                                                     
-                                                    <?php if($permisos->update == 1):?>
+                                                    
                                                         <a href="<?php echo base_url()?>movimientos/ventas/edit/<?php echo $venta->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php endif;?>
-                                                    <?php if($permisos->delete == 1):?>
+                                                    
                                                         <a href="<?php echo base_url();?>movimientos/ventas/delete/<?php echo $venta->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php endif;?>
-                                                    <?php endif ?>
+                                                    
                                                 </td>
                                             </tr>
                                                 
