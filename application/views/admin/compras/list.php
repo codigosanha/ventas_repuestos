@@ -12,6 +12,8 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
+                <input type="hidden" id="modulo" value="movimientos/compras">
+
                 <div class="row">
                     <div class="col-md-12">
                       
@@ -26,6 +28,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <?php if (!$this->session->userdata("sucursal")): ?>
+                                        <th>Sucursal</th>
+                                    <?php endif ?>
                                     <th>Fecha</th>
                                     <th>Comprobante</th>
                                     <th>Serie y No. Documento</th>
@@ -41,18 +46,22 @@
                                     <?php foreach($compras as $compra):?>
                                         <tr>
                                             <td><?php echo $compra->id;?></td>
+                                            <?php if (!$this->session->userdata("sucursal")): ?>
+                                                <td><?php echo get_record("sucursales","id=".$compra->sucursal_id)->nombre;?></td>
+                                            <?php endif ?>
+
                                             <td><?php echo $compra->fecha;?></td>
-                                            <td><?php echo $compra->comprobante;?></td>
-                                            <td><?php echo $compra->serie." - ".$compra->numero;?></td>
+                                            <td><?php echo get_record("comprobantes","id=".$compra->comprobante_id)->nombre;?></td>
+                                            <td><?php echo $compra->serie." - ".$compra->numero_comprobante;?></td>
                                             <?php $proveedor = get_record("proveedores","id=".$compra->proveedor_id);?>
                                             <td><?php echo $proveedor->nombre;?></td>
                                             <td><?php echo $proveedor->nit;?></td>
-                                            <td><?php echo $compra->tipo_pago;?></td>
+                                            <td><?php echo $compra->tipo_pago == 1 ? "Efectivo":"Credito";?></td>
                                             <td><?php echo $compra->total;?></td>
 
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-success btn-info-compra" data-toggle="modal" data-target="#modal-compra" value="<?php echo $compra->id;?>"><span class="fa fa-search"></span></button>
+                                                    <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $compra->id;?>"><span class="fa fa-search"></span></button>
                                                     
                                                 </div>
                                             </td>
@@ -73,7 +82,7 @@
 </div>
 <!-- /.content-wrapper -->
 
-<div class="modal fade" id="modal-compra">
+<div class="modal fade" id="modal-default">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

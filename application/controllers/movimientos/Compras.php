@@ -59,6 +59,11 @@ class Compras extends CI_Controller {
 		$sucursal_id = $this->input->post("sucursal_id");
 		$bodega_id = $this->input->post("bodega_id");
 
+		$idProductos = $this->input->post("idProductos");
+		$precios = $this->input->post("precios");
+		$cantidades = $this->input->post("cantidades");
+		$importes = $this->input->post("importes");
+
 		$data  = array(
 			"fecha" => $fecha, 
 			"serie" => $serie, 
@@ -76,7 +81,10 @@ class Compras extends CI_Controller {
 			if ($tipo_pago == 2) {
 				$this->saveCuentaPagar($compra);
 			}
-			for
+
+			$this->saveDetalle($compra->id, $idProductos, $precios, $cantidades, $importes);
+			$this->updateStock($bodega_id, $sucursal_id, $idProductos, $cantidades);
+
 			redirect(base_url()."movimientos/compras");
 		}
 		else{
@@ -84,6 +92,29 @@ class Compras extends CI_Controller {
 			redirect(base_url()."movimientos/compras/add");
 		}
 		
+	}
+
+	protected function saveDetalle($compra_id, $productos, $precios, $cantidades, $importes){
+		for ($i=0; $i < count($productos) ; $i++) { 
+			$dataDetalle = array(
+				"producto_id" => $productos[$i],
+				"compra_id" => $compra_id,
+				"cantidad" => $cantidades[$i],
+				"precio" =>  $precios[$i],
+				"importe" => $importes[$i],
+			);
+			$this->Comun_model->insert("detalle_compra", $dataDetalle);
+		}
+	}
+
+	protected function updateStock($bodega_id, $sucursal_id, $productos, $cantidades){
+		for ($i=0; $i < count($productos) ; $i++) { 
+			$bsp = $this->Comun_model->get_record("bodega_sucursal_producto","bodega_id='$bodega_id' and sucursal_id='$sucursal_id' and producto_id='$productos[$i]'");
+			$data = array(
+				"stock" => $bsp->stock + $cantidades[$i] 
+			);
+			$this->Comun_model->update("bodega_sucursal_producto","id='$bsp->id'",$data);
+		}
 	}
 
 	protected function saveCuentaPagar($compra){
@@ -96,57 +127,11 @@ class Compras extends CI_Controller {
 		$this->Comun_model->insert("cuentas_pagar", $dataCuenta);
 	}
 
-	public function edit($id){
-		$contenido_interno  = array(
-			//"permisos" => $this->permisos,
-			"compra" => $this->Comun_model->get_record("compras","id=$id"), 
-		);
-
-		$contenido_externo = array(
-			"title" => "compras", 
-			"contenido" => $this->load->view("admin/compras/edit", $contenido_interno, TRUE)
-		);
-		$this->load->view("admin/template",$contenido_externo);
-	}
-
-	public function update(){
-		$idCompra = $this->input->post("idCompra");
-		$nombre = $this->input->post("nombre");
-		$descripcion = $this->input->post("descripcion");
-
-		$sucursalActual = $this->Comun_model->get_record("compras","id=$idCompra");
-
-		if ($nombre == $sucursalActual->nombre) {
-			$is_unique_nombre = "";
-		}else{
-			$is_unique_nombre = "|is_unique[compras.nombre]";
-		}
-
-		$this->form_validation->set_rules("nombre","Nombre","required".$is_unique_nombre);
-
-		if ($this->form_validation->run()==TRUE) {
-			$data = array(
-				"nombre" => $nombre,
-				"descripcion" => $descripcion,
-			);
-
-			if ($this->Comun_model->update("compras","id=$idCompra",$data)) {
-				redirect(base_url()."movimientos/compras");
-			}
-			else{
-				$this->session->set_flashdata("error","No se pudo actualizar la informacion");
-				redirect(base_url()."movimientos/compras/edit/".$idCompra);
-			}
-		}else{
-			$this->edit($idCompra);
-		}
-
-		
-	}
 
 	public function view($id){
 		$data  = array(
 			"compra" => $this->Comun_model->get_record("compras", "id=$id"), 
+			"detalles" => $this->Comun_model->get_records("detalle_compra", "compra_id='$id'"), 
 		);
 		$this->load->view("admin/compras/view",$data);
 	}

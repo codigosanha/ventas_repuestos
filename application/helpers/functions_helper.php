@@ -56,3 +56,78 @@ if(!function_exists('get_records'))
 	}
 }
 
+if(!function_exists('getNumeroVentas'))
+{
+	function getNumeroVentas($idCaja)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+
+		$ci->db->where('caja_id',$idCaja);
+		$query = $ci->db->get('ventas');
+		return $query->num_rows();
+	 
+	}
+}
+
+if(!function_exists('getMontoVentas'))
+{
+	function getMontoVentas($idCaja)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->select('SUM(total) as total');
+		$ci->db->from('ventas');
+		$ci->db->where('caja_id',$idCaja);
+		$ci->db->group_by('caja_id');
+		$query = $ci->db->get();
+		if ($query->num_rows() > 0 ) {
+			return number_format($query->row()->total, 2, '.', '');
+		}
+		return '0.00';
+	 
+	}
+}
+
+if(!function_exists('getMontos'))
+{
+	function getMontos($campo,$idCaja)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->select('SUM('.$campo.') as total');
+		$ci->db->from('ventas');
+		$ci->db->where('caja_id',$idCaja);
+		$ci->db->group_by('caja_id');
+		$query = $ci->db->get();
+		if ($query->num_rows() > 0 ) {
+			return number_format($query->row()->total, 2, '.', '');
+		}
+		return '0.00';
+	 
+	}
+}
+
+if(!function_exists('getGastos'))
+{
+	function getGastos($idCaja)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		/*$ci =& get_instance();
+		$ci->db->select('SUM(monto) as monto');
+		$ci->db->from('gastos');
+		$ci->db->where('caja_id',$idCaja);
+		$ci->db->group_by('caja_id');
+		$query = $ci->db->get();
+		if ($query->num_rows() > 0 ) {
+			return $query->row()->monto;
+		}*/
+		return '0.00';
+	 
+	}
+}
+

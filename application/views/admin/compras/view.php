@@ -1,37 +1,38 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="form-group">
-            <table border="1" width="100%">
+            <table class="table table-bordered" width="100%">
                 <tbody>
                     <tr>
                         <th colspan="7" class="text-center">Informacion del Proveedor</th>
                     </tr>
+                    <?php $proveedor = get_record("proveedores","id=".$compra->proveedor_id);?>
                     <tr>
                         <th>Proveedor:</th>
-                        <td colspan="2"><?php echo $compra->proveedor;?></td>
+                        <td colspan="2"><?php echo $proveedor->nombre;?></td>
                         <th>Serie:</th>
                         <td><?php echo $compra->serie;?></td>
                         <th>No. Comprobante</th>
-                        <td><?php echo $compra->numero;?></td>
+                        <td><?php echo $compra->numero_comprobante;?></td>
                     </tr>
                     <tr>
                         <th>NIT:</th>
-                        <td><?php echo $compra->nit;?></td>
+                        <td><?php echo $proveedor->nit;?></td>
                         <th>Comprobante:</th>
-                        <td colspan="2"><?php echo $compra->comprobante;?></td>
+                        <td colspan="2"><?php echo get_record("comprobantes","id=".$compra->comprobante_id)->nombre;?></td>
                         <th>Tipo Pago</th>
-                        <td><?php echo $compra->tipopago;?></td>
+                        <td><?php echo $compra->tipo_pago == 1 ? "Efectivo":"Credito";?></td>
                     </tr>
                     <tr>
                         <th>Direccion:</th>
-                        <td colspan="4"><?php echo $compra->direccion;?></td>
+                        <td colspan="4"><?php echo $proveedor->direccion;?></td>
                         <th>Fecha Compra:</th>
                         <td><?php echo $compra->fecha;?></td>
                     </tr>
                 </tbody>
             </table>
             <br>
-            <table border="1" width="100%">
+            <table class="table table-bordered" width="100%">
                 <tbody>
                     <tr>
                         <th colspan="4" class="text-center">Detalle de la Compra</th>
@@ -45,7 +46,7 @@
                     <?php foreach ($detalles as $detalle): ?>
                         <tr>
                             <td><?php echo $detalle->cantidad;?></td>
-                            <td><?php echo $detalle->nombre;?></td>
+                            <td><?php echo get_record("productos","id=".$detalle->producto_id)->nombre;?></td>
                             <td><?php echo $detalle->precio;?></td>
                             <td><?php echo $detalle->importe;?></td>
                         </tr>
