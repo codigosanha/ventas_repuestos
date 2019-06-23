@@ -52,6 +52,33 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("change", "#sucursal-venta", function(){
+        var sucursal_id = $(this).val();
+        $.ajax({
+            url: base_url + "movimientos/ventas/getBodegasAndComprobantes",
+            type: "POST",
+            data:{idSucursal:sucursal_id},
+            dataType:"json",
+            success: function(data){
+                bodegas = "<option value=''>Seleccione...</option>";
+
+                $.each(data.bodegas, function(key, value){
+                    bodegas += "<option value='"+value.bodega_id+"'>"+value.nombre+"</option>";
+                });
+
+                $("#bodega").html(bodegas);
+
+                comprobantes = "<option value=''>Seleccione...</option>";
+
+                $.each(data.comprobantes, function(key, value){
+                    comprobantes += "<option value='"+value.comprobante_id+"'>"+value.nombre+"</option>";
+                });
+
+                $("#comprobanteVenta").html(comprobantes);
+            }
+        });
+    });
+
     $(document).on("change", "#bodega", function(){
         var bodega_id = $(this).val();
         var sucursal_id = $("#sucursal").val();

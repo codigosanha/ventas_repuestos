@@ -18,123 +18,144 @@
                     <div class="row">
 
                         <div class="col-md-9">
+                            <?php if ($this->session->userdata("sucursal")): ?>
+                                <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>" id="sucursal">
+                            <?php else: ?>
+                                <div class="form-group">
+                                    <label for="sucursal_id">Sucursal:</label>
+                                    <select name="sucursal_id" id="sucursal-venta" class="form-control">
+                                        <option value="">Seleccione...</option>
+                                        <?php foreach ($sucursales as $sucursal): ?>
+                                            <option value="<?php echo $sucursal->id;?>"><?php echo $sucursal->nombre;?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            <?php endif ?>
+                            <?php if ($this->session->userdata("sucursal")): ?>
+                                <div class="form-group">
+                                    <label for="bodega_id">Bodega:</label>
+                                    <select name="bodega_id" id="bodega" class="form-control">
+                                        <option value="">Seleccione...</option>
+                                        <?php foreach ($bodegas as $b): ?>
+                                            <option value="<?php echo $b->bodega_id;?>"><?php echo get_record("bodegas","id=".$b->bodega_id)->nombre;?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            <?php else: ?>
+                                <div class="form-group">
+                                    <label for="bodega_id">Bodega:</label>
+                                    <select name="bodega_id" id="bodega" class="form-control">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                            <?php endif ?>
                             <div class="form-group">
-                                
-                            </div>
-
-                                    <label for="">Producto:</label>
-                                    <div class="input-group barcode">
+                                <label for="">Producto:</label>
+                                <div class="input-group barcode">
                                     <div class="input-group-addon">
                                         <i class="fa fa-barcode"></i>
                                     </div>
                                     <input type="text" class="form-control" id="searchProductoVenta" placeholder="Buscar por codigo de barras o nombre del proucto">
                                 </div>
-                            
                             </div>
-                        
-                                <div class="col-md-12">
-                            <table id="tbventas" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                        <th>Marca</th>
-                                        <th>Precio</th>
-                                        <th>Stock Max.</th>
-                                        <th>Cantidad</th>
-                                        <th>Importe</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                
-                                </tbody>
-                            </table>
+                            <div class="form-group">
+                                <table id="tbventas" class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Marca</th>
+                                            <th>Precio</th>
+                                            <th>Stock Max.</th>
+                                            <th>Cantidad</th>
+                                            <th>Importe</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                    </tbody>
+                                </table>
                             </div>
                       
-                    </div>
-                    <!--Inicio 2da Columna-->
-                    <div class="col-md-3">
-                               
-                                    <label for="">Comprobante:</label>
-                                    <select name="comprobante" id="comprobanteVenta" class="form-control" required>
-                                        <option value="">Seleccione...</option>
-                                        <?php foreach($tipocomprobantes as $tipocomprobante):?> 
-                                            <?php 
-                                                if ($tipocomprobante->predeterminado ==1) {
-                                                    $predeterminado = $tipocomprobante->id;
-                                                    $iva = $tipocomprobante->iva;
-                                                }
-                                                $data = $tipocomprobante->id."*".$tipocomprobante->nombre."*".$tipocomprobante->iva;?>
-                                            <option value="<?php echo $data;?>" <?php echo $tipocomprobante->predeterminado == 1 ? 'selected':'';?>><?php echo $tipocomprobante->nombre?></option>
-                                        <?php endforeach;?>
-                                        <input type="hidden" id="iva" value="0">
-                                        <input type="hidden" name="comprobante_id" id="comprobante_id" value="<?php echo $predeterminado;?>">
-                                    </select>
-                               
-                                    <label for="">Tipo de Pago:</label>
-                                    <select name="tipo_pago" id="tipo_pago" class="form-control" required>
-                                        
-                                        <option value="1">Efectivo</option>
-                                        <option value="2">Credito</option>
-                                    </select>
-                                 
-                                    <label for="">Fecha:</label>
-                                    <input type="date" class="form-control" name="fecha" value="<?php echo date("Y-m-d");?>" required>
-                                
-                                    <label for="">Cliente:</label>
-                                    <div class="input-group">
-                                        <input type="hidden" name="idcliente" id="idcliente">
-                                        <input type="text" class="form-control" " id="cliente">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-default" ><span class="fa fa-search"></span> Buscar</button>
-                                        </span>
-                                    </div><!-- /input-group -->
-                            
-                                    <label for="">Monto Recibido:</label>
-                                    <input type="text" class="form-control" id="monto_recibido" name="monto_recibido">
-                           
-                                     <br>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Subtotal:</span>
-                                        <input type="text" class="form-control" placeholder="0.00" name="subtotal" readonly="readonly">
-                                    </div>
-                               
-                                    <div class="input-group">
-                                        <span class="input-group-addon">IVA:</span>
-                                        <input type="text" class="form-control" placeholder="0.00" name="iva" readonly="readonly">
-                                    </div>
-                           
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Descuento:</span>
-                                        <input type="text" class="form-control" placeholder="descuento" name="descuento" id="descuento" value="0.00" readonly="readonly">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-danger" id="btn-descuento" type="button" data-toggle="modal" data-target="#modal-default2">
-                                                Aplicar
-                                            </button>
-                                        </span>
-                                    </div>
-                    
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Total:</span>
-                                        <input type="text" class="form-control" placeholder="0.00" name="total" readonly="readonly">
-                                    </div>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Cambio:</span>
-                                        <input type="text" class="form-control" placeholder="0.00" name="cambio" readonly="readonly">
-                                    </div>
-                               <br>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-flat" id="btn-guardar-venta"><i class="fa fa-save"></i> Guardar Venta</button>
-                                     
-                                    <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat"><i class="fa fa-times"></i> Cancelar</a>
+                        </div>
+                        <!--Inicio 2da Columna-->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Comprobante:</label>
+                                <select name="comprobante" id="comprobanteVenta" class="form-control" required>
+                                    <option value="">Seleccione...</option>
+                                    <?php if ($this->session->userdata("sucursal")): ?>
+                                        <?php foreach ($comprobantes as $c): ?>
+                                            <option value="<?php echo $c->comprobante_id;?>"><?php echo get_record("comprobantes","id='$c->comprobante_id'")->nombre;?></option>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Tipo de Pago:</label>
+                                <select name="tipo_pago" id="tipo_pago" class="form-control" required>
+                                    
+                                    <option value="1">Efectivo</option>
+                                    <option value="2">Credito</option>
+                                </select>
+                            </div> 
+                            <div class="form-group">
+                                <label for="">Fecha:</label>
+                                <input type="date" class="form-control" name="fecha" value="<?php echo date("Y-m-d");?>" required>
+                            </div>  
+                            <div class="form-group">
+                                <label for="">Cliente:</label>
+                                <div class="input-group">
+                                    <input type="hidden" name="idcliente" id="idcliente">
+                                    <input type="text" class="form-control" " id="cliente">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-default" ><span class="fa fa-search"></span> Buscar</button>
+                                    </span>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <label for="">Monto Recibido:</label>
+                                <input type="text" class="form-control" id="monto_recibido" name="monto_recibido">
+                            </div> 
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Subtotal:</span>
+                                    <input type="text" class="form-control" placeholder="0.00" name="subtotal" readonly="readonly">
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">IVA:</span>
+                                    <input type="text" class="form-control" placeholder="0.00" name="iva" readonly="readonly">
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Descuento:</span>
+                                    <input type="text" class="form-control" placeholder="descuento" name="descuento" id="descuento" value="0.00" readonly="readonly">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-danger" id="btn-descuento" type="button" data-toggle="modal" data-target="#modal-default2">
+                                            Aplicar
+                                        </button>
+                                    </span>
+                                </div>
+                            </div> 
+                            <div class="form group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Total:</span>
+                                    <input type="text" class="form-control" placeholder="0.00" name="total" readonly="readonly">
                                 </div>
                             </div>
-                            </form>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Cambio:</span>
+                                    <input type="text" class="form-control" placeholder="0.00" name="cambio" readonly="readonly">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!--Fin de Primer Columna-->
-                </div>
-
+                </form>
                 <!--end row1-->
             </div>
             <!-- /.box-body -->

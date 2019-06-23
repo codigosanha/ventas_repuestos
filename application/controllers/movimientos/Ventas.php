@@ -43,7 +43,7 @@ class Ventas extends CI_Controller {
 			"bodegas" => $bodegas,
 			"sucursales" => $this->Comun_model->get_records("sucursales"),
 			//"permisos" => $this->permisos,
-			"comprobantes" => $this->Comun_model->get_records("comprobantes"), 
+			"comprobantes" => $this->Comun_model->get_records("comprobante_sucursal","sucursal_id=".$this->session->userdata("sucursal")), 
 			"proveedores" => $this->Comun_model->get_records("proveedores"), 
 		);
 		$contenido_externo = array(
@@ -178,5 +178,29 @@ class Ventas extends CI_Controller {
 		}
 		echo json_encode($data);
 
+	}
+
+	public function getBodegasAndComprobantes(){
+		$sucursal_id = $this->input->post("idSucursal");
+		$bodegas = $this->Comun_model->get_records("bodega_sucursal", "sucursal_id='$sucursal_id'");
+		$comprobantes = $this->Comun_model->get_records("comprobante_sucursal", "sucursal_id='$sucursal_id'");
+		$dataBodegas = array();
+		foreach ($bodegas as $b) {
+			$dataBodegas[] = array(
+				'bodega_id' => $b->bodega_id,
+				'nombre' => get_record("bodegas", "id=".$b->bodega_id)->nombre, 
+			);
+		}
+		$dataComprobantes = array();
+		foreach ($comprobantes as $c) {
+			$dataComprobantes[] = array(
+				'comprobante_id' => $c->comprobante_id,
+				'nombre' => get_record("comprobantes", "id=".$c->comprobante_id)->nombre, 
+			);
+		}
+		echo json_encode(array(
+			'bodegas' => $dataBodegas,
+			"comprobantes" => $dataComprobantes
+		));
 	}
 }
