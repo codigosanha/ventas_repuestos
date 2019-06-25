@@ -33,6 +33,10 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/jquery/jquery-confirm.min.css">
     
     <style>
+        #modal-venta .modal-dialog {
+            width: 300px;
+           
+        }
         .menu-notificaciones li{
             padding: 7px;
         }

@@ -10,7 +10,7 @@ class Auth extends CI_Controller {
 	public function index()
 	{
 		if ($this->session->userdata("login")) {
-			redirect(base_url()."dashboard");
+			redirect(base_url()."backend/dashboard");
 		}
 		else{
 			$this->load->view("auth/login");

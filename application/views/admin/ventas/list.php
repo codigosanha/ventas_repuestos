@@ -25,7 +25,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="tableSimple" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -56,6 +56,14 @@
                                                     } else {
                                                         echo '<span class="label label-danger">Anulado</span>';
                                                     } ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                        $caja = get_record("caja","id=".$venta->caja_id);
+                                                        echo get_record("sucursales","id=".$caja->sucursal_id)->nombre;
+
+                                                     ?>
+
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info btn-info-venta" value="<?php echo $venta->id;?>" data-toggle="modal" data-target="#modal-venta"><span class="fa fa-search"></span></button>

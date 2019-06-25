@@ -189,8 +189,8 @@ class Ventas extends CI_Controller {
 
 	public function view($id){
 		$data  = array(
-			"compra" => $this->Comun_model->get_record("ventas", "id=$id"), 
-			"detalles" => $this->Comun_model->get_records("detalle_compra", "compra_id='$id'"), 
+			"venta" => $this->Comun_model->get_record("ventas", "id=$id"), 
+			"detalles" => $this->Comun_model->get_records("detalle_venta", "venta_id='$id'"), 
 		);
 		$this->load->view("admin/ventas/view",$data);
 	}

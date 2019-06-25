@@ -190,9 +190,9 @@ $(document).ready(function () {
     $(".btn-info-venta").on("click", function(){
         idVenta = $(this).val();
         $.ajax({
-            url:base_url + "movimientos/ventas/view",
+            url:base_url + "movimientos/ventas/view/"+idVenta,
             type: "POST",
-            data: {id:idVenta},
+            
             success:function(resp){
                 $("#modal-venta .modal-body").html(resp);
             }
