@@ -1,6 +1,49 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $("#btn-save-venta").on("click", function(){
+        var total = Number($("input[name=total]").val());
+        if (total == 0) {
+            swal("Error","El detalle de la venta debe contar con al menos un producto","error");
+
+            return false;
+        }
+
+    });
+    $("#tipo_pago").on("change", function(){
+        tipo_pago = $(this).val();
+        switch(tipo_pago){
+            case '1' :
+                $("#content-monto-efectivo").hide();
+                $("#content-tarjeta").hide();
+                $("#content-monto-tarjeta").hide();
+
+                $("#monto_tarjeta").removeAttr("required");
+                $("#monto_efectivo").removeAttr("required");
+                break;
+            case '2' :
+                $("#content-monto-efectivo").hide();
+                $("#content-tarjeta").show();
+                $("#content-monto-tarjeta").hide();
+                $("#monto_tarjeta").removeAttr("required");
+                $("#monto_efectivo").removeAttr("required");
+                break;
+            case '3' :
+                $("#content-monto-efectivo").hide();
+                $("#content-tarjeta").show();
+                $("#content-monto-tarjeta").show();
+                $("#monto_tarjeta").attr("required","required");
+                $("#monto_efectivo").removeAttr("required");
+                break;
+            default:
+                $("#content-monto-efectivo").show();
+                $("#content-tarjeta").hide();
+                $("#content-monto-tarjeta").hide();
+                $("#monto_tarjeta").removeAttr("required");
+                $("#monto_efectivo").removeAttr("required");
+                break;
+        }
+    });
     $(document).on("change", "#precios", function(){
         precio_compra = $(this).val();
         cantidad = $(this).closest("tr").children("td:eq(4)").find("input").val();
@@ -8,6 +51,15 @@ $(document).ready(function () {
         $(this).closest("tr").children("td:eq(3)").find("input").val(precio_compra);
         $(this).closest("tr").children("td:eq(5)").find("input").val(importe.toFixed(2));
         $(this).closest("tr").children("td:eq(5)").find("p").text(importe.toFixed(2));
+
+    });
+    $(document).on("change", "#preciosVentas", function(){
+        precio_venta = $(this).val();
+        cantidad = $(this).closest("tr").children("td:eq(5)").find("input").val();
+        importe = precio_venta*cantidad;
+        $(this).closest("tr").children("td:eq(3)").find("input").val(precio_venta);
+        $(this).closest("tr").children("td:eq(6)").find("input").val(importe.toFixed(2));
+        $(this).closest("tr").children("td:eq(6)").find("p").text(importe.toFixed(2));
 
     });
     $(document).on("click", "#btn-guardar", function(){
@@ -282,7 +334,7 @@ $(document).ready(function () {
     $(document).on("keyup mouseup","#tbventas input.cantidadesVenta", function(){
 
         cantidad = $(this).val();
-        precio = Number($(this).closest("tr").find("td:eq(3)").text());
+        precio = Number($(this).closest("tr").children("td:eq(3)").find("input").val());
         stock = Number($(this).closest("tr").find("td:eq(4)").text());
 
         if (cantidad!='') {
@@ -1050,11 +1102,13 @@ $(document).ready(function () {
 
     $("#searchProductoVenta").autocomplete({
         source:function(request, response){
+            var sucursal = $("#sucursal-venta").val();
+            var bodega = $("#bodega").val();
             $.ajax({
                 url: base_url+"movimientos/ventas/getProductos",
                 type: "POST",
                 dataType:"json",
-                data:{ valor: request.term},
+                data:{ valor: request.term, sucursal_id:sucursal, bodega_id:bodega},
                 success:function(data){
                     response(data);
                 }
@@ -1063,13 +1117,17 @@ $(document).ready(function () {
         minLength:2,
         select:function(event, ui){
             html = "<tr>";
-            html +="<td><input type='hidden' name='idproductos[]' value='"+ui.item.id+"'>"+ui.item.codigo_barras+"</td>";
+            html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
             html +="<td>"+ui.item.nombre+"</td>";
-            html +="<td>"+ui.item.marca+"</td>";
-            html +="<td><input type='hidden' name='precios[]' value='"+ui.item.precio_compra+"'>"+ui.item.precio_compra+"</td>";
+            precios = "<option value=''>Seleccione</option>";
+            $.each(ui.item.precios, function(key, value){
+                precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
+            });
+            html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
+            html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
             html +="<td>"+ui.item.stock+"</td>";
-            html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' value='1' onkeypress='validate(event)' required='required'></td>";
-            html +="<td><input type='hidden' name='importes[]' value='"+ui.item.precio_compra+"'><p>"+ui.item.precio_compra+"</p></td>";
+            html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;'></td>";
+            html +="<td><input type='hidden' name='importes[]'><p></p></td>";
             html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
             html +="</tr>"
 

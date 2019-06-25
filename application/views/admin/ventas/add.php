@@ -14,7 +14,7 @@
         <div class="box box-solid">
             <div class="box-body">
                 <input type="hidden" id="modulo" value="movimientos/ventas">
-                <form action="<?php echo base_url();?>movimientos/ventas/store" >
+                <form action="<?php echo base_url();?>movimientos/ventas/store" method="POST">
                     <div class="row">
 
                         <div class="col-md-9">
@@ -64,8 +64,9 @@
                                         <tr>
                                             <th>Codigo</th>
                                             <th>Nombre</th>
-                                            <th>Marca</th>
-                                            <th>Precio</th>
+                                          
+                                            <th>Precios</th>
+                                            <th>P. Venta</th>
                                             <th>Stock Max.</th>
                                             <th>Cantidad</th>
                                             <th>Importe</th>
@@ -76,13 +77,20 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-flat" id="btn-save-venta">
+                                    <i class="fa fa-save"></i> 
+                                    Guardar
+                                </button>
+                                <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat"><i class="fa fa-times"></i> Cancelar</a>
+                            </div>
                       
                         </div>
                         <!--Inicio 2da Columna-->
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="">Comprobante:</label>
-                                <select name="comprobante" id="comprobanteVenta" class="form-control" required>
+                                <select name="comprobante_id" id="comprobanteVenta" class="form-control" required>
                                     <option value="">Seleccione...</option>
                                     <?php if ($this->session->userdata("sucursal")): ?>
                                         <?php foreach ($comprobantes as $c): ?>
@@ -90,15 +98,8 @@
                                         <?php endforeach ?>
                                     <?php endif ?>
                                 </select>
+                                <input type="hidden" id="iva" value="0">
                             </div>
-                            <div class="form-group">
-                                <label for="">Tipo de Pago:</label>
-                                <select name="tipo_pago" id="tipo_pago" class="form-control" required>
-                                    
-                                    <option value="1">Efectivo</option>
-                                    <option value="2">Credito</option>
-                                </select>
-                            </div> 
                             <div class="form-group">
                                 <label for="">Fecha:</label>
                                 <input type="date" class="form-control" name="fecha" value="<?php echo date("Y-m-d");?>" required>
@@ -107,12 +108,38 @@
                                 <label for="">Cliente:</label>
                                 <div class="input-group">
                                     <input type="hidden" name="idcliente" id="idcliente">
-                                    <input type="text" class="form-control" " id="cliente">
+                                    <input type="text" class="form-control" " id="cliente" required="required">
                                     <span class="input-group-btn">
                                         <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-default" ><span class="fa fa-search"></span> Buscar</button>
                                     </span>
                                 </div>
                             </div> 
+                            <div class="form-group">
+                                <label for="">Forma de Pago</label>
+                                <select name="tipo_pago" id="tipo_pago" class="form-control" required="required">
+                                    <option value="1">Efectivo</option>
+                                    <option value="2">Tarjeta de Credito</option>
+                                    <option value="3">Pago Mixto</option>
+                                    <option value="4">Credito</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="content-tarjeta" style="display: none;">
+                                <label for="">Tarjeta</label>
+                                <select name="tarjeta" id="tarjeta" class="form-control">
+                                    <?php foreach ($tarjetas as $tarjeta): ?>
+                                        <option value="<?php echo $tarjeta->id?>"><?php echo $tarjeta->nombre;?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="form-group" id="content-monto-tarjeta" style="display: none;">
+                                <label for="">Monto de tarjeta</label>
+                                <input type="text" name="monto_tarjeta" id="monto_tarjeta" class="form-control">
+                            </div>
+
+                            <div class="form-group" id="content-monto-efectivo" style="display: none;">
+                                <label for="">Monto de Efectivo</label>
+                                <input type="text" name="monto_efectivo" id="monto_efectivo" class="form-control">
+                            </div>
                             <div class="form-group">
                                 <label for="">Monto Recibido:</label>
                                 <input type="text" class="form-control" id="monto_recibido" name="monto_recibido">
@@ -188,9 +215,10 @@
                             <table id="example1" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Documento</th>
-                                        <th>Numero</th>
+                                        <th>Cedula</th>
+                                        
                                         <th>Nombre</th>
+                                        <th>Apellidos</th>
                                         <th>Opcion</th>
                                     </tr>
                                 </thead>
@@ -198,10 +226,10 @@
                                     <?php if(!empty($clientes)):?>
                                         <?php foreach($clientes as $cliente):?>
                                             <tr>
-                                                <td><?php echo $cliente->tipodocumento;?></td>
-                                                <td><?php echo $cliente->num_documento;?></td>
-                                                <td><?php echo $cliente->nombre;?></td>
-                                                <?php $datacliente = $cliente->id."*".$cliente->nombre."*".$cliente->tipocontribuyente."*".$cliente->tipodocumento."*".$cliente->num_documento."*".$cliente->telefono."*".$cliente->direccion;?>
+                                                <td><?php echo $cliente->cedula;?></td>
+                                                <td><?php echo $cliente->nombres;?></td>
+                                                <td><?php echo $cliente->apellidos;?></td>
+                                                <?php $datacliente = $cliente->id."*".$cliente->nombres."*".$cliente->apellidos."*".$cliente->cedula."*".$cliente->telefono."*".$cliente->direccion."*".$cliente->nit;?>
                                                 <td>
                                                     <button type="button" class="btn btn-success btn-check" value="<?php echo $datacliente;?>"><span class="fa fa-check"></span></button>
                                                 </td>

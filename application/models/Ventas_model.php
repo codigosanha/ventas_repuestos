@@ -70,15 +70,27 @@ class Ventas_model extends CI_Model {
 		return $resultado->row();
 	}
 
-	public function getproductos($valor){
-		$this->db->select("p.id,CONCAT(p.codigo_barras,' - ',p.nombre) as label,p.nombre,p.codigo_barras,p.precio_compra,m.nombre as marca,p.stock");
-		$this->db->from("productos p");
-		$this->db->join("marca m", "p.marca_id = m.id");
+
+	public function getProductos($sucursal, $bodega, $valor){
+		$this->db->select("bsp.*");
+		$this->db->from("bodega_sucursal_producto bsp");
+		$this->db->join("productos p", "bsp.producto_id = p.id");
+		$this->db->where("bsp.sucursal_id",$sucursal);
+		$this->db->where("bsp.bodega_id",$bodega);
+		$this->db->where("bsp.stock >=",1);
 		$this->db->like("CONCAT(p.codigo_barras,'',p.nombre)",$valor);
-		$this->db->where("p.stock > ",0);
 		$resultados = $this->db->get();
-		return $resultados->result_array();
+		return $resultados->result();
 	}
+	public function getPrecios($producto){
+		$this->db->select("pp.*,p.nombre");
+		$this->db->from("producto_precio pp");
+		$this->db->join("precios p", "pp.precio_id = p.id");
+		$this->db->where("pp.producto_id",$producto);
+		$resultados = $this->db->get();
+		return $resultados->result();
+	}
+	
 
 	public function getProductoByCode($codigo_barra){
 		$this->db->select("p.id,p.nombre,p.codigo_barras,p.precio,m.nombre as marca,p.stock");

@@ -44,7 +44,9 @@ class Ventas extends CI_Controller {
 			"sucursales" => $this->Comun_model->get_records("sucursales"),
 			//"permisos" => $this->permisos,
 			"comprobantes" => $this->Comun_model->get_records("comprobante_sucursal","sucursal_id=".$this->session->userdata("sucursal")), 
-			"proveedores" => $this->Comun_model->get_records("proveedores"), 
+			"proveedores" => $this->Comun_model->get_records("proveedores"),
+			"tarjetas" => $this->Comun_model->get_records("tarjetas"),
+			"clientes" => $this->Comun_model->get_records("clientes"),
 		);
 		$contenido_externo = array(
 			"title" => "ventas", 
@@ -57,40 +59,82 @@ class Ventas extends CI_Controller {
 
 		$comprobante_id = $this->input->post("comprobante_id");
 		$tipo_pago = $this->input->post("tipo_pago");
-		$serie = $this->input->post("serie");
-		$numero_comprobante = $this->input->post("numero_comprobante");
-		$fecha = $this->input->post("fecha");
-		$proveedor_id = $this->input->post("proveedor_id");
+		$cliente_id = $this->input->post("idcliente");
+		$fecha = date("Y-m-d H:i:s");
 		$subtotal = $this->input->post("subtotal");
+		$descuento = $this->input->post("descuento");
+		$iva = $this->input->post("iva");
 		$total = $this->input->post("total");
 		$sucursal_id = $this->input->post("sucursal_id");
 		$bodega_id = $this->input->post("bodega_id");
+		$caja = $this->Comun_model->get_record("caja","sucursal_id='$sucursal_id' and estado='1'");
+		$comprobante = $this->Comun_model->get_record("comprobante_sucursal","comprobante_id='$comprobante_id' and sucursal_id='$sucursal_id'");
 
 		$idProductos = $this->input->post("idProductos");
 		$precios = $this->input->post("precios");
 		$cantidades = $this->input->post("cantidades");
 		$importes = $this->input->post("importes");
 
+		switch ($tipo_pago) {
+			case '1':
+				$monto_efectivo = $total;
+				$monto_credito = 0;
+				$monto_tarjeta = 0;
+				$tarjeta_id = 0;
+				break;
+			case '2':
+				$monto_efectivo = 0;
+				$monto_credito = 0;
+				$monto_tarjeta = $total;
+				$tarjeta_id = $this->input->post("tarjeta");
+				break;
+			case '3':
+				
+				$monto_credito = 0;
+				$monto_tarjeta = $this->input->post("monto_tarjeta");
+				$monto_efectivo = $total - $monto_tarjeta;
+				$tarjeta_id = $this->input->post("tarjeta");
+				break;
+
+			default:
+				if (!empty($this->input->post("monto_efectivo"))) {
+					$monto_efectivo = $this->input->post("monto_efectivo");
+				}else{
+					$monto_efectivo = 0;
+				}
+				
+				$monto_tarjeta = 0;
+				$monto_credito = $total - $monto_efectivo;
+				$tarjeta_id = 0;
+				break;
+		}
+
 		$data  = array(
 			"fecha" => $fecha, 
-			"serie" => $serie, 
-			"numero_comprobante" => $numero_comprobante, 
+			"numero_comprobante" => str_pad($comprobante->realizados + 1, 8, "0", STR_PAD_LEFT), 
 			"comprobante_id" => $comprobante_id, 
 			"subtotal" => $subtotal, 
+			"descuento" => $descuento, 
+			"iva" => $iva, 
 			"total" => $total, 
 			"tipo_pago" => $tipo_pago, 
-			"proveedor_id" => $proveedor_id,
-			"sucursal_id" => $sucursal_id,
+			"cliente_id" => $cliente_id,
+			"caja_id" => $caja->id,
+			'monto_efectivo' => $monto_efectivo,
+			'monto_credito' => $monto_credito,
+			'monto_tarjeta' => $monto_tarjeta,
+			'tarjeta_id' => $tarjeta_id,
 			"estado" => "1"
 		);
-		$compra = $this->Comun_model->insert("ventas", $data);
-		if ($compra) {
-			if ($tipo_pago == 2) {
-				$this->saveCuentaPagar($compra);
+		$venta = $this->Comun_model->insert("ventas", $data);
+		if ($venta) {
+			if ($tipo_pago == 4) {
+				$this->saveCuentaCobrar($venta);
 			}
 
-			$this->saveDetalle($compra->id, $idProductos, $precios, $cantidades, $importes);
+			$this->saveDetalle($venta->id, $idProductos, $precios, $cantidades, $importes);
 			$this->updateStock($bodega_id, $sucursal_id, $idProductos, $cantidades);
+			$this->updateComprobante($comprobante);
 
 			redirect(base_url()."movimientos/ventas");
 		}
@@ -101,16 +145,24 @@ class Ventas extends CI_Controller {
 		
 	}
 
-	protected function saveDetalle($compra_id, $productos, $precios, $cantidades, $importes){
+	protected function updateComprobante($comprobante){
+		$dataComprobante = array(
+			"realizados" => $comprobante->realizados + 1
+		);
+
+		$this->Comun_model->update("comprobante_sucursal","id='$comprobante->id'",$dataComprobante);
+	}
+
+	protected function saveDetalle($venta_id, $productos, $precios, $cantidades, $importes){
 		for ($i=0; $i < count($productos) ; $i++) { 
 			$dataDetalle = array(
 				"producto_id" => $productos[$i],
-				"compra_id" => $compra_id,
+				"venta_id" => $venta_id,
 				"cantidad" => $cantidades[$i],
 				"precio" =>  $precios[$i],
 				"importe" => $importes[$i],
 			);
-			$this->Comun_model->insert("detalle_compra", $dataDetalle);
+			$this->Comun_model->insert("detalle_venta", $dataDetalle);
 		}
 	}
 
@@ -118,20 +170,20 @@ class Ventas extends CI_Controller {
 		for ($i=0; $i < count($productos) ; $i++) { 
 			$bsp = $this->Comun_model->get_record("bodega_sucursal_producto","bodega_id='$bodega_id' and sucursal_id='$sucursal_id' and producto_id='$productos[$i]'");
 			$data = array(
-				"stock" => $bsp->stock + $cantidades[$i] 
+				"stock" => $bsp->stock - $cantidades[$i] 
 			);
 			$this->Comun_model->update("bodega_sucursal_producto","id='$bsp->id'",$data);
 		}
 	}
 
-	protected function saveCuentaPagar($compra){
+	protected function saveCuentaCobrar($venta){
 		$dataCuenta = array(
-			"compra_id" => $compra->id,
-			"monto" => $compra->total,
+			"venta_id" => $venta->id,
+			"monto" => $venta->monto_credito,
 			"fecha" => date("Y-m-d"),
 			"estado" => "0"
 		);
-		$this->Comun_model->insert("cuentas_pagar", $dataCuenta);
+		$this->Comun_model->insert("cuentas_cobrar", $dataCuenta);
 	}
 
 
@@ -163,7 +215,7 @@ class Ventas extends CI_Controller {
 		$valor = $this->input->post("valor");
 		$sucursal_id = $this->input->post("sucursal_id");
 		$bodega_id = $this->input->post("bodega_id");
-		$productos = $this->Compras_model->getProductos($sucursal_id,$bodega_id, $valor);
+		$productos = $this->Ventas_model->getProductos($sucursal_id,$bodega_id, $valor);
 		$data = array();
 		foreach ($productos as $p) {
 			$producto = get_record("productos", "id=".$p->producto_id);
@@ -173,7 +225,7 @@ class Ventas extends CI_Controller {
 				"nombre" => $producto->nombre,
 				"codigo_barras" => $producto->codigo_barras,
 				"stock" => $p->stock,
-				"precios" => $this->Compras_model->getPrecios($p->producto_id),
+				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
 			);
 		}
 		echo json_encode($data);
