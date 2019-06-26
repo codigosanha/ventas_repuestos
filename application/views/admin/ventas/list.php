@@ -42,12 +42,15 @@
                             <tbody>
                                 <?php if (!empty($ventas)): ?>
                                     <?php foreach($ventas as $venta):?>
-
+                                            
                                             <tr>
                                                 <td><?php echo $venta->id;?></td>
                                                 <td><?php echo get_record("clientes","id=".$venta->cliente_id)->nombres;?></td>
                                                 <td><?php echo get_record("comprobantes","id=".$venta->comprobante_id)->nombre;?></td>
-                                                <td><?php echo $venta->numero_comprobante;?></td>
+                                                <?php 
+                                                $caja = get_record("caja","id=".$venta->caja_id);
+                                                $comprobante = get_record("comprobantes","id=".$venta->comprobante_id);?>
+                                                <td><?php echo get_record("comprobante_sucursal","comprobante_id='$venta->comprobante_id' and sucursal_id='$caja->sucursal_id'")->serie."-".$venta->numero_comprobante;?></td>
                                                 <td><?php echo $venta->fecha;?></td>
                                                 <td><?php echo $venta->total;?></td>
                                                 <td>
@@ -59,7 +62,7 @@
                                                 </td>
                                                 <td>
                                                     <?php
-                                                        $caja = get_record("caja","id=".$venta->caja_id);
+                                                        
                                                         echo get_record("sucursales","id=".$caja->sucursal_id)->nombre;
 
                                                      ?>
@@ -69,11 +72,15 @@
                                                     <button type="button" class="btn btn-info btn-info-venta" value="<?php echo $venta->id;?>" data-toggle="modal" data-target="#modal-venta"><span class="fa fa-search"></span></button>
                                                     
                                                         
+                                                    <?php if ($venta->estado): ?>
+                                                        <?php if ($comprobante->permitir_anular): ?>
+                                                            <a href="<?php echo base_url();?>movimientos/ventas/anular/<?php echo $venta->id;?>" class="btn btn-danger btn-anular-venta"><span class="fa fa-remove"></span></a>
+                                                        <?php endif ?>
+                                                    <?php endif ?>
                                                     
+                                                        
                                                     
-                                                        <a href="<?php echo base_url()?>movimientos/ventas/edit/<?php echo $venta->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    
-                                                        <a href="<?php echo base_url();?>movimientos/ventas/delete/<?php echo $venta->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                        
                                                     
                                                 </td>
                                             </tr>

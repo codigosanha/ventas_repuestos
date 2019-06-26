@@ -14,7 +14,7 @@
         <div class="box box-solid">
             <div class="box-body">
                 <input type="hidden" id="modulo" value="movimientos/ventas">
-                <form action="<?php echo base_url();?>movimientos/ventas/store" method="POST">
+                <form action="<?php echo base_url();?>movimientos/ventas/store" method="POST" id="form-add-venta">
                     <div class="row">
 
                         <div class="col-md-9">
@@ -331,5 +331,26 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal fade" id="modal-venta">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Informacion de la Venta</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-flat btn-print-venta"><span class="fa fa-print"></span> Imprimir</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->

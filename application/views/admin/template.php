@@ -50,6 +50,10 @@
         .navbar-nav>.notifications-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.tasks-menu>.dropdown-menu>li .menu>li>a{
             white-space: normal;
         }
+
+        .contenido-venta{
+            width: 275px;
+        }
        
         .contenido{
             width: 280px;

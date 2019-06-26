@@ -1,6 +1,29 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("click",".btn-anular-venta",function(e){
+        e.preventDefault();
+        var url = $(this).attr("href");
+        swal({
+                title:"Esta seguro de anular la venta?",
+                text: "Esta operacion es irreversible",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                confirmButtonText: "Eliminar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: true,
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    window.location.href = url;
+                    }
+                return false;
+            });
+       
+    });
     $("#btn-save-venta").on("click", function(){
         var total = Number($("input[name=total]").val());
         if (total == 0) {
@@ -312,6 +335,33 @@ $(document).ready(function () {
         }
         sumarCompra();
     });
+    $("#form-add-venta").submit(function(e){
+        e.preventDefault();
+        var dataForm = $(this).serialize();
+        var url = $(this).attr("action");
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: dataForm,
+            success: function(resp){
+                if (resp != "0") {
+                    $("#modal-venta").modal("show");
+                    $("#modal-venta .modal-body").html(resp);
+                    cleanFormVenta();
+                    
+                } else {
+                    swal("Error","No se pudo guardar la venta", "error");
+                }
+            }
+        });
+    });
+
+    function cleanFormVenta(){
+        $("#form-add-venta")[0].reset();
+        $("#idcliente").val(null);
+        $("#tbventas tbody").html("");
+
+    }
 
     function sumarCompra(){
         subtotal = 0;
@@ -1296,6 +1346,24 @@ $(document).ready(function () {
     $(document).on("click",".btn-print",function(){
         
         $(".modal-body").print({
+            globalStyles: true,
+            mediaPrint: false,
+            stylesheet: null,
+            noPrintSelector: ".no-print",
+            append: null,
+            prepend: null,
+            manuallyCopyFormValues: true,
+            deferred: $.Deferred(),
+            timeout: 750,
+            title: "  ",
+            doctype: '<!doctype html>'
+        });
+
+
+    });
+    $(document).on("click",".btn-print-venta",function(){
+        
+        $("#modal-venta .modal-body").print({
             globalStyles: true,
             mediaPrint: false,
             stylesheet: null,

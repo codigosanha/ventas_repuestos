@@ -124,6 +124,8 @@ class Ventas extends CI_Controller {
 			'monto_credito' => $monto_credito,
 			'monto_tarjeta' => $monto_tarjeta,
 			'tarjeta_id' => $tarjeta_id,
+			'bodega_id' => $bodega_id,
+			'sucursal_id' => $sucursal_id,
 			"estado" => "1"
 		);
 		$venta = $this->Comun_model->insert("ventas", $data);
@@ -136,11 +138,19 @@ class Ventas extends CI_Controller {
 			$this->updateStock($bodega_id, $sucursal_id, $idProductos, $cantidades);
 			$this->updateComprobante($comprobante);
 
-			redirect(base_url()."movimientos/ventas");
+			$dataVenta = array(
+				"venta" => $venta,
+				"detalles" => $this->Comun_model->get_records("detalle_venta","venta_id='$venta->id'")
+			); 
+
+			$this->load->view("admin/ventas/view",$dataVenta);
+
+			//redirect(base_url()."movimientos/ventas");
 		}
 		else{
-			$this->session->set_flashdata("error","No se pudo guardar la informacion");
-			redirect(base_url()."movimientos/ventas/add");
+			echo "0";
+			/*$this->session->set_flashdata("error","No se pudo guardar la informacion");
+			redirect(base_url()."movimientos/ventas/add");*/
 		}
 		
 	}
@@ -203,12 +213,27 @@ class Ventas extends CI_Controller {
 		echo "movimientos/ventas";
 	}
 
-	public function deshabilitar($id){
+	public function anular($id){
 		$data  = array(
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("ventas","id=$id",$data);
-		echo "movimientos/ventas";
+		$this->return_stock($id);
+		
+		redirect(base_url()."movimientos/ventas");
+	}
+
+	protected function return_stock($id){
+		$venta = $this->Comun_model->get_record("ventas","id='$id'");
+		$detalles = $this->Comun_model->get_records("detalle_venta","venta_id='$id'");
+		foreach ($detalles as $detalle) {
+			$bsp = $this->Comun_model->get_record("bodega_sucursal_producto","bodega_id='$venta->bodega_id' and sucursal_id='$venta->sucursal_id' and producto_id='$detalle->producto_id'");
+			$data = array(
+				"stock" => $bsp->stock + $detalle->cantidad
+			);
+
+			$this->Comun_model->update("bodega_sucursal_producto","id='$bsp->id'",$data);
+		}
 	}
 
 	public function getProductos(){

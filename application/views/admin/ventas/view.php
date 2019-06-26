@@ -1,4 +1,4 @@
-<div class="contenido">
+<div class="contenido-venta">
 	<div class="form-group text-center">
 		<label for="">Tienda Repuestos</label><br>
 		<p>
@@ -7,11 +7,12 @@
 		3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
 		Santa Cruz del Quiche
 	</div>
-	<?php $comprobante = get_record("comprobante_sucursal","comprobante_id='$venta->comprobante_id' and sucursal_id='$venta-');?>
+	<?php $caja = get_record("caja","id='$venta->caja_id'");?>
+	<?php $comprobante_sucursal = get_record("comprobante_sucursal","comprobante_id='$venta->comprobante_id' and sucursal_id='$caja->sucursal_id'");?>
 	<?php $comprobante = get_record("comprobantes","id=".$venta->comprobante_id);?>
 	<div class="form-group text-center">
 		<label for=""><?php echo $comprobante->nombre;?></label><br>
-		<?php echo $comprobante->serie ." - ".$venta->numero_comprobante;?>
+		<?php echo $comprobante_sucursal->serie ." - ".$venta->numero_comprobante;?>
 	</div>
 	<div class="form-group">
 		<p><b>Estado: </b><?php if ($venta->estado == "1") {
@@ -19,12 +20,12 @@
                                                 }else{
                                                     echo '<span class="label label-danger">Anulado</span>';
                                                 } ?>
-                                            </p>
+                                            <br>
 
         <?php $cliente = get_record("clientes","id=".$venta->cliente_id);?>
-		<p><b>Cliente: </b><?php echo $cliente->nombres;?></p>
-		<p><b>No. Cedula: </b><?php echo $cliente->cedula;?></p>
-		<p><b>Fecha: </b><?php echo $venta->fecha;?></p>
+		<b>Cliente: </b><?php echo $cliente->nombres;?><br>
+		<b>No. Cedula: </b><?php echo $cliente->cedula;?><br>
+		<b>Fecha: </b><?php echo $venta->fecha;?></p>
 	</div>
 
 	<div class="form-group">
@@ -40,7 +41,7 @@
 				<?php foreach($detalles as $detalle):?>
 				<tr>
 					<td><?php echo $detalle->cantidad;?></td>
-					<td><?php echo get_record($detalle->producto_id)->nombre;?></td>
+					<td><?php echo get_record("productos","id=".$detalle->producto_id)->nombre;?></td>
 					<td style="text-align: right;"><?php echo $detalle->importe;?></td>
 				</tr>
 				<?php endforeach;?>
@@ -68,10 +69,10 @@
 		</table>
 	</div>
 	<div class="form-group text-center">
-        <p>Gracias por tu preferencia!!!</p>
-        <p>Si el servicio fue de tu agrado te agradeceremos una <strong>Propina</strong></p>
-        <p>Recuerda visitarnos en:</p>
-        <p><i class="fa fa-globe"> www.ventasrepuestos.com</i></p>
-        <p><i class="fa fa-facebook-square"> Ventas Repuestos</i></p>
+        <p>
+        	Gracias por tu preferencia!!! <br>
+        	Recuerda visitarnos en:<br>
+        	www.ventasrepuestos.com</i><br>
+        	<i class="fa fa-facebook-square"> Ventas Repuestos</i></p>
     </div>
 </div>
