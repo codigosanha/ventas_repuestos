@@ -40,10 +40,8 @@
                             <thead>
                                 <tr>
                                     <th>Producto </th>
-                                    <th>Stock</th>
+                          
                                     <th>Vendidos</th>
-                                    <th>Precio</th>
-                                    <th>Monto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,12 +50,9 @@
                                         <tr>
                                             <td><?php echo $p->nombre;?></td>
                                             
-                                            <td><?php echo $p->stock;?></td>
                                             
                                            
                                             <td><?php echo $p->totalVendidos;?></td>
-                                            <td><?php echo $p->precio;?></td>
-                                            <td><?php echo number_format($p->precio * $p->totalVendidos, 2, '.', '');?></td>
                                         </tr>
                                     <?php endforeach;?>
                                 <?php endif ?>

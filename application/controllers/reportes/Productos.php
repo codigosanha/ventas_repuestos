@@ -2,10 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Productos extends CI_Controller {
-private $permisos;
+//private $permisos;
 	public function __construct(){
 		parent::__construct();
-		$this->permisos = $this->backend_lib->control();
+		//$this->permisos = $this->backend_lib->control();
 		$this->load->model("Ventas_model");
 	}
 
@@ -18,15 +18,18 @@ private $permisos;
 		else{
 			$productos = "";
 		}
-		$data = array(
+
+		$contenido_interno  = array(
+			//"permisos" => $this->permisos,
 			"productos" => $productos,
 			"fechainicio" => $fechainicio,
 			"fechafin" => $fechafin
 		);
 
-		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/reportes/productos",$data);
-		$this->load->view("layouts/footer");
+		$contenido_externo = array(
+			"title" => "Ventas", 
+			"contenido" => $this->load->view("admin/reportes/productos", $contenido_interno, TRUE)
+		);
+		$this->load->view("admin/template",$contenido_externo);
 	}
 }

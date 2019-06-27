@@ -235,12 +235,15 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function productosVendidos($fechainicio, $fechafin){
-		$this->db->select("p.id, p.nombre, p.stock, p.precio,SUM(dv.cantidad) as totalVendidos");
+		$this->db->select("p.id, p.nombre,SUM(dv.cantidad) as totalVendidos");
 		$this->db->from("detalle_venta dv");
 		$this->db->join("productos p", "dv.producto_id = p.id");
 		$this->db->join("ventas v", "dv.venta_id = v.id");
-		$this->db->where("v.fecha >=", $fechainicio);
-		$this->db->where("v.fecha <=", $fechafin);
+		$this->db->where("DATE(v.fecha) >=", $fechainicio);
+		$this->db->where("DATE(v.fecha) <=", $fechafin);
+		if ($this->session->userdata("sucursal")) {
+			$this->db->where("v.sucursal_id", $this->session->userdata("sucursal"));
+		}
 		$this->db->group_by("dv.producto_id");
 		$resultados = $this->db->get();
 		return $resultados->result();
