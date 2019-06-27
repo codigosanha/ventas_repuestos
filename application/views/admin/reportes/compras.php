@@ -5,7 +5,7 @@
     <section class="content-header">
         <h1>
         Reportes
-        <small>Ventas</small>
+        <small>Compras</small>
         </h1>
     </section>
     <!-- Main content -->
