@@ -844,8 +844,12 @@ $(document).ready(function () {
     });
 
     var year = (new Date).getFullYear();
-    datagrafico(base_url);
-    datagraficoMeses(base_url,year);
+    if ($("#grafico").length) {
+         datagrafico(base_url);
+         datagraficoMeses(base_url,year);
+    }
+   
+    
     $("#year").on("change",function(){
         yearselect = $(this).val();
         datagrafico(base_url,yearselect);
@@ -1499,7 +1503,7 @@ function sumar(){
 function datagrafico(base_url){
     /*namesMonth= ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Set","Oct","Nov","Dic"];*/
     $.ajax({
-        url: base_url + "Grafico/getData",
+        url: base_url + "grafico/getData",
         type:"POST",
         dataType:"json",
         success:function(data){

@@ -12,9 +12,17 @@ class Dashboard extends CI_Controller {
 	}
 	public function index()
 	{
+		$contenido_interno = array(
+			"cantVentas" => $this->Backend_model->rowCount("ventas"),
+			"cantUsuarios" => $this->Backend_model->rowCount("usuarios"),
+			"cantClientes" => $this->Backend_model->rowCount("clientes"),
+			"cantProductos" => $this->Backend_model->rowCount("productos"),
+			'productoslast' => $this->Ventas_model->getLastProductos(),
+			
+		);
 		$contenido_externo = array(
 			'title' => 'Principal', 
-			'contenido' => $this->load->view("admin/dashboard", '', TRUE)
+			'contenido' => $this->load->view("admin/dashboard", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}

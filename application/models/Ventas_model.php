@@ -142,7 +142,7 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function montos(){
-		$this->db->select("fecha, SUM(total) as monto");
+		$this->db->select("DATE(fecha) as fecha, SUM(total) as monto");
 		$this->db->from("ventas");
 		$this->db->where("estado","1");
 		$this->db->group_by("fecha");

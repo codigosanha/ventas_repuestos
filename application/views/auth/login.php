@@ -64,7 +64,7 @@
       success:function(resp){
 
 
-        if (resp == "0") {
+        if (resp == 0) {
 
             swal({
                 title: "Error",
@@ -83,7 +83,7 @@
                 showConfirmButton: false,
                 type: 'success'
             });
-          window.location.href = base_url + "dashboard";
+          window.location.href = base_url + "backend/dashboard";
         }
       }
     });
