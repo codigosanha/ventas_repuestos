@@ -1,6 +1,41 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("click", ".btn-abonar", function(){
+        idCuenta = $(this).val();
+        num_documento = $(this).closest("tr").children("td:eq(1)").text();
+        monto = $(this).closest("tr").children("td:eq(4)").text();
+        monto_abonado = $(this).closest("tr").children("td:eq(5)").text();
+        saldo_pendiente = $(this).closest("tr").children("td:eq(6)").text();
+        $("#idCuenta").val(idCuenta);
+        $("#num_documento").val(num_documento);
+        $("#monto_abonado").val(monto_abonado);
+        $("#monto").val(monto);
+        $("#saldo_pendiente").val(saldo_pendiente);
+    });
+
+    $(document).on("click", ".btn-pagos", function(){
+        idCuenta = $(this).attr("data-href");
+        num_documento = $(this).closest("tr").find("td:eq(1)").text();
+        texto = "<strong>Nro de Comprobante: </strong>"+num_documento;
+        $("p.num_documento").html(texto);
+        modulo = $("#modulo").val();
+        $.ajax({
+            url: base_url + modulo + "/pagosByCuenta/"+idCuenta,
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+                html = "";
+                $.each(data, function(key, value){
+                    html += "<tr>";
+                    html += "<td>"+value.monto+"</td>";
+                    html += "<td>"+value.fecha+"</td>";
+                    html += "</tr>";
+                });
+                $("#tbpagos tbody").html(html);
+            }
+        });
+    });
     $(document).on("click",".btn-anular-venta",function(e){
         e.preventDefault();
         var url = $(this).attr("href");

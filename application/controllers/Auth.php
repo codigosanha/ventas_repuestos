@@ -25,9 +25,9 @@ class Auth extends CI_Controller {
 		$res = $this->Usuarios_model->login($username, sha1($password));
 
 		if (!$res) {
-			$this->session->set_flashdata("error","El usuario y/o contraseña son incorrectos");
-			redirect(base_url());
-			//echo "0";
+			/*$this->session->set_flashdata("error","El usuario y/o contraseña son incorrectos");
+			redirect(base_url());*/
+			echo "0";
 		}
 		else{
 			$data  = array(
@@ -39,8 +39,8 @@ class Auth extends CI_Controller {
 				'login' => TRUE
 			);
 			$this->session->set_userdata($data);
-			redirect(base_url()."backend/dashboard");
-			//echo "1";
+			/*redirect(base_url()."backend/dashboard");*/
+			echo "1";
 		}
 	}
 

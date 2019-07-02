@@ -130,4 +130,42 @@ if(!function_exists('getGastos'))
 	 
 	}
 }
+if(!function_exists('getTotalAbonos'))
+{
+	function getTotalAbonos($idCuenta)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
 
+		$ci->db->where('cuenta_cobrar_id',$idCuenta);
+		$query = $ci->db->get('cobros');
+		$total = 0;
+		foreach ($query->result() as $row) {
+			$total = $total + $row->monto;
+		}
+
+		return $total;
+	 
+	}
+}
+
+if(!function_exists('getTotalAbonosProveedores'))
+{
+	function getTotalAbonosProveedores($idCuenta)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+
+		$ci->db->where('cuenta_pagar_id',$idCuenta);
+		$query = $ci->db->get('pagos');
+		$total = 0;
+		foreach ($query->result() as $row) {
+			$total = $total + $row->monto;
+		}
+
+		return $total;
+	 
+	}
+}
