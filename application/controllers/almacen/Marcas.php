@@ -120,15 +120,17 @@ class Marcas extends CI_Controller {
 		$data  = array(
 			'estado' => "1", 
 		);
-		$this->Comun_model->update("categorias","id=$id",$data);
-		echo "almacen/marcas";
+		$this->Comun_model->update("marcas","id=$id",$data);
+		//echo "almacen/marcas";
+		redirect(base_url()."almacen/marcas");
 	}
 
 	public function deshabilitar($id){
 		$data  = array(
 			'estado' => "0", 
 		);
-		$this->Comun_model->update("categorias","id=$id",$data);
-		echo "almacen/marcas";
+		$this->Comun_model->update("marcas","id=$id",$data);
+		//echo "almacen/marcas";
+		redirect(base_url()."almacen/marcas");
 	}
 }

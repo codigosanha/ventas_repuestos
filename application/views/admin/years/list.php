@@ -48,7 +48,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>almacen/years/edit/<?php echo $year->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>almacen/years/delete/<?php echo $year->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($year->estado): ?>
+                                                        <a href="<?php echo base_url();?>almacen/years/deshabilitar/<?php echo $year->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>almacen/years/habilitar/<?php echo $year->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                   
                                                 </div>
                                             </td>

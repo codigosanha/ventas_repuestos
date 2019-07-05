@@ -92,10 +92,12 @@ class Ventas_model extends CI_Model {
 	}
 	
 
-	public function getProductoByCode($codigo_barra){
-		$this->db->select("p.id,p.nombre,p.codigo_barras,p.precio,m.nombre as marca,p.stock");
-		$this->db->from("productos p");
-		$this->db->join("marca m", "p.marca_id = m.id");
+	public function getProductoByCode($codigo_barra,$sucursal_id,$bodega_id){
+		$this->db->select("bsp.*");
+		$this->db->from("bodega_sucursal_producto bsp");
+		$this->db->join("productos p", "bsp.producto_id = p.id");
+		$this->db->where("bsp.sucursal_id", $sucursal_id);
+		$this->db->where("bsp.bodega_id", $bodega_id);
 		$this->db->where("p.codigo_barras", $codigo_barra);
 		$this->db->where("p.stock > ",0);
 		$resultados = $this->db->get();
@@ -145,8 +147,8 @@ class Ventas_model extends CI_Model {
 		$this->db->select("DATE(fecha) as fecha, SUM(total) as monto");
 		$this->db->from("ventas");
 		$this->db->where("estado","1");
-		$this->db->group_by("fecha");
-		$this->db->order_by("fecha");
+		$this->db->group_by("DATE(fecha)");
+		$this->db->order_by("DATE(fecha)");
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}
@@ -156,6 +158,7 @@ class Ventas_model extends CI_Model {
 		$this->db->from("ventas");
 		$this->db->where("fecha >=",$year."-01-01");
 		$this->db->where("fecha <=",$year."-12-31");
+		$this->db->where("estado","1");
 		$this->db->group_by("mes");
 		$this->db->order_by("mes");
 		$resultados = $this->db->get();
@@ -278,6 +281,21 @@ class Ventas_model extends CI_Model {
 		$this->db->order_by("totalVendidos", "desc"); 
 		$this->db->limit(10);
 		$this->db->group_by("dv.producto_id");
+		$resultados = $this->db->get();
+		return $resultados->result();
+	}
+
+	public function searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo){
+		$this->db->select("bsp.*");
+		$this->db->from("bodega_sucursal_producto bsp");
+		$this->db->join("productos p","bsp.producto_id = p.id");
+		$this->db->where("bsp.sucursal_id",$sucursal_id);
+		$this->db->where("bsp.bodega_id",$bodega_id);
+		$this->db->where("p.marca_id",$marca);
+		$this->db->where("p.year_id",$year);
+		$this->db->where("p.modelo_id",$modelo);
+		$this->db->where("p.estado","1");
+		$this->db->where("bsp.stock >=", 1);
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}

@@ -159,7 +159,8 @@ class Usuarios extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("usuarios","id=$id",$data);
-		echo "administrador/usuarios";
+		//echo "administrador/usuarios";
+		redirect(base_url()."administrador/usuarios");
 	}
 
 	public function deshabilitar($id){
@@ -167,6 +168,7 @@ class Usuarios extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("usuarios","id=$id",$data);
-		echo "administrador/usuarios";
+		//echo "administrador/usuarios";
+		redirect(base_url()."administrador/usuarios");
 	}
 }

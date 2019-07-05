@@ -121,7 +121,8 @@ class Tarjetas extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("tarjetas","id=$id",$data);
-		echo "administrador/tarjetas";
+		//echo "administrador/tarjetas";
+		redirect(base_url()."administrador/tarjetas");
 	}
 
 	public function deshabilitar($id){
@@ -129,6 +130,7 @@ class Tarjetas extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("tarjetas","id=$id",$data);
-		echo "administrador/tarjetas";
+		//echo "administrador/tarjetas";
+		redirect(base_url()."administrador/tarjetas");
 	}
 }

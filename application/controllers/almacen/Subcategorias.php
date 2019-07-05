@@ -132,7 +132,8 @@ class Subcategorias extends CI_Controller {
 			'estado' => "1", 
 		);
 		$this->Comun_model->update("subcategorias","id=$id",$data);
-		echo "almacen/subcategorias";
+		//echo "almacen/subcategorias";
+		redirect(base_url()."almacen/subcategorias");
 	}
 
 	public function deshabilitar($id){
@@ -140,6 +141,7 @@ class Subcategorias extends CI_Controller {
 			'estado' => "0", 
 		);
 		$this->Comun_model->update("subcategorias","id=$id",$data);
-		echo "almacen/subcategorias";
+		//echo "almacen/subcategorias";
+		redirect(base_url()."almacen/subcategorias");
 	}
 }

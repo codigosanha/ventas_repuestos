@@ -144,15 +144,17 @@ class Comprobantes extends CI_Controller {
 		$data  = array(
 			"estado" => "1", 
 		);
-		$this->Comun_model->update("comprobantes","id=$id",$data);
-		echo "administrador/comprobantes";
+		$this->Comun_model->update("comprobante_sucursal","id=$id",$data);
+		//echo "administrador/comprobantes";
+		redirect(base_url()."administrador/comprobantes");
 	}
 
 	public function deshabilitar($id){
 		$data  = array(
 			"estado" => "0", 
 		);
-		$this->Comun_model->update("comprobantes","id=$id",$data);
-		echo "administrador/comprobantes";
+		$this->Comun_model->update("comprobante_sucursal","id=$id",$data);
+		//echo "administrador/comprobantes";
+		redirect(base_url()."administrador/comprobantes");
 	}
 }

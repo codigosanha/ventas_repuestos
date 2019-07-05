@@ -49,8 +49,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>almacen/subcategorias/edit/<?php echo $sc->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
+                                                    <?php if ($sc->estado): ?>
+                                                        <a href="<?php echo base_url();?>almacen/subcategorias/deshabilitar/<?php echo $sc->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>almacen/subcategorias/habilitar/<?php echo $sc->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
                                                     
-                                                    <a href="<?php echo base_url();?>almacen/subcategorias/delete/<?php echo $sc->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
                                                   
                                                 </div>
                                             </td>

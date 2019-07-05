@@ -141,7 +141,8 @@ class Proveedores extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("proveedores","id=$id",$data);
-		echo "almacen/proveedores";
+		//echo "almacen/proveedores";
+		redirect(base_url()."almacen/proveedores");
 	}
 
 	public function deshabilitar($id){
@@ -149,6 +150,7 @@ class Proveedores extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("proveedores","id=$id",$data);
-		echo "almacen/proveedores";
+		//echo "almacen/proveedores";
+		redirect(base_url()."almacen/proveedores");
 	}
 }

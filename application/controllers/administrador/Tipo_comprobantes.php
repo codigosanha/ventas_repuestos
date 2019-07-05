@@ -132,7 +132,8 @@ class Tipo_comprobantes extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("comprobantes","id=$id",$data);
-		echo "administrador/tipo_comprobantes";
+		//echo "administrador/tipo_comprobantes";
+		redirect(base_url()."administrador/tipo_comprobantes");
 	}
 
 	public function deshabilitar($id){
@@ -140,6 +141,7 @@ class Tipo_comprobantes extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("comprobantes","id=$id",$data);
-		echo "administrador/tipo_comprobantes";
+		//echo "administrador/tipo_comprobantes";
+		redirect(base_url()."administrador/tipo_comprobantes");
 	}
 }

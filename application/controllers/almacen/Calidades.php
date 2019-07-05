@@ -121,7 +121,8 @@ class Calidades extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("calidades","id=$id",$data);
-		echo "almacen/calidades";
+		//echo "almacen/calidades";
+		redirect(base_url()."almacen/calidades");
 	}
 
 	public function deshabilitar($id){
@@ -129,6 +130,7 @@ class Calidades extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("calidades","id=$id",$data);
-		echo "almacen/calidades";
+		//echo "almacen/calidades";
+		redirect(base_url()."almacen/calidades");
 	}
 }

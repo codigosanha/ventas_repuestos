@@ -64,7 +64,12 @@
                                                     </button>
                                                     <a href="<?php echo base_url()?>administrador/comprobantes/edit/<?php echo $c->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
                                                     <?php if ($this->session->userdata("total_access")): ?>
-                                                        <a href="<?php echo base_url();?>administrador/comprobantes/delete/<?php echo $c->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                        <?php if ($c->estado): ?>
+                                                            <a href="<?php echo base_url();?>administrador/comprobantes/deshabilitar/<?php echo $c->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                        <?php else: ?>
+                                                            <a href="<?php echo base_url();?>administrador/comprobantes/habilitar/<?php echo $c->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                        <?php endif ?>
+                                                        
                                                     <?php endif ?>
                                                     
                                                   

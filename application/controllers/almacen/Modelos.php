@@ -121,7 +121,8 @@ class Modelos extends CI_Controller {
 			'estado' => "1", 
 		);
 		$this->Comun_model->update("modelos","id=$id",$data);
-		echo "almacen/modelos";
+		//echo "almacen/modelos";
+		redirect(base_url()."almacen/modelos");
 	}
 
 	public function deshabilitar($id){
@@ -129,6 +130,7 @@ class Modelos extends CI_Controller {
 			'estado' => "0", 
 		);
 		$this->Comun_model->update("modelos","id=$id",$data);
-		echo "almacen/modelos";
+		//echo "almacen/modelos";
+		redirect(base_url()."almacen/modelos");
 	}
 }

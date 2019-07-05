@@ -1,6 +1,118 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("click", ".btn-view-ajuste", function(){
+        id = $(this).val();
+        showAjuste(id);
+
+    });
+    function showAjuste(id){
+        $.ajax({
+            url: base_url + "inventario/ajuste/view/" + id,
+            type: "POST",
+            success: function(resp){
+                $("#modal-ajuste").modal("show");
+                $("#modal-ajuste .modal-body").html(resp);
+            }
+        });
+    }
+    $(document).on("keyup mouseup", ".stocks_fisico", function(){
+        stocks_fisico = Number($(this).val());
+        stocks_bd = Number($(this).closest("tr").find("td:eq(1)").text());
+        diferencia_stock = stocks_fisico-stocks_bd;
+        $(this).closest("tr").find("td:eq(3)").children('input').val(diferencia_stock);
+    });
+    $("#btn-ver-productos").on("click", function(){
+        var bodega_id = $("#bodega").val();
+        var sucursal_id = $("#sucursal").val();
+        var dataForm = {
+            bodega_id: bodega_id,
+            sucursal_id: sucursal_id
+        };
+        $.ajax({
+            url: base_url + "inventario/ajuste/searchProductos",
+            type: "POST",
+            data: dataForm,
+            dataType: "json",
+            success: function(data){
+                console.log(data);
+                html = "";
+                $.each(data, function(key, value){
+                        html +='<tr><td>';
+                        html +='<input type="hidden" name="productos[]" value="'+value.producto_id+'">';
+                        html += value.nombre;
+                        html +='</td>';
+                        html +='<td>';
+                        html +='<input type="hidden" name="stocks_bd[]" value="'+value.stock+'">';
+                        html += value.stock;
+                        html +='</td>';
+                        html +='<td>';
+                        html +='<input type="text" name="stocks_fisico[]" class="form-control stocks_fisico" value="'+value.stock+'"';
+                        html +='</td>';
+                        html +='<td>';
+                        html +='<input type="text" name="stocks_diferencia[]" class="form-control" value="0" readonly="readonly">';
+                        html +='</td></tr>';
+                });
+                if (!html) {
+                    $("#btn-inventario").attr("disabled","disabled");
+                } else{
+                    $("#btn-inventario").removeAttr("disabled");
+                }
+                $("#tbInventario tbody").html(html);
+            }
+        });
+    });
+    $(document).on("click",".btn-selected", function(){
+        data = JSON.parse($(this).val());
+        html = "<tr>";
+        html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
+        html +="<td>"+data.nombre+"</td>";
+        precios = "<option value=''>Seleccione</option>";
+        $.each(data.precios, function(key, value){
+            precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
+        });
+        html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
+        html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
+        html +="<td>"+data.stock+"</td>";
+        html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;'></td>";
+        html +="<td><input type='hidden' name='importes[]'><p></p></td>";
+        html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
+        html +="</tr>"
+
+        $("#tbventas tbody").append(html);
+        sumarVenta();
+        
+    });
+    $("#formSearchProducto").submit(function(e){
+        e.preventDefault();
+        var dataForm = $(this).serialize();
+        var url = $(this).attr("action");
+        sucursal_id = $("#sucursal-venta").val();
+        bodega_id = $("#bodega").val();
+
+        if (bodega_id) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                data: dataForm + "&sucursal_id="+sucursal_id+"&bodega_id="+bodega_id,
+                success: function(data){
+                    //alert(data);
+                    html = "";
+                    $.each(data, function(key, value){
+                        html += "<tr>";
+                        html += "<td><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' width='100px' class='img-responsive'></td>";
+                        html += "<td>"+value.nombre+"</td>";
+                        html += "<td><button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>";
+                        html += "</tr>";
+                    });
+                    $("#tbProductos tbody").html(html);
+                }
+            });
+        }else{
+            swal("Error", "Debe seleccionar una bodega", "error");
+        }
+    });
     $(document).on("click", ".btn-abonar", function(){
         idCuenta = $(this).val();
         num_documento = $(this).closest("tr").children("td:eq(1)").text();
@@ -265,13 +377,20 @@ $(document).ready(function () {
         codigo_barra = $(this).val();
 
         if (event.which == '10' || event.which == '13') {
+
+            var sucursal_id = $("#sucursal-venta").val();
+            var bodega_id = $("#bodega").val();
             
-            
+            var dataForm = {
+                bodega_id: bodega_id,
+                sucursal_id: sucursal_id,
+                codigo_barra: codigo_barra
+            };
             $.ajax({
                 url: base_url+"movimientos/ventas/getProductoByCode",
                 type: "POST",
                 dataType:"json",
-                data:{ codigo_barra: codigo_barra},
+                data: dataForm,
                 success:function(data){
                 
                     if (data =="0") {
@@ -284,13 +403,17 @@ $(document).ready(function () {
                         });
                     }else{
                         html = "<tr>";
-                        html +="<td><input type='hidden' name='idproductos[]' value='"+data.id+"'>"+data.codigo_barras+"</td>";
+                        html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
                         html +="<td>"+data.nombre+"</td>";
-                        html +="<td>"+data.marca+"</td>";
-                        html +="<td><input type='hidden' name='precios[]' value='"+data.precio+"'>"+data.precio+"</td>";
+                        precios = "<option value=''>Seleccione</option>";
+                        $.each(data.precios, function(key, value){
+                            precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
+                        });
+                        html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
+                        html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
                         html +="<td>"+data.stock+"</td>";
-                        html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' value='1' onkeypress='validate(event)'></td>";
-                        html +="<td><input type='hidden' name='importes[]' value='"+data.precio+"'><p>"+data.precio+"</p></td>";
+                        html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;'></td>";
+                        html +="<td><input type='hidden' name='importes[]'><p></p></td>";
                         html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
                         html +="</tr>"
 
@@ -854,18 +977,51 @@ $(document).ready(function () {
         yearselect = $(this).val();
         datagrafico(base_url,yearselect);
     });
-    $(".btn-remove").on("click", function(e){
+    $(document).on("click",".btn-remove",function(e){
         e.preventDefault();
-        var ruta = $(this).attr("href");
-        //alert(ruta);
-        $.ajax({
-            url: ruta,
-            type:"POST",
-            success:function(resp){
-                //http://localhost/ventas_ci/mantenimiento/productos
-                window.location.href = base_url + resp;
-            }
-        });
+        var url = $(this).attr("href");
+        swal({
+                title:"Esta seguro deshabilitar el registro?",
+                text: "Esta operacion es irreversible",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: true,
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    window.location.href = url;
+                    }
+                return false;
+            });
+       
+    });
+    $(document).on("click",".btn-habilitar",function(e){
+        e.preventDefault();
+        var url = $(this).attr("href");
+        swal({
+                title:"Esta seguro habilitar el registro?",
+                text: "Esta operacion es irreversible",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: true,
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    window.location.href = url;
+                    }
+                return false;
+            });
+       
     });
 
      $(".btn-view-producto").on("click", function(){

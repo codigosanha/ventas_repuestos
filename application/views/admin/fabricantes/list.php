@@ -48,8 +48,12 @@
                                                     </button>
                                                    
                                                     <a href="<?php echo base_url()?>almacen/fabricantes/edit/<?php echo $fabricante->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
+                                                    <?php if ($fabricante->estado): ?>
+                                                        <a href="<?php echo base_url();?>almacen/fabricantes/deshabilitar/<?php echo $fabricante->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>almacen/fabricantes/habilitar/<?php echo $fabricante->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
                                                     
-                                                    <a href="<?php echo base_url();?>almacen/fabricantes/delete/<?php echo $fabricante->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
                                                     
                                                 </div>
                                             </td>

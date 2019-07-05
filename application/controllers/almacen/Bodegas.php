@@ -133,15 +133,17 @@ class Bodegas extends CI_Controller {
 		$data  = array(
 			"estado" => "1", 
 		);
-		$this->Comun_model->update("bodegas","id=$id",$data);
-		echo "almacen/bodegas";
+		$this->Comun_model->update("bodega_sucursal","id=$id",$data);
+		//echo "almacen/bodegas";
+		redirect(base_url()."almacen/bodegas");
 	}
 
 	public function deshabilitar($id){
 		$data  = array(
 			"estado" => "0", 
 		);
-		$this->Comun_model->update("bodegas","id=$id",$data);
-		echo "almacen/bodegas";
+		$this->Comun_model->update("bodega_sucursal","id=$id",$data);
+		//echo "almacen/bodegas";
+		redirect(base_url()."almacen/bodegas");
 	}
 }

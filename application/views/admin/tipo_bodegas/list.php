@@ -68,7 +68,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>almacen/tipo_bodegas/edit/<?php echo $bodega->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>almacen/tipo_bodegas/delete/<?php echo $bodega->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($bodega->estado): ?>
+                                                        <a href="<?php echo base_url();?>almacen/tipo_bodegas/deshabilitar/<?php echo $bodega->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>almacen/tipo_bodegas/habilitar/<?php echo $bodega->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                   
                                                 </div>
                                             </td>

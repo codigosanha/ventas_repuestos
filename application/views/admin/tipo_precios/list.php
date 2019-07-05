@@ -48,7 +48,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>almacen/tipo_precios/edit/<?php echo $precio->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>almacen/tipo_precios/delete/<?php echo $precio->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($precio->estado): ?>
+                                                        <a href="<?php echo base_url();?>almacen/tipo_precios/deshabilitar/<?php echo $precio->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>almacen/tipo_precios/habilitar/<?php echo $precio->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                   
                                                 </div>
                                             </td>

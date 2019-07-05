@@ -1,7 +1,7 @@
 <?php
 defined("BASEPATH") OR exit("No direct script access allowed");
 
-class Presentaciones extends CI_Controller {
+class Ajuste extends CI_Controller {
 
 	//private $permisos;
 	public function __construct(){
@@ -15,12 +15,12 @@ class Presentaciones extends CI_Controller {
 	{
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"presentaciones" => $this->Comun_model->get_records("presentaciones"), 
+			"ajustes" => $this->Comun_model->get_records("ajustes"), 
 		);
 
 		$contenido_externo = array(
-			"title" => "presentaciones", 
-			"contenido" => $this->load->view("admin/presentaciones/list", $contenido_interno, TRUE)
+			"title" => "ajustes", 
+			"contenido" => $this->load->view("admin/calidades/list", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 
@@ -28,8 +28,8 @@ class Presentaciones extends CI_Controller {
 
 	public function add(){
 		$contenido_externo = array(
-			"title" => "presentaciones", 
-			"contenido" => $this->load->view("admin/presentaciones/add","", TRUE)
+			"title" => "ajustes", 
+			"contenido" => $this->load->view("admin/calidades/add","", TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}
@@ -38,7 +38,7 @@ class Presentaciones extends CI_Controller {
 
 		$nombre = $this->input->post("nombre");
 		$descripcion = $this->input->post("descripcion");
-		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[presentaciones.nombre]");
+		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[calidades.nombre]");
 
 		if ($this->form_validation->run()==TRUE) {
 
@@ -48,12 +48,12 @@ class Presentaciones extends CI_Controller {
 				"estado" => "1"
 			);
 
-			if ($this->Comun_model->insert("presentaciones", $data)) {
-				redirect(base_url()."almacen/presentaciones");
+			if ($this->Comun_model->insert("ajustes", $data)) {
+				redirect(base_url()."almacen/calidades");
 			}
 			else{
 				$this->session->set_flashdata("error","No se pudo guardar la informacion");
-				redirect(base_url()."almacen/presentaciones/add");
+				redirect(base_url()."almacen/calidades/add");
 			}
 		}
 		else{
@@ -64,27 +64,27 @@ class Presentaciones extends CI_Controller {
 	public function edit($id){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"presentacion" => $this->Comun_model->get_record("presentaciones","id=$id"), 
+			"calidad" => $this->Comun_model->get_record("ajustes","id=$id"), 
 		);
 
 		$contenido_externo = array(
-			"title" => "presentaciones", 
-			"contenido" => $this->load->view("admin/presentaciones/edit", $contenido_interno, TRUE)
+			"title" => "ajustes", 
+			"contenido" => $this->load->view("admin/calidades/edit", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}
 
 	public function update(){
-		$idPresentacion = $this->input->post("idPresentacion");
+		$idCalidad = $this->input->post("idCalidad");
 		$nombre = $this->input->post("nombre");
 		$descripcion = $this->input->post("descripcion");
 
-		$sucursalActual = $this->Comun_model->get_record("presentaciones","id=$idPresentacion");
+		$sucursalActual = $this->Comun_model->get_record("ajustes","id=$idCalidad");
 
 		if ($nombre == $sucursalActual->nombre) {
 			$is_unique_nombre = "";
 		}else{
-			$is_unique_nombre = "|is_unique[presentaciones.nombre]";
+			$is_unique_nombre = "|is_unique[calidades.nombre]";
 		}
 
 		$this->form_validation->set_rules("nombre","Nombre","required".$is_unique_nombre);
@@ -95,15 +95,15 @@ class Presentaciones extends CI_Controller {
 				"descripcion" => $descripcion,
 			);
 
-			if ($this->Comun_model->update("presentaciones","id=$idPresentacion",$data)) {
-				redirect(base_url()."almacen/presentaciones");
+			if ($this->Comun_model->update("ajustes","id=$idCalidad",$data)) {
+				redirect(base_url()."almacen/calidades");
 			}
 			else{
 				$this->session->set_flashdata("error","No se pudo actualizar la informacion");
-				redirect(base_url()."almacen/presentaciones/edit/".$idPresentacion);
+				redirect(base_url()."almacen/calidades/edit/".$idCalidad);
 			}
 		}else{
-			$this->edit($idPresentacion);
+			$this->edit($idCalidad);
 		}
 
 		
@@ -111,26 +111,26 @@ class Presentaciones extends CI_Controller {
 
 	public function view($id){
 		$data  = array(
-			"presentacion" => $this->Comun_model->get_record("presentaciones", "id=$id"), 
+			"calidad" => $this->Comun_model->get_record("ajustes", "id=$id"), 
 		);
-		$this->load->view("admin/presentaciones/view",$data);
+		$this->load->view("admin/calidades/view",$data);
 	}
 
 	public function habilitar($id){
 		$data  = array(
 			"estado" => "1", 
 		);
-		$this->Comun_model->update("presentaciones","id=$id",$data);
-		//echo "almacen/presentaciones";
-		redirect(base_url()."almacen/presentaciones");
+		$this->Comun_model->update("ajustes","id=$id",$data);
+		//echo "almacen/calidades";
+		redirect(base_url()."almacen/calidades");
 	}
 
 	public function deshabilitar($id){
 		$data  = array(
 			"estado" => "0", 
 		);
-		$this->Comun_model->update("presentaciones","id=$id",$data);
-		//echo "almacen/presentaciones";
-		redirect(base_url()."almacen/presentaciones");
+		$this->Comun_model->update("ajustes","id=$id",$data);
+		//echo "almacen/calidades";
+		redirect(base_url()."almacen/calidades");
 	}
 }

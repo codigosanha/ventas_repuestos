@@ -121,7 +121,8 @@ class Tipo_precios extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("precios","id=$id",$data);
-		echo "almacen/tipo_precios";
+		//echo "almacen/tipo_precios";
+		redirect(base_url()."almacen/tipo_precios");
 	}
 
 	public function deshabilitar($id){
@@ -129,6 +130,7 @@ class Tipo_precios extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("precios","id=$id",$data);
-		echo "almacen/tipo_precios";
+		//echo "almacen/tipo_precios";
+		redirect(base_url()."almacen/tipo_precios");
 	}
 }

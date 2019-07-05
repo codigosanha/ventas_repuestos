@@ -52,7 +52,7 @@
                                             <td>
                                                 <img src="<?php echo base_url().'assets/barcode/'.$producto->codigo_barras.".png";?>" alt="">
                                             </td>
-                                            <td><img src="<?php echo base_url().'assets/imagenes_productos/'.$producto->nombre?>" alt="<?php echo $producto->nombre?>" style="width: 100px; " class="img-responsive"></td>           
+                                            <td><img src="<?php echo base_url().'assets/imagenes_productos/'.$producto->imagen;?>" alt="<?php echo $producto->nombre?>" style="width: 100px; " class="img-responsive"></td>           
                                             <td><?php echo $producto->nombre;?></td>
                                             <td><?php echo get_record("fabricantes","id=".$producto->fabricante_id)->nombre;?></td>
                                             <td><?php echo get_record("modelos","id=".$producto->modelo_id)->nombre;?></td>

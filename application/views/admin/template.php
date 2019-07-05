@@ -37,6 +37,14 @@
             width: 300px;
            
         }
+        #modal-ajuste .modal-dialog {
+            width: 320px;
+           
+        }
+        #modal-productos .modal-dialog {
+            width: 900px;
+           
+        }
         .menu-notificaciones li{
             padding: 7px;
         }

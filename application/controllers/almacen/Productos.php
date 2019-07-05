@@ -71,7 +71,18 @@ class Productos extends CI_Controller {
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[productos.nombre]");
 
 		if ($this->form_validation->run()==TRUE) {
+			$imagen = 'image_default.jpg';
+			if (!empty($_FILES['imagen']['name'])) {
+				$config['upload_path']          = './assets/imagenes_productos/';
+                $config['allowed_types']        = 'gif|jpg|png';
 
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('imagen'))
+                {
+  					$data = array('upload_data' => $this->upload->data());
+                    $imagen = $data['upload_data']['file_name'];
+                } 
+			}
 			$data  = array(
 				"nombre" => $nombre, 
 				"descripcion" => $descripcion,
@@ -85,10 +96,12 @@ class Productos extends CI_Controller {
 				"categoria_id" => $categoria_id,
 				"subcategoria_id" => $subcategoria_id,
 				"codigo_barras" => $codigo_barras,
+				"imagen" => $imagen,
 				"estado" => "1"
 			);
 			$producto = $this->Comun_model->insert("productos", $data);
 			if ($producto) {
+				$this->generateBarCode($codigo_barras);
 				if (!empty($modelos)) {
 					$this->saveCompatibilidades($producto->id,$modelos);
 				}
@@ -203,6 +216,20 @@ class Productos extends CI_Controller {
 		$this->form_validation->set_rules("nombre","Nombre","required".$is_unique_nombre);
 
 		if ($this->form_validation->run()==TRUE) {
+			$producto = $this->Comun_model->get_record("productos","id='$idProducto'");
+			$imagen = $producto->imagen;
+			if (!empty($_FILES['imagen']['name'])) {
+				$config['upload_path']          = './assets/imagenes_productos/';
+                $config['allowed_types']        = 'gif|jpg|png';
+
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('imagen'))
+                {
+  					$data = array('upload_data' => $this->upload->data());
+                    $imagen = $data['upload_data']['file_name'];
+                    unlink("assets/imagenes_productos/".$producto->imagen);
+                } 
+			}
 			$data = array(
 				"nombre" => $nombre,
 				"descripcion" => $descripcion,
@@ -216,9 +243,12 @@ class Productos extends CI_Controller {
 				"categoria_id" => $categoria_id,
 				"subcategoria_id" => $subcategoria_id,
 				"codigo_barras" => $codigo_barras,
+				"imagen" => $imagen
 			);
 
 			if ($this->Comun_model->update("productos","id=$idProducto",$data)) {
+
+				$this->generateBarCode($codigo_barras);
 
 				$this->Comun_model->delete("compatibilidades","producto_id='$idProducto'");
 				$this->Comun_model->delete("productos_asociados","producto_original='$idProducto'");
@@ -302,5 +332,13 @@ class Productos extends CI_Controller {
             $data [] = $dataPrecio;
         }
         echo json_encode($data);
+	}
+
+	protected function generateBarCode($codigo_barras){
+		$this->load->library('zend');
+	   	$this->zend->load('Zend/Barcode');
+	   	$file = Zend_Barcode::draw('code128', 'image', array('text' => $codigo_barras), array());
+	   	//$code = time().$code;
+	   	$store_image = imagepng($file,"./assets/barcode/{$codigo_barras}.png");
 	}
 }

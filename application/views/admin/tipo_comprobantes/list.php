@@ -50,7 +50,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>administrador/tipo_comprobantes/edit/<?php echo $comprobante->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>administrador/tipo_comprobantes/delete/<?php echo $comprobante->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($comprobante->estado): ?>
+                                                        <a href="<?php echo base_url();?>administrador/tipo_comprobantes/deshabilitar/<?php echo $comprobante->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>administrador/tipo_comprobantes/habilitar/<?php echo $comprobante->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                   
                                                 </div>
                                             </td>

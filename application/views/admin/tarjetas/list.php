@@ -48,7 +48,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>administrador/tarjetas/edit/<?php echo $tarjeta->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>administrador/tarjetas/delete/<?php echo $tarjeta->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($tarjeta->estado): ?>
+                                                        <a href="<?php echo base_url();?>administrador/tarjetas/deshabilitar/<?php echo $tarjeta->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>administrador/tarjetas/habilitar/<?php echo $tarjeta->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                   
                                                 </div>
                                             </td>

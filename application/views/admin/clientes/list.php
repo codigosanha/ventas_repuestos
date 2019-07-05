@@ -59,8 +59,12 @@
                                                     
                                                   
                                                     <a href="<?php echo base_url()?>almacen/clientes/edit/<?php echo $cliente->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                   
-                                                    <a href="<?php echo base_url();?>almacen/clientes/delete/<?php echo $cliente->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($cliente->estado): ?>
+                                                        <a href="<?php echo base_url();?>almacen/clientes/deshabilitar/<?php echo $cliente->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>almacen/clientes/habilitar/<?php echo $cliente->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                     
                                                 </div>
                                             </td>

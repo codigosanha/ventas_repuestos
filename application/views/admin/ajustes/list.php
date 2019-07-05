@@ -1,102 +1,153 @@
+<?php if($this->session->flashdata("success")):?>
+    <script>
+        $(document).ready(function(){
+            var id= '<?php echo $this->session->flashdata("success"); ?>';
+            showAjuste(id);
+        });
+    </script>
+<?php endif; ?>
+
+<?php if($this->session->flashdata("error")):?>
+    <script>
+        swal("Error!", "<?php echo $this->session->flashdata('error');?>", "error");
+    </script>
+<?php endif;?>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Bodegas
+        Ajustes de Inventario
         <small>Listado</small>
         </h1>
     </section>
+
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="almacen/bodegas">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>almacen/bodegas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Bodega</a>
+                        
+                        <a href="<?php echo base_url();?>inventario/ajuste/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Ajuste</a>
                       
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="table-responsive">
                         <table id="tableSimple" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Bodega</th>
                                     <?php if (!$this->session->userdata("sucursal")): ?>
                                         <th>Sucursal</th>
                                     <?php endif ?>
+                                    <th>Bodega</th>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if(!empty($bodegas)):?>
-                                    <?php foreach($bodegas as $bodega):?>
+                                <?php if (!empty($ajustes)): ?>
+                                    <?php foreach ($ajustes as $ajuste): ?>
                                         <tr>
-                                            <td><?php echo $bodega->id;?></td>
-                                            <td><?php echo get_record("bodegas","id=".$bodega->bodega_id)->nombre;?></td>
+
+                                            <td><?php echo $ajuste->id;?></td>
                                             <?php if (!$this->session->userdata("sucursal")): ?>
-                                                <td><?php echo get_record("sucursales","id=".$bodega->sucursal_id)->nombre;?></td>
+                                                <td><?php echo get_record("sucursales","id=".$ajuste->sucursal_id)->nombre;?></td>
                                             <?php endif ?>
+                                            <td><?php echo get_record("bodegas","id=".$ajuste->bodega_id)->nombre;?></td>
+                                            <td><?php echo $ajuste->fecha;?></td>
+                                            <td><?php echo get_record("usuarios","id=".$ajuste->usuario_id)->nombres;?></td>
                                             <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $bodega->id;?>">
-                                                        <span class="fa fa-search"></span>
+
+                                                
+                                                    <button type="button" class="btn btn-info btn-view-ajuste" value="<?php echo $ajuste->id;?>">
+                                                        <span class="fa fa-eye"></span>
                                                     </button>
-                                                    <?php if ($this->session->userdata("total_access")): ?>
-                                                        <?php if ($bodega->estado): ?>
-                                                            <a href="<?php echo base_url();?>almacen/bodegas/deshabilitar/<?php echo $bodega->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                        <?php else: ?>
-                                                            <a href="<?php echo base_url();?>almacen/bodegas/habilitar/<?php echo $bodega->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
-                                                        <?php endif ?>
-                                                        
-                                                    <?php endif ?>
+                                                    <a href="<?php echo base_url();?>inventario/ajuste/edit/<?php echo $ajuste->id;?>" class="btn btn-warning btn-flat"><span class="fa fa-pencil"></span></a>
                                                     
-                                                  
-                                                </div>
+
+                                                
+
                                             </td>
+
                                         </tr>
-                                    <?php endforeach;?>
-                                <?php endif;?>
+
+                                    <?php endforeach ?>
+
+                                <?php endif ?>
+
                             </tbody>
+
                         </table>
-                       </div>
+
                     </div>
+
                 </div>
 
+
+
             </div>
+
             <!-- /.box-body -->
+
         </div>
+
         <!-- /.box -->
+
     </section>
+
     <!-- /.content -->
+
 </div>
+
 <!-- /.content-wrapper -->
 
-<div class="modal fade" id="modal-default">
+
+
+<div class="modal fade" id="modal-ajuste">
+
   <div class="modal-dialog">
+
     <div class="modal-content">
+
       <div class="modal-header">
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Informacion de la Bodega</h4>
+
+        <h4 class="modal-title">Informacion del Ajuste</h4>
+
       </div>
+
       <div class="modal-body">
+        <p></p>
         
+
       </div>
+
       <div class="modal-footer">
+
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-print">Imprimir</button>
+
       </div>
+
     </div>
+
     <!-- /.modal-content -->
+
   </div>
+
   <!-- /.modal-dialog -->
+
 </div>
+
 <!-- /.modal -->
+

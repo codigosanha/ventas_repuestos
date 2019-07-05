@@ -47,6 +47,9 @@ class Ventas extends CI_Controller {
 			"proveedores" => $this->Comun_model->get_records("proveedores"),
 			"tarjetas" => $this->Comun_model->get_records("tarjetas"),
 			"clientes" => $this->Comun_model->get_records("clientes"),
+			"years" => $this->Comun_model->get_records("years","estado=1"),
+			"marcas" => $this->Comun_model->get_records("marcas","estado=1"),
+			"modelos" => $this->Comun_model->get_records("modelos","estado=1"),
 		);
 		$contenido_externo = array(
 			"title" => "ventas", 
@@ -279,5 +282,50 @@ class Ventas extends CI_Controller {
 			'bodegas' => $dataBodegas,
 			"comprobantes" => $dataComprobantes
 		));
+	}
+
+	public function searchProducto(){
+		$year =$this->input->post("year");
+		$marca = $this->input->post("marca");
+		$modelo = $this->input->post("modelo");
+		$sucursal_id = $this->input->post("sucursal_id");
+		$bodega_id = $this->input->post("bodega_id");
+
+		$productos = $this->Ventas_model->searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo);
+		$data = array();
+		foreach ($productos as $p) {
+			$producto = get_record("productos", "id=".$p->producto_id);
+			$data[] = array(
+				"producto_id" => $p->producto_id,
+				"nombre" => $producto->nombre,
+				"codigo_barras" => $producto->codigo_barras,
+				"imagen" => $producto->imagen,
+				"stock" => $p->stock,
+				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
+			);
+		}
+		echo json_encode($data);
+	}
+
+	public function getProductoByCode(){
+		$codigo_barra = $this->input->post("codigo_barra");
+		$bodega_id = $this->input->post("bodega_id");
+		$sucursal_id = $this->input->post("sucursal_id");
+		$productoEncontrado = $this->Ventas_model->getProductoByCode($codigo_barra,$sucursal_id,$bodega_id);
+
+		if ($productoEncontrado != false) {
+			$producto = get_record("productos", "id=".$productoEncontrado->producto_id);
+			$data = array(
+				"producto_id" => $productoEncontrado->producto_id,
+				"nombre" => $producto->nombre,
+				"codigo_barras" => $producto->codigo_barras,
+				"imagen" => $producto->imagen,
+				"stock" => $productoEncontrado->stock,
+				"precios" => $this->Ventas_model->getPrecios($productoEncontrado->producto_id),
+			);
+			echo json_encode($data);
+		}else{
+			echo "0";
+		}
 	}
 }

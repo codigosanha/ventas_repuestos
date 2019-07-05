@@ -118,7 +118,8 @@ class Tipo_bodegas extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("bodegas","id=$id",$data);
-		echo "almacen/tipo_bodegas";
+		//echo "almacen/tipo_bodegas";
+		redirect(base_url()."almacen/tipo_bodegas");
 	}
 
 	public function deshabilitar($id){
@@ -126,7 +127,8 @@ class Tipo_bodegas extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("bodegas","id=$id",$data);
-		echo "almacen/tipo_bodegas";
+		//echo "almacen/tipo_bodegas";
+		redirect(base_url()."almacen/tipo_bodegas");
 	}
 
 	public function set_bodega_venta(){
