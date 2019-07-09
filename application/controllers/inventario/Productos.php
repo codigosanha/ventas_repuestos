@@ -157,7 +157,7 @@ class Productos extends CI_Controller {
 
 	public function getBodegas(){
 		$sucursal_id = $this->input->post("idSucursal");
-		$bodegas = $this->Comun_model->get_records("bodega_sucursal", "sucursal_id='$sucursal_id'");
+		$bodegas = $this->Comun_model->get_records("bodega_sucursal", "sucursal_id='$sucursal_id' and estado=1");
 		$data = array();
 		foreach ($bodegas as $b) {
 			$data[] = array(

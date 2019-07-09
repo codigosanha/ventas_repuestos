@@ -29,14 +29,14 @@ class Productos extends CI_Controller {
 	public function add(){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"categorias" => $this->Comun_model->get_records("categorias"), 
-			"years" => $this->Comun_model->get_records("years"), 
-			"presentaciones" => $this->Comun_model->get_records("presentaciones"), 
-			"modelos" => $this->Comun_model->get_records("modelos"), 
-			"marcas" => $this->Comun_model->get_records("marcas"), 
-			"fabricantes" => $this->Comun_model->get_records("fabricantes"), 
-			"calidades" => $this->Comun_model->get_records("calidades"), 
-			"tipo_precios" => $this->Comun_model->get_records("precios"), 
+			"categorias" => $this->Comun_model->get_records("categorias","estado=1"), 
+			"years" => $this->Comun_model->get_records("years","estado=1"), 
+			"presentaciones" => $this->Comun_model->get_records("presentaciones","estado=1"), 
+			"modelos" => $this->Comun_model->get_records("modelos","estado=1"), 
+			"marcas" => $this->Comun_model->get_records("marcas","estado=1"), 
+			"fabricantes" => $this->Comun_model->get_records("fabricantes","estado=1"), 
+			"calidades" => $this->Comun_model->get_records("calidades","estado=1"), 
+			"tipo_precios" => $this->Comun_model->get_records("precios","estado=1"), 
 
 		);
 		$contenido_externo = array(
@@ -162,18 +162,18 @@ class Productos extends CI_Controller {
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"producto" => $producto,
-			"categorias" => $this->Comun_model->get_records("categorias"),
-			"subcategorias" => $this->Comun_model->get_records("subcategorias","categoria_id='$producto->categoria_id'"),
-			"years" => $this->Comun_model->get_records("years"), 
-			"presentaciones" => $this->Comun_model->get_records("presentaciones"), 
-			"modelos" => $this->Comun_model->get_records("modelos"), 
-			"marcas" => $this->Comun_model->get_records("marcas"), 
-			"fabricantes" => $this->Comun_model->get_records("fabricantes"), 
-			"calidades" => $this->Comun_model->get_records("calidades"), 
-			"tipo_precios" => $this->Comun_model->get_records("precios"), 
+			"categorias" => $this->Comun_model->get_records("categorias","estado=1"),
+			"subcategorias" => $this->Comun_model->get_records("subcategorias","categoria_id='$producto->categoria_id' and estado=1"),
+			"years" => $this->Comun_model->get_records("years","estado=1"), 
+			"presentaciones" => $this->Comun_model->get_records("presentaciones","estado=1"), 
+			"modelos" => $this->Comun_model->get_records("modelos","estado=1"), 
+			"marcas" => $this->Comun_model->get_records("marcas","estado=1"), 
+			"fabricantes" => $this->Comun_model->get_records("fabricantes","estado=1"), 
+			"calidades" => $this->Comun_model->get_records("calidades","estado=1"), 
+			"tipo_precios" => $this->Comun_model->get_records("precios","estado=1"), 
 			"compatibilidades" => $this->Comun_model->get_records("compatibilidades","producto_id='$id'"),
 			"productos_asociados" => $this->Comun_model->get_records("productos_asociados","producto_original='$id'"),
-			"precios" => $this->Comun_model->get_records("producto_precio","producto_id='$id'"),
+			"precios" => $this->Comun_model->get_records("producto_precio","producto_id='$id' and estado=1"),
 		);
 
 		$contenido_externo = array(

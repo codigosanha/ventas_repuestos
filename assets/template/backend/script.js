@@ -1,6 +1,73 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $("#searchProductoTraslado").autocomplete({
+        source:function(request, response){
+            var sucursal = $("#sucursal_envio").val();
+            var bodega = $("#bodega_envio").val();
+            $.ajax({
+                url: base_url+"inventario/traslados/getProductos",
+                type: "POST",
+                dataType:"json",
+                data:{ valor: request.term, sucursal_id:sucursal, bodega_id:bodega},
+                success:function(data){
+                    response(data);
+                }
+            });
+        },
+        minLength:2,
+        select:function(event, ui){
+            
+            html = "<tr>";
+            html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
+            html +="<td>"+ui.item.nombre+"</td>";
+            html +="<td><input type='text' name='cantidades[]'  style='width:60px;'></td>";
+            html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
+            html +="</tr>"
+
+            $("#tbTraslado tbody").append(html);
+            //sumarCompra();
+            this.value = "";
+            return false;
+
+        },
+    });
+    $(document).on("change", "#sucursal_envio", function(){
+        var sucursal_id = $(this).val();
+        $.ajax({
+            url: base_url + "inventario/traslados/getBodegas",
+            type: "POST",
+            data:{idSucursal:sucursal_id},
+            dataType:"json",
+            success: function(data){
+                bodegas = "<option value=''>Seleccione...</option>";
+
+                $.each(data, function(key, value){
+                    bodegas += "<option value='"+value.bodega_id+"'>"+value.nombre+"</option>";
+                });
+
+                $("#bodega_envio").html(bodegas);
+            }
+        });
+    });
+    $(document).on("change", "#sucursal_recibe", function(){
+        var sucursal_id = $(this).val();
+        $.ajax({
+            url: base_url + "inventario/traslados/getBodegas",
+            type: "POST",
+            data:{idSucursal:sucursal_id},
+            dataType:"json",
+            success: function(data){
+                bodegas = "<option value=''>Seleccione...</option>";
+
+                $.each(data, function(key, value){
+                    bodegas += "<option value='"+value.bodega_id+"'>"+value.nombre+"</option>";
+                });
+
+                $("#bodega_recibe").html(bodegas);
+            }
+        });
+    });
     $(document).on("click", ".btn-view-ajuste", function(){
         id = $(this).val();
         showAjuste(id);
@@ -337,7 +404,7 @@ $(document).ready(function () {
             html += "</div>";
         }
         html += "</div>";
-        $("#modal-barcode .modal-body").html(html);
+        $("#modal-default .modal-body").html(html);
         for (var i = 1; i <= Number(cantidad); i++) {
             JsBarcode("#barcode"+i, codigo_barra, {
               

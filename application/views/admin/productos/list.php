@@ -66,7 +66,7 @@
                                             <td><?php echo get_record("subcategorias","id=".$producto->subcategoria_id)->nombre;?></td>
                                             <td>
                                                 <div class="btn-group-vertical">
-                                                    <button type="button" class="btn btn-default btn-view-barcode" data-toggle="modal" data-target="#modal-barcode" value="<?php echo $producto->codigo_barras;?>">
+                                                    <button type="button" class="btn btn-default btn-view-barcode" data-toggle="modal" data-target="#modal-default" value="<?php echo $producto->codigo_barras;?>">
                                                         <span class="fa fa-barcode"></span>
                                                     </button>
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $producto->id;?>">
@@ -108,6 +108,10 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-print"> 
+            <span class="fa fa-print"></span>
+            Imprimir
+        </button>
       </div>
     </div>
     <!-- /.modal-content -->
