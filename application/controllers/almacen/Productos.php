@@ -302,7 +302,7 @@ class Productos extends CI_Controller {
 
 	public function getSubcategorias(){
 		$categoria_id = $this->input->post("idCategoria");
-		$subcategorias = $this->Comun_model->get_records("subcategorias","categoria_id='$categoria_id'");
+		$subcategorias = $this->Comun_model->get_records("subcategorias","categoria_id='$categoria_id' and estado=1");
 		echo json_encode($subcategorias);
 	}
 
