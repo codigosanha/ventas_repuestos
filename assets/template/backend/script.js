@@ -1,6 +1,19 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $("#form-search-venta").submit(function(e){
+        e.preventDefault();
+        var dataForm = $(this).serialize();
+        var url = $(this).attr("action");
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: dataForm,
+            success: function(data){
+                alert(data);
+            }
+        });
+    });
     $("#searchProductoTraslado").autocomplete({
         source:function(request, response){
             var sucursal = $("#sucursal_envio").val();

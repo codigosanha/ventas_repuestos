@@ -183,4 +183,14 @@ class Devoluciones extends CI_Controller {
 		}
 		echo json_encode($data);
 	}
+
+	public function getVenta(){
+		$comprobante = $this->input->post("comprobante");
+		$sucursal = $this->input->post("sucursal");
+		$bodega = $this->input->post("bodega");
+		$numero_comprobante = $this->input->post("numero_comprobante");
+
+		$venta = $this->Comun_model->get_record("ventas", "bodega_id='$bodega' and sucursal_id='$sucursal' and comprobante_id='$comprobante' and numero_comprobante='$numero_comprobante'");
+		echo json_encode($venta);
+	}
 }
