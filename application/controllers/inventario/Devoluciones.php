@@ -191,6 +191,29 @@ class Devoluciones extends CI_Controller {
 		$numero_comprobante = $this->input->post("numero_comprobante");
 
 		$venta = $this->Comun_model->get_record("ventas", "bodega_id='$bodega' and sucursal_id='$sucursal' and comprobante_id='$comprobante' and numero_comprobante='$numero_comprobante'");
-		echo json_encode($venta);
+		$cliente = get_record("clientes","id='$venta->cliente_id'");
+		$dataVenta = array(
+			"numero_comprobante" => $venta->numero_comprobante,
+			"venta_id" => $venta->id,
+			"fecha" => $venta->fecha,
+			"sucursal_id" => $venta->sucursal_id,
+			"sucursal" => get_record("sucursales","id='$venta->sucursal_id'")->nombre,
+			"bodega_id" => $venta->bodega_id,
+			"bodega" => get_record("bodegas","id='$venta->bodega_id'")->nombre,
+			"cliente" => $cliente->nombres ." ". $cliente->apellidos,
+		);
+		$productos = $this->Comun_model->get_records("detalle_venta","venta_id='$venta->id'");
+		$dataProductos = array();
+		foreach ($productos as $p) {
+			$dataProductos[] = array(
+				"producto" => get_record("productos","id='$p->producto_id'")->nombre,
+				"producto_id" => $p->producto_id,
+				"cantidad" => $p->cantidad,
+			);
+		}
+		echo json_encode(array(
+			"venta" => $dataVenta,
+			"detalles" => $dataProductos
+		));
 	}
 }
