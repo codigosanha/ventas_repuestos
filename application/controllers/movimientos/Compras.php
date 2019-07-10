@@ -28,16 +28,16 @@ class Compras extends CI_Controller {
 
 	public function add(){
 		if ($this->session->userdata("sucursal")) {
-			$bodegas = $this->Comun_model->get_records("bodega_sucursal","sucursal_id=".$this->session->userdata("sucursal"));
+			$bodegas = $this->Comun_model->get_records("bodega_sucursal","estado=1 and sucursal_id=".$this->session->userdata("sucursal"));
 		}else{
-			$bodegas = $this->Comun_model->get_records("bodega_sucursal");
+			$bodegas = $this->Comun_model->get_records("bodega_sucursal","estado=1");
 		}
 		$contenido_interno  = array(
 			"bodegas" => $bodegas,
-			"sucursales" => $this->Comun_model->get_records("sucursales"),
+			"sucursales" => $this->Comun_model->get_records("sucursales","estado=1"),
 			//"permisos" => $this->permisos,
-			"comprobantes" => $this->Comun_model->get_records("comprobantes"), 
-			"proveedores" => $this->Comun_model->get_records("proveedores"), 
+			"comprobantes" => $this->Comun_model->get_records("comprobantes","estado=1"), 
+			"proveedores" => $this->Comun_model->get_records("proveedores","estado=1"), 
 		);
 		$contenido_externo = array(
 			"title" => "compras", 

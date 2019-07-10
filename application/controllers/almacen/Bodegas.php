@@ -34,8 +34,8 @@ class Bodegas extends CI_Controller {
 	}
 
 	public function add(){
-		$bodegas = $this->Comun_model->get_records("bodegas");
-		$sucursales = $this->Comun_model->get_records("sucursales");
+		$bodegas = $this->Comun_model->get_records("bodegas","estado=1");
+		$sucursales = $this->Comun_model->get_records("sucursales","estado=1");
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"bodegas" => $bodegas,

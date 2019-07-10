@@ -35,18 +35,18 @@ class Ventas extends CI_Controller {
 
 	public function add(){
 		if ($this->session->userdata("sucursal")) {
-			$bodegas = $this->Comun_model->get_records("bodega_sucursal","sucursal_id=".$this->session->userdata("sucursal"));
+			$bodegas = $this->Comun_model->get_records("bodega_sucursal","estado=1 and sucursal_id=".$this->session->userdata("sucursal"));
 		}else{
-			$bodegas = $this->Comun_model->get_records("bodega_sucursal");
+			$bodegas = $this->Comun_model->get_records("bodega_sucursal", "estado=1");
 		}
 		$contenido_interno  = array(
 			"bodegas" => $bodegas,
-			"sucursales" => $this->Comun_model->get_records("sucursales"),
+			"sucursales" => $this->Comun_model->get_records("sucursales","estado=1"),
 			//"permisos" => $this->permisos,
-			"comprobantes" => $this->Comun_model->get_records("comprobante_sucursal","sucursal_id=".$this->session->userdata("sucursal")), 
-			"proveedores" => $this->Comun_model->get_records("proveedores"),
-			"tarjetas" => $this->Comun_model->get_records("tarjetas"),
-			"clientes" => $this->Comun_model->get_records("clientes"),
+			"comprobantes" => $this->Comun_model->get_records("comprobante_sucursal","estado=1 and sucursal_id=".$this->session->userdata("sucursal")), 
+			"proveedores" => $this->Comun_model->get_records("proveedores","estado=1"),
+			"tarjetas" => $this->Comun_model->get_records("tarjetas","estado=1"),
+			"clientes" => $this->Comun_model->get_records("clientes","estado=1"),
 			"years" => $this->Comun_model->get_records("years","estado=1"),
 			"marcas" => $this->Comun_model->get_records("marcas","estado=1"),
 			"modelos" => $this->Comun_model->get_records("modelos","estado=1"),
@@ -262,8 +262,8 @@ class Ventas extends CI_Controller {
 
 	public function getBodegasAndComprobantes(){
 		$sucursal_id = $this->input->post("idSucursal");
-		$bodegas = $this->Comun_model->get_records("bodega_sucursal", "sucursal_id='$sucursal_id'");
-		$comprobantes = $this->Comun_model->get_records("comprobante_sucursal", "sucursal_id='$sucursal_id'");
+		$bodegas = $this->Comun_model->get_records("bodega_sucursal", "sucursal_id='$sucursal_id' and estado=1");
+		$comprobantes = $this->Comun_model->get_records("comprobante_sucursal", "sucursal_id='$sucursal_id' and estado=1");
 		$dataBodegas = array();
 		foreach ($bodegas as $b) {
 			$dataBodegas[] = array(

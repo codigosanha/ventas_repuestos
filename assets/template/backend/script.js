@@ -340,6 +340,24 @@ $(document).ready(function () {
             }
         });
     });
+    $(document).on("change", "#sucursal-devolucion", function(){
+        var sucursal_id = $(this).val();
+        $.ajax({
+            url: base_url + "inventario/devoluciones/getBodegas",
+            type: "POST",
+            data:{idSucursal:sucursal_id},
+            dataType:"json",
+            success: function(data){
+                bodegas = "<option value=''>Seleccione...</option>";
+
+                $.each(data, function(key, value){
+                    bodegas += "<option value='"+value.bodega_id+"'>"+value.nombre+"</option>";
+                });
+
+                $("#bodega").html(bodegas);
+            }
+        });
+    });
 
     $(document).on("change", "#sucursal-venta", function(){
         var sucursal_id = $(this).val();
