@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">Compruebe Comprobante</div>
+                            <div class="panel-heading">COMPROBACIÓN DE COMPROBANTE</div>
                             <div class="panel-body">
                                 <form action="<?php echo base_url();?>inventario/devoluciones/getVenta" method="POST" id="form-search-venta">
                                     <div class="row">
@@ -76,27 +76,38 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="info-venta" style="display: none;">
                     
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Información de la venta
+                                INFORMACIÓN DE LA VENTA
                             </div>
                             <div class="panel-heading">
-                                <dl class="dl-horizontal">
-                                    <dt>Numero del Comprobante:</dt>
-                                    <dd class="numero_comprobante">sdsdsdsdsd</dd>
-                                    <dt>Fecha:</dt>
-                                    <dd class="fecha">ssss</dd>
-                                    
-                                    <dt>Bodega:</dt>
-                                    <dd class="bodega">ss</dd>
-                                    <dt>Sucursal:</dt>
-                                    <dd class="sucursal"></dd>
-                                    <dt>Cliente:</dt>
-                                    <dd class="cliente"></dd>
-                                </dl>
+                                <table class="table table-bordered" >
+                                    <tbody>
+                                        <tr>
+                                            <th>Numero del Comprobante:</th>
+                                            <td class="numero_comprobante"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Fecha:</th>
+                                            <td class="fecha"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Bodega</th>
+                                            <td class="bodega"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sucursal:</th>
+                                            <td class="sucursal"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Cliente:</th>
+                                            <td class="cliente"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <table class="table table-bordered" id="tbVentaProductos">
                                     <caption class="text-center">DETALLE DE VENTA</caption>
                                     <thead>
@@ -116,19 +127,31 @@
                        
                     </div>
                     <div class="col-md-6">
+                        <form action="<?php echo base_url();?>inventario/devoluciones/store" method="POST">
+                        <h4>PRODUCTOS A DEVOLVER</h4>
+                        <input type="hidden" name="idVenta" id="idVenta">
+                        <input type="hidden" name="bodega_venta" id="bodega_venta">
+                        <input type="hidden" name="sucursal_venta" id="sucursal_venta">
+                        <div class="form-group">
+                            <label for="">Bodega:</label>
+                            <select name="bodega_devolucion" id="bodega_devolucion" class="form-control" required="required">
+                                <option value="">Seleccione...</option>
 
-                        <p>Productos a devolver</p>
+                            </select>
+                        </div>
                         <table class="table table-bordered" id="tbDevolucion">
                             <thead>
                                 <tr>
                                     <th>Producto</th>
                                     <th>Cantidad Max</th>
-                                    <th width="10%">Cantidad</th>
+                                    <th>Cantidad</th>
                                     <th width="10%"></th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
+                        <button type="submit" class="btn btn-success btn-flat" id="btnGuardarDevolucion">Guardar</button>
+                        </form>
                     </div>
                 </div>
             </div>

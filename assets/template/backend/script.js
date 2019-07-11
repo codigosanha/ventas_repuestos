@@ -1,6 +1,13 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $("#btnGuardarDevolucion").on("click", function(){
+        var productos = $("#tbDevolucion tbody tr").length;
+        if (productos == 0) {
+            swal("Error","Debe haber al menos un producto a devolver","error");
+            return false;
+        } 
+    });
     $("#form-search-venta").submit(function(e){
         e.preventDefault();
         var dataForm = $(this).serialize();
@@ -9,10 +16,49 @@ $(document).ready(function () {
             url: url,
             type: "POST",
             data: dataForm,
+            dataType: "json",
             success: function(data){
-                alert(data);
+                if (data!="0") {
+                    $("#info-venta").show();
+                    $(".numero_comprobante").text(data.venta.numero_comprobante);
+                    $(".bodega").text(data.venta.bodega);
+                    $(".sucursal").text(data.venta.sucursal);
+                    $(".cliente").text(data.venta.cliente);
+                    $(".fecha").text(data.venta.fecha);
+                    $("#bodega_venta").val(data.venta.bodega_id);
+                    $("#sucursal_venta").val(data.venta.sucursal_id);
+                    $("#idVenta").val(data.venta.venta_id);
+                    html = "";
+                    $.each(data.detalles, function(key, value){
+                        html += "<tr>";
+                        html += "<td>"+value.producto+"</td>"
+                        html += "<td>"+value.cantidad+"</td>"
+                        html += "<td><button class='btn btn-warning btn-sm btn-devolver' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>"
+                        html += "</tr>"; 
+                    });
+                    $("#tbVentaProductos tbody").html(html);
+                    options = "<option value=''>Seleccione...</option>";
+                    $.each(data.bodegas, function(key, value){
+                        options += "<option value='"+value.bodega_id+"'>"+value.nombre+"</option>"; 
+                    });
+                    $("#bodega_devolucion").html(options);
+
+                }else{
+                    swal("Error","No se ha encontrado ninguna venta","error");
+                    $("#info-venta").hide();
+                }
             }
         });
+    });
+    $(document).on("click",".btn-devolver", function(){
+        var producto = JSON.parse($(this).val());
+        html = "<tr>";
+        html += "<td><input type='hidden' name='idProductos[]' value='"+producto.producto_id+"'>"+producto.producto+"</td>"
+        html += "<td>"+producto.cantidad+"</td>";
+        html += "<td><input type='text' name='cantidades[]' style='width:60px;' required='required'></td>";
+        html += "<td><button type='button' class='btn btn-danger btn-sm btn-delprod'><span class='fa fa-times'></span></button></td>";
+        html += "</tr>";
+        $("#tbDevolucion").append(html);
     });
     $("#searchProductoTraslado").autocomplete({
         source:function(request, response){
