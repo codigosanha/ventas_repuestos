@@ -2,14 +2,8 @@
 	<div class="form-group text-center">
 		
 		<p><strong>Corte de Caja</strong></p>
-		<p><strong>Cajero:</strong><?php echo getUsuario($caja->usuario_id)->nombres; ?></p>
+		<p><strong>Cajero:</strong><?php echo get_record("usuarios","id=".$caja->usuario_id)->nombres; ?></p>
 	</div>	
-	<div class="form-group text-center">
-		<label for="">Quicheladas</label><br>
-		3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
-		Santa Cruz del Quiche
-		<p>NIT: 81118287</p>
-	</div>
 	<div class="form-group text-center">
 		Fecha: <?php echo $caja->fecha_cierre;?> <br>
 		No. de Caja: 1

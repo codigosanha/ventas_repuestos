@@ -74,11 +74,14 @@ class Compras_model extends CI_Model {
 		return $resultados->result();
 	}
 
-	public function getProductoByCode($codigo_barra){
-		$this->db->select("p.id,p.nombre,p.codigo_barras,p.precio_compra,m.nombre as marca,p.stock");
-		$this->db->from("productos p");
-		$this->db->join("marca m", "p.marca_id = m.id");
+	public function getProductoByCode($codigo_barra,$sucursal_id,$bodega_id){
+		$this->db->select("bsp.*");
+		$this->db->from("bodega_sucursal_producto bsp");
+		$this->db->join("productos p", "bsp.producto_id = p.id");
+		$this->db->where("bsp.sucursal_id", $sucursal_id);
+		$this->db->where("bsp.bodega_id", $bodega_id);
 		$this->db->where("p.codigo_barras", $codigo_barra);
+
 		$resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->row();

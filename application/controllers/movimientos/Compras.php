@@ -172,4 +172,26 @@ class Compras extends CI_Controller {
 		echo json_encode($data);
 
 	}
+
+	public function getProductoByCode(){
+		$codigo_barra = $this->input->post("codigo_barra");
+		$bodega_id = $this->input->post("bodega_id");
+		$sucursal_id = $this->input->post("sucursal_id");
+		$productoEncontrado = $this->Compras_model->getProductoByCode($codigo_barra,$sucursal_id,$bodega_id);
+
+		if ($productoEncontrado != false) {
+			$producto = get_record("productos", "id=".$productoEncontrado->producto_id);
+			$data = array(
+				"producto_id" => $productoEncontrado->producto_id,
+				"nombre" => $producto->nombre,
+				"codigo_barras" => $producto->codigo_barras,
+				"imagen" => $producto->imagen,
+				"stock" => $productoEncontrado->stock,
+				"precios" => $this->Compras_model->getPrecios($productoEncontrado->producto_id),
+			);
+			echo json_encode($data);
+		}else{
+			echo "0";
+		}
+	}
 }

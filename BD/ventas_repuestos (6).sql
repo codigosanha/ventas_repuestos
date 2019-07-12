@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-06-2019 a las 01:26:46
+-- Tiempo de generación: 12-07-2019 a las 17:21:14
 -- Versión del servidor: 10.1.35-MariaDB
 -- Versión de PHP: 7.2.9
 
@@ -21,6 +21,53 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `ventas_repuestos`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ajustes`
+--
+
+CREATE TABLE `ajustes` (
+  `id` int(11) NOT NULL,
+  `sucursal_id` int(11) DEFAULT NULL,
+  `bodega_id` int(11) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `ajustes`
+--
+
+INSERT INTO `ajustes` (`id`, `sucursal_id`, `bodega_id`, `usuario_id`, `fecha`) VALUES
+(3, 1, 2, 1, '2019-07-04 22:13:40'),
+(4, 1, 2, 1, '2019-07-05 06:54:54');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ajustes_productos`
+--
+
+CREATE TABLE `ajustes_productos` (
+  `id` int(11) NOT NULL,
+  `ajuste_id` int(11) DEFAULT NULL,
+  `producto_id` int(11) DEFAULT NULL,
+  `stock_bd` int(11) DEFAULT NULL,
+  `stock_fisico` int(11) DEFAULT NULL,
+  `diferencia_stock` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `ajustes_productos`
+--
+
+INSERT INTO `ajustes_productos` (`id`, `ajuste_id`, `producto_id`, `stock_bd`, `stock_fisico`, `diferencia_stock`) VALUES
+(1, 3, 1, 0, 0, 0),
+(2, 3, 2, 11, 8, -3),
+(3, 4, 1, 0, 0, 0),
+(4, 4, 2, 8, 10, 2);
 
 -- --------------------------------------------------------
 
@@ -92,12 +139,12 @@ CREATE TABLE `bodega_sucursal_producto` (
 --
 
 INSERT INTO `bodega_sucursal_producto` (`id`, `producto_id`, `bodega_id`, `sucursal_id`, `estado`, `stock`) VALUES
-(1, 1, 2, 1, 1, 0),
-(2, 2, 2, 1, 1, 10),
+(1, 1, 2, 1, 1, 13),
+(2, 2, 2, 1, 1, -1),
 (3, 1, 1, 1, 1, 0),
-(4, 2, 1, 1, 1, 0),
-(5, 1, 3, 1, 1, 0),
-(6, 2, 3, 1, 1, 12),
+(4, 2, 1, 1, 1, 10),
+(5, 1, 3, 1, 1, 2),
+(6, 2, 3, 1, 1, 13),
 (7, 1, 1, 2, 1, 0),
 (8, 2, 1, 2, 1, 0);
 
@@ -124,9 +171,10 @@ CREATE TABLE `caja` (
 --
 
 INSERT INTO `caja` (`id`, `usuario_id`, `fecha_apertura`, `fecha_cierre`, `monto_apertura`, `monto_efectivo`, `estado`, `observaciones`, `sucursal_id`) VALUES
-(1, 1, '2019-06-21 22:20:01', NULL, '200.00', NULL, 1, NULL, 1),
-(2, 1, '2019-06-21 22:43:07', NULL, '200.00', NULL, 1, NULL, 2),
-(3, 1, '2019-06-21 22:43:16', NULL, '300.00', NULL, 1, NULL, 3);
+(1, 1, '2019-06-21 22:20:01', '2019-07-12 00:03:06', '200.00', '750.00', 0, 'cierre de caja', 1),
+(2, 1, '2019-06-21 22:43:07', '2019-07-12 08:25:27', '200.00', '100.00', 0, 'cerre caja', 2),
+(3, 1, '2019-06-21 22:43:16', '2019-07-12 08:32:53', '300.00', '300.00', 0, 'cierre de cjaa', 3),
+(4, 1, '2019-07-12 08:34:00', NULL, '200.00', NULL, 1, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -168,8 +216,8 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `nombre`, `estado`, `descripcion`) VALUES
-(1, 'Categoria 01', 1, NULL),
-(2, 'Categoria 012', 1, NULL);
+(1, 'Categoria 01', 1, 'Descripcion de la categoria 01'),
+(2, 'Categoria 02', 1, 'Desccripcion de la categoria 02');
 
 -- --------------------------------------------------------
 
@@ -208,6 +256,13 @@ CREATE TABLE `cobros` (
   `fecha` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `cobros`
+--
+
+INSERT INTO `cobros` (`id`, `cuenta_cobrar_id`, `monto`, `fecha`) VALUES
+(1, 1, '30.00', '2019-07-01 10:21:18');
+
 -- --------------------------------------------------------
 
 --
@@ -225,8 +280,10 @@ CREATE TABLE `compatibilidades` (
 --
 
 INSERT INTO `compatibilidades` (`id`, `producto_id`, `modelo_id`) VALUES
-(1, 1, 2),
-(7, 2, 1);
+(14, 2, 1),
+(15, 3, 1),
+(18, 4, 1),
+(19, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -254,7 +311,9 @@ CREATE TABLE `compras` (
 
 INSERT INTO `compras` (`id`, `fecha`, `serie`, `numero_comprobante`, `comprobante_id`, `estado`, `subtotal`, `total`, `tipo_pago`, `proveedor_id`, `sucursal_id`) VALUES
 (1, '2019-06-21', '001', '000012', 2, 1, '300.00', '300.00', 1, 1, 1),
-(2, '2019-06-21', '001', '000013', 2, 1, '300.00', '300.00', 2, 1, 1);
+(2, '2019-06-21', '001', '000013', 2, 1, '300.00', '300.00', 2, 1, 1),
+(3, '2019-06-25', '001', '0000012', 2, 1, '600.00', '600.00', 1, 1, 1),
+(4, '2019-07-10', '001', '00000012', 2, 1, '800.00', '800.00', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -305,11 +364,11 @@ CREATE TABLE `comprobante_sucursal` (
 --
 
 INSERT INTO `comprobante_sucursal` (`id`, `comprobante_id`, `sucursal_id`, `serie`, `numero_inicial`, `limite`, `fecha_aprobacion_sat`, `fecha_vencimiento_sat`, `dias_vencimiento`, `estado`, `realizados`) VALUES
-(1, 1, 1, '001', 1, 100, '2019-06-10', '2019-09-09', 90, 1, 0),
-(3, 2, 1, '001', 1, 100, '2019-06-02', '2019-09-03', 90, 1, 1),
+(1, 1, 1, '001', 1, 100, '2019-06-10', '2019-09-09', 90, 1, 2),
+(3, 2, 1, '001', 1, 100, '2019-06-02', '2019-09-03', 90, 1, 2),
 (4, 1, 2, '002', 1, 100, '2019-06-02', '2019-06-03', 90, 1, 0),
 (5, 2, 2, '001', 1, 200, '2019-01-02', '2019-06-05', 90, 1, 0),
-(6, 3, 1, '001', 1, 100, '2019-05-04', '2019-08-02', 90, 1, 0),
+(6, 3, 1, '001', 1, 100, '2019-05-04', '2019-08-02', 90, 1, 3),
 (7, 1, 3, '001', 1, 100, '2019-02-01', '2019-06-03', 60, 1, 0);
 
 -- --------------------------------------------------------
@@ -337,6 +396,13 @@ CREATE TABLE `cuentas_cobrar` (
   `estado` tinyint(1) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `cuentas_cobrar`
+--
+
+INSERT INTO `cuentas_cobrar` (`id`, `venta_id`, `monto`, `estado`, `fecha`) VALUES
+(1, 6, '90.00', 0, '2019-07-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -380,7 +446,9 @@ CREATE TABLE `detalle_compra` (
 
 INSERT INTO `detalle_compra` (`id`, `compra_id`, `producto_id`, `precio`, `cantidad`, `importe`) VALUES
 (1, 1, 2, '25.00', 12, '300.00'),
-(2, 2, 2, '25.00', 12, '300.00');
+(2, 2, 2, '25.00', 12, '300.00'),
+(3, 3, 2, '25.00', 24, '600.00'),
+(4, 4, 1, '40.00', 20, '800.00');
 
 -- --------------------------------------------------------
 
@@ -402,7 +470,60 @@ CREATE TABLE `detalle_venta` (
 --
 
 INSERT INTO `detalle_venta` (`id`, `venta_id`, `producto_id`, `cantidad`, `precio`, `importe`) VALUES
-(1, 8, 2, 2, '30.00', '60.00');
+(1, 1, 2, 3, '25.00', '75.00'),
+(2, 2, 2, 3, '25.00', '75.00'),
+(3, 3, 2, 2, '25.00', '50.00'),
+(4, 4, 2, 3, '30.00', '90.00'),
+(5, 5, 2, 2, '30.00', '60.00'),
+(6, 6, 2, 3, '30.00', '90.00'),
+(7, 7, 1, 5, '40.00', '200.00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `devoluciones`
+--
+
+CREATE TABLE `devoluciones` (
+  `id` int(11) NOT NULL,
+  `venta_id` int(11) NOT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `bodega_id` int(11) DEFAULT NULL,
+  `sucursal_id` int(11) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `devoluciones`
+--
+
+INSERT INTO `devoluciones` (`id`, `venta_id`, `fecha`, `bodega_id`, `sucursal_id`, `usuario_id`, `estado`) VALUES
+(1, 7, '2019-07-10 23:24:28', 2, 1, 1, 1),
+(2, 7, '2019-07-10 23:46:29', 2, 1, 1, 1),
+(3, 2, '2019-07-11 09:30:14', 2, 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `devoluciones_productos`
+--
+
+CREATE TABLE `devoluciones_productos` (
+  `id` int(11) NOT NULL,
+  `devolucion_id` int(11) DEFAULT NULL,
+  `producto_id` int(11) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `devoluciones_productos`
+--
+
+INSERT INTO `devoluciones_productos` (`id`, `devolucion_id`, `producto_id`, `cantidad`) VALUES
+(1, 1, 1, 1),
+(2, 2, 1, 1),
+(3, 3, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -423,6 +544,23 @@ CREATE TABLE `fabricantes` (
 
 INSERT INTO `fabricantes` (`id`, `nombre`, `descripcion`, `estado`) VALUES
 (1, 'Fabricante 01', 'descripcion de la fabricante 01', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gastos`
+--
+
+CREATE TABLE `gastos` (
+  `id` int(11) NOT NULL,
+  `sucursal_id` int(11) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `monto` decimal(10,2) DEFAULT NULL,
+  `nombre` varchar(150) DEFAULT NULL,
+  `observaciones` text,
+  `caja_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -476,8 +614,8 @@ INSERT INTO `menus` (`id`, `url`, `nombre`, `icono`, `parent`, `orden`, `estado`
 (8, 'backend/cuentas_pagar', 'Cuentas por Pagar', 'fa fa-money', 0, 7, 1),
 (9, '#', 'Administrador', 'fa fa-user', 0, 8, 1),
 (10, 'almacen/bodegas', 'Bodegas', 'fa fa-circle-o', 2, 1, 1),
-(11, 'almacen/traslados', 'Traslados', 'fa fa-circle-o', 2, 2, 1),
-(12, 'almacen/devoluciones', 'Devoluciones', 'fa fa-circle-o', 2, 3, 1),
+(11, 'inventario/traslados', 'Traslados', 'fa fa-circle-o', 44, 3, 1),
+(12, 'inventario/devoluciones', 'Devoluciones', 'fa fa-circle-o', 44, 3, 1),
 (13, 'almacen/productos', 'Productos', 'fa fa-circle-o', 2, 4, 1),
 (14, 'almacen/categorias', 'Categorias', 'fa fa-circle-o', 2, 5, 1),
 (15, 'almacen/subcategorias', 'Subcategorias', 'fa fa-circle-o', 2, 6, 1),
@@ -488,16 +626,16 @@ INSERT INTO `menus` (`id`, `url`, `nombre`, `icono`, `parent`, `orden`, `estado`
 (20, 'almacen/years', 'Años', 'fa fa-circle-o', 2, 11, 1),
 (21, 'almacen/presentaciones', 'Presentaciones', 'fa fa-circle-o', 2, 12, 1),
 (22, 'almacen/proveedores', 'Proveedores', 'fa fa-circle-o', 2, 13, 1),
-(23, 'almacen/ajuste', 'Ajuste de Inventario', 'fa fa-circle-o', 2, 14, 1),
+(23, 'inventario/ajuste', 'Ajuste de Inventario', 'fa fa-circle-o', 44, 14, 1),
 (24, 'caja/apertura_cierre', 'Aperturas y Cierre', 'fa fa-circle-o', 4, 1, 1),
 (25, 'caja/gastos', 'Gastos', 'fa fa-circle-o', 4, 2, 1),
 (26, 'movimientos/compras', 'Compras', 'fa fa-circle-o', 5, 1, 1),
 (27, 'movimientos/ventas', 'Ventas', 'fa fa-circle-o', 5, 2, 1),
-(28, 'backend/reportes/ventas', 'Reporte de Ventas', 'fa fa-circle-o', 6, 1, 1),
-(29, 'backend/reportes/productos', 'Reporte de Productos', 'fa fa-circle-o', 6, 2, 1),
-(30, 'backend/reportes/compras', 'Reporte de Compras', 'fa fa-circle-o', 6, 3, 1),
-(31, 'backend/reportes/ganancias', 'Reporte de Ganancias', 'fa fa-circle-o', 6, 4, 1),
-(32, 'backend/reportes/inventario', 'Reporte de Inventario', 'fa fa-circle-o', 6, 5, 1),
+(28, 'reportes/ventas', 'Reporte de Ventas', 'fa fa-circle-o', 6, 1, 1),
+(29, 'reportes/productos', 'Reporte de Productos', 'fa fa-circle-o', 6, 2, 1),
+(30, 'reportes/compras', 'Reporte de Compras', 'fa fa-circle-o', 6, 3, 1),
+(31, 'reportes/ganancias', 'Reporte de Ganancias', 'fa fa-circle-o', 6, 4, 1),
+(32, 'reportes/inventario', 'Reporte de Inventario', 'fa fa-circle-o', 6, 5, 1),
 (33, 'administrador/usuarios', 'Usuarios', 'fa fa-circle-o', 9, 1, 1),
 (34, 'administrador/permisos', 'Permisos', 'fa fa-circle-o', 9, 2, 1),
 (35, 'administrador/correos', 'Correos', 'fa fa-circle-o', 9, 3, 1),
@@ -546,6 +684,13 @@ CREATE TABLE `pagos` (
   `monto` decimal(10,2) DEFAULT NULL,
   `fecha` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `pagos`
+--
+
+INSERT INTO `pagos` (`id`, `cuenta_pagar_id`, `monto`, `fecha`) VALUES
+(1, 1, '150.00', '2019-07-01');
 
 -- --------------------------------------------------------
 
@@ -690,16 +835,19 @@ CREATE TABLE `productos` (
   `marca_id` int(11) DEFAULT NULL,
   `presentacion_id` int(11) DEFAULT NULL,
   `estado` tinyint(1) DEFAULT NULL,
-  `stock_minimo` int(11) DEFAULT NULL
+  `stock_minimo` int(11) DEFAULT NULL,
+  `imagen` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `codigo_barras`, `nombre`, `descripcion`, `year_id`, `fabricante_id`, `modelo_id`, `calidad_id`, `categoria_id`, `subcategoria_id`, `marca_id`, `presentacion_id`, `estado`, `stock_minimo`) VALUES
-(1, '1100911112', 'Aceite Castrol 20W-50', 'Aceite Castrol 20W-50', 1, 1, 2, 2, 2, 2, 1, 2, 1, 10),
-(2, '1100911112', 'Juego de Destornilladores', 'Juego de Destornilladores', 1, 1, 2, 2, 2, 2, 1, 2, 1, 10);
+INSERT INTO `productos` (`id`, `codigo_barras`, `nombre`, `descripcion`, `year_id`, `fabricante_id`, `modelo_id`, `calidad_id`, `categoria_id`, `subcategoria_id`, `marca_id`, `presentacion_id`, `estado`, `stock_minimo`, `imagen`) VALUES
+(1, '1100911112', 'Aceite Castrol 20W-50', 'Aceite Castrol 20W-50', 1, 1, 2, 2, 2, 2, 1, 2, 1, 10, 'image.png'),
+(2, '1100911112', 'Juego de Destornilladores', 'Juego de Destornilladores', 1, 1, 2, 2, 2, 2, 1, 2, 1, 10, 'photo21.png'),
+(3, '1100911113', 'Brocha', 'brocha', 1, 1, 1, 1, 2, 1, 2, 1, 1, 10, 'photo3.jpg'),
+(4, '1100911114', 'Brocha Acero', 'brocha', 1, 1, 1, 1, 2, 1, 2, 1, 1, 10, 'avatar5.png');
 
 -- --------------------------------------------------------
 
@@ -734,8 +882,13 @@ CREATE TABLE `producto_precio` (
 --
 
 INSERT INTO `producto_precio` (`id`, `producto_id`, `precio_id`, `precio_venta`, `precio_compra`, `estado`) VALUES
-(7, 2, 1, '30.00', '25.00', 1),
-(8, 2, 2, '35.00', '30.00', 1);
+(17, 2, 1, '30.00', '25.00', 1),
+(18, 2, 2, '35.00', '30.00', 1),
+(19, 3, 1, '15.00', '10.00', 1),
+(20, 3, 2, '20.00', '15.00', 1),
+(25, 4, 1, '15.00', '10.00', 1),
+(26, 4, 2, '20.00', '15.00', 1),
+(27, 1, 2, '45.00', '40.00', 1);
 
 -- --------------------------------------------------------
 
@@ -860,14 +1013,46 @@ INSERT INTO `tarjetas` (`id`, `nombre`, `descripcion`, `estado`) VALUES
 
 CREATE TABLE `traslados` (
   `id` int(11) NOT NULL,
-  `sucursal_envia` int(11) DEFAULT NULL,
-  `bodega_envia` int(11) DEFAULT NULL,
+  `sucursal_envio` int(11) DEFAULT NULL,
+  `bodega_envio` int(11) DEFAULT NULL,
   `sucursal_recibe` int(11) DEFAULT NULL,
   `bodega_recibe` int(11) DEFAULT NULL,
-  `producto_id` int(11) DEFAULT NULL,
-  `fecha` date DEFAULT NULL,
-  `estado` tinyint(4) DEFAULT NULL
+  `fecha` datetime DEFAULT NULL,
+  `estado` tinyint(4) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `traslados`
+--
+
+INSERT INTO `traslados` (`id`, `sucursal_envio`, `bodega_envio`, `sucursal_recibe`, `bodega_recibe`, `fecha`, `estado`, `usuario_id`) VALUES
+(1, 1, 2, 1, 1, '2019-07-07 00:00:00', 1, 1),
+(2, 1, 1, 1, 2, '2019-07-06 00:00:00', 0, 1),
+(3, 1, 2, 1, 1, '2019-07-07 00:00:00', 1, 1),
+(4, 1, 1, 1, 2, '2019-07-07 10:09:34', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `traslados_productos`
+--
+
+CREATE TABLE `traslados_productos` (
+  `id` int(11) NOT NULL,
+  `traslado_id` int(11) DEFAULT NULL,
+  `producto_id` int(11) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `traslados_productos`
+--
+
+INSERT INTO `traslados_productos` (`id`, `traslado_id`, `producto_id`, `cantidad`) VALUES
+(1, 2, 2, 5),
+(2, 3, 2, 5),
+(3, 4, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -919,15 +1104,23 @@ CREATE TABLE `ventas` (
   `monto_credito` decimal(10,2) DEFAULT NULL,
   `monto_tarjeta` decimal(10,2) DEFAULT NULL,
   `tarjeta_id` int(11) DEFAULT '0',
-  `caja_id` int(11) DEFAULT NULL
+  `caja_id` int(11) DEFAULT NULL,
+  `bodega_id` int(11) DEFAULT NULL,
+  `sucursal_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `ventas`
 --
 
-INSERT INTO `ventas` (`id`, `numero_comprobante`, `comprobante_id`, `estado`, `fecha`, `tipo_pago`, `cliente_id`, `subtotal`, `iva`, `descuento`, `total`, `monto_efectivo`, `monto_credito`, `monto_tarjeta`, `tarjeta_id`, `caja_id`) VALUES
-(8, '00000001', 2, 1, '2019-06-24 12:02:39', 1, 1, '60.00', '0.00', '0.00', '60.00', '60.00', '0.00', '0.00', 0, 1);
+INSERT INTO `ventas` (`id`, `numero_comprobante`, `comprobante_id`, `estado`, `fecha`, `tipo_pago`, `cliente_id`, `subtotal`, `iva`, `descuento`, `total`, `monto_efectivo`, `monto_credito`, `monto_tarjeta`, `tarjeta_id`, `caja_id`, `bodega_id`, `sucursal_id`) VALUES
+(1, '00000001', 1, 1, '2019-06-25 23:15:16', 1, 1, '75.00', '0.00', '0.00', '75.00', '75.00', '0.00', '0.00', 0, 1, 2, 1),
+(2, '00000001', 2, 0, '2019-06-25 23:26:24', 1, 1, '75.00', '0.00', '0.00', '75.00', '75.00', '0.00', '0.00', 0, 1, 2, 1),
+(3, '00000001', 3, 0, '2019-06-25 23:35:12', 1, 1, '50.00', '0.00', '0.00', '50.00', '50.00', '0.00', '0.00', 0, 1, 2, 1),
+(4, '00000002', 3, 0, '2019-06-25 23:37:57', 1, 1, '90.00', '0.00', '0.00', '90.00', '90.00', '0.00', '0.00', 0, 1, 2, 1),
+(5, '00000002', 1, 1, '2019-07-01 08:46:08', 1, 1, '60.00', '0.00', '0.00', '60.00', '60.00', '0.00', '0.00', 0, 1, 2, 1),
+(6, '00000003', 3, 1, '2019-07-01 09:45:35', 4, 1, '90.00', '0.00', '0.00', '90.00', '0.00', '90.00', '0.00', 0, 1, 2, 1),
+(7, '00000002', 2, 1, '2019-07-10 23:23:18', 1, 1, '200.00', '0.00', '0.00', '200.00', '200.00', '0.00', '0.00', 0, 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -952,6 +1145,23 @@ INSERT INTO `years` (`id`, `year`, `estado`, `descripcion`) VALUES
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `ajustes`
+--
+ALTER TABLE `ajustes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_ajuste_sucursal_idx` (`sucursal_id`),
+  ADD KEY `fk_ajuste_bodega_idx` (`bodega_id`),
+  ADD KEY `fk_ajuste_usuario_idx` (`usuario_id`);
+
+--
+-- Indices de la tabla `ajustes_productos`
+--
+ALTER TABLE `ajustes_productos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_ajuste_idx` (`ajuste_id`),
+  ADD KEY `fk_ajuste_producto_idx` (`producto_id`);
 
 --
 -- Indices de la tabla `bodegas`
@@ -1083,11 +1293,38 @@ ALTER TABLE `detalle_venta`
   ADD KEY `fk_producto_idx` (`producto_id`);
 
 --
+-- Indices de la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_devolucion_venta_idx` (`venta_id`),
+  ADD KEY `fk_devolucion_usuario_idx` (`usuario_id`),
+  ADD KEY `fk_devolucion_sucursal_idx` (`sucursal_id`),
+  ADD KEY `fk_devolucion_bodega_idx` (`bodega_id`);
+
+--
+-- Indices de la tabla `devoluciones_productos`
+--
+ALTER TABLE `devoluciones_productos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_devolucion_idx` (`devolucion_id`),
+  ADD KEY `fk_devolucion_producto_idx` (`producto_id`);
+
+--
 -- Indices de la tabla `fabricantes`
 --
 ALTER TABLE `fabricantes`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nombre_UNIQUE` (`nombre`);
+
+--
+-- Indices de la tabla `gastos`
+--
+ALTER TABLE `gastos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_usuario_id_idx` (`usuario_id`),
+  ADD KEY `fk_sucursal_id_idx` (`sucursal_id`),
+  ADD KEY `fk_caja_id_idx` (`caja_id`);
 
 --
 -- Indices de la tabla `marcas`
@@ -1209,11 +1446,19 @@ ALTER TABLE `tarjetas`
 --
 ALTER TABLE `traslados`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_sucursal_envia_idx` (`sucursal_envia`),
-  ADD KEY `fk_bodega_envia_idx` (`bodega_envia`),
+  ADD KEY `fk_sucursal_envia_idx` (`sucursal_envio`),
+  ADD KEY `fk_bodega_envia_idx` (`bodega_envio`),
   ADD KEY `fk_sucursal_recibe_idx` (`sucursal_recibe`),
   ADD KEY `fk_bodega_recibe_idx` (`bodega_recibe`),
-  ADD KEY `fk_producto_idx` (`producto_id`);
+  ADD KEY `fk_usuario_traslado_idx` (`usuario_id`);
+
+--
+-- Indices de la tabla `traslados_productos`
+--
+ALTER TABLE `traslados_productos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_traslado_producto_idx` (`producto_id`),
+  ADD KEY `fk_traslado_idx` (`traslado_id`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -1232,7 +1477,9 @@ ALTER TABLE `ventas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_comprobante_idx` (`comprobante_id`),
   ADD KEY `fk_cliente_idx` (`cliente_id`),
-  ADD KEY `fk_caja_idx` (`caja_id`);
+  ADD KEY `fk_caja_idx` (`caja_id`),
+  ADD KEY `fk_bodega_venta_idx` (`bodega_id`),
+  ADD KEY `fk_sucursal_venta_idx` (`sucursal_id`);
 
 --
 -- Indices de la tabla `years`
@@ -1244,6 +1491,18 @@ ALTER TABLE `years`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `ajustes`
+--
+ALTER TABLE `ajustes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `ajustes_productos`
+--
+ALTER TABLE `ajustes_productos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `bodegas`
@@ -1267,7 +1526,7 @@ ALTER TABLE `bodega_sucursal_producto`
 -- AUTO_INCREMENT de la tabla `caja`
 --
 ALTER TABLE `caja`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `calidades`
@@ -1291,19 +1550,19 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `cobros`
 --
 ALTER TABLE `cobros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `compatibilidades`
 --
 ALTER TABLE `compatibilidades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `comprobantes`
@@ -1327,7 +1586,7 @@ ALTER TABLE `correos`
 -- AUTO_INCREMENT de la tabla `cuentas_cobrar`
 --
 ALTER TABLE `cuentas_cobrar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas_pagar`
@@ -1339,18 +1598,36 @@ ALTER TABLE `cuentas_pagar`
 -- AUTO_INCREMENT de la tabla `detalle_compra`
 --
 ALTER TABLE `detalle_compra`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `devoluciones_productos`
+--
+ALTER TABLE `devoluciones_productos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `fabricantes`
 --
 ALTER TABLE `fabricantes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `gastos`
+--
+ALTER TABLE `gastos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -1375,7 +1652,7 @@ ALTER TABLE `modelos`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos`
@@ -1399,7 +1676,7 @@ ALTER TABLE `presentaciones`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `productos_asociados`
@@ -1411,7 +1688,7 @@ ALTER TABLE `productos_asociados`
 -- AUTO_INCREMENT de la tabla `producto_precio`
 --
 ALTER TABLE `producto_precio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
@@ -1447,7 +1724,13 @@ ALTER TABLE `tarjetas`
 -- AUTO_INCREMENT de la tabla `traslados`
 --
 ALTER TABLE `traslados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `traslados_productos`
+--
+ALTER TABLE `traslados_productos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -1459,7 +1742,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `years`
@@ -1470,6 +1753,21 @@ ALTER TABLE `years`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `ajustes`
+--
+ALTER TABLE `ajustes`
+  ADD CONSTRAINT `fk_ajuste_bodega` FOREIGN KEY (`bodega_id`) REFERENCES `bodegas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ajuste_sucursal` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ajuste_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `ajustes_productos`
+--
+ALTER TABLE `ajustes_productos`
+  ADD CONSTRAINT `fk_ajuste` FOREIGN KEY (`ajuste_id`) REFERENCES `ajustes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ajuste_producto` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `bodega_sucursal`
@@ -1554,6 +1852,30 @@ ALTER TABLE `detalle_venta`
   ADD CONSTRAINT `fk_venta_detalle` FOREIGN KEY (`venta_id`) REFERENCES `ventas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  ADD CONSTRAINT `fk_devolucion_bodega` FOREIGN KEY (`bodega_id`) REFERENCES `bodegas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_devolucion_sucursal` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_devolucion_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_devolucion_venta` FOREIGN KEY (`venta_id`) REFERENCES `ventas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `devoluciones_productos`
+--
+ALTER TABLE `devoluciones_productos`
+  ADD CONSTRAINT `fk_devolucion` FOREIGN KEY (`devolucion_id`) REFERENCES `devoluciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_devolucion_producto` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `gastos`
+--
+ALTER TABLE `gastos`
+  ADD CONSTRAINT `fk_caja_id` FOREIGN KEY (`caja_id`) REFERENCES `caja` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_sucursal_id` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `pagos`
 --
 ALTER TABLE `pagos`
@@ -1603,11 +1925,18 @@ ALTER TABLE `subcategorias`
 -- Filtros para la tabla `traslados`
 --
 ALTER TABLE `traslados`
-  ADD CONSTRAINT `fk_bodega_envia` FOREIGN KEY (`bodega_envia`) REFERENCES `bodegas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_bodega_envia` FOREIGN KEY (`bodega_envio`) REFERENCES `bodegas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_bodega_recibe` FOREIGN KEY (`bodega_recibe`) REFERENCES `bodegas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_producto` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_sucursal_envia` FOREIGN KEY (`sucursal_envia`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_sucursal_recibe` FOREIGN KEY (`sucursal_recibe`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_sucursal_envia` FOREIGN KEY (`sucursal_envio`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_sucursal_recibe` FOREIGN KEY (`sucursal_recibe`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_usuario_traslado` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `traslados_productos`
+--
+ALTER TABLE `traslados_productos`
+  ADD CONSTRAINT `fk_traslado` FOREIGN KEY (`traslado_id`) REFERENCES `traslados` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_traslado_producto` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `usuarios`
@@ -1620,9 +1949,11 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `ventas`
 --
 ALTER TABLE `ventas`
+  ADD CONSTRAINT `fk_bodega_venta` FOREIGN KEY (`bodega_id`) REFERENCES `bodegas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_caja_venta` FOREIGN KEY (`caja_id`) REFERENCES `caja` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_cliente_venta` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_comprobante_venta` FOREIGN KEY (`comprobante_id`) REFERENCES `comprobantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_comprobante_venta` FOREIGN KEY (`comprobante_id`) REFERENCES `comprobantes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_sucursal_venta` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

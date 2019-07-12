@@ -39,9 +39,15 @@ class Ventas extends CI_Controller {
 		}else{
 			$bodegas = $this->Comun_model->get_records("bodega_sucursal", "estado=1");
 		}
+		$sucursales = $this->Comun_model->get_records("sucursales");
+		foreach ($sucursales as $sucursal) {
+			if ($this->Comun_model->get_record("caja","sucursal_id='$sucursal->id' and estado=1")) {
+				$sucursalesDisponibles[] = $sucursal;
+			}
+		}
 		$contenido_interno  = array(
 			"bodegas" => $bodegas,
-			"sucursales" => $this->Comun_model->get_records("sucursales","estado=1"),
+			"sucursales" => $sucursalesDisponibles,
 			//"permisos" => $this->permisos,
 			"comprobantes" => $this->Comun_model->get_records("comprobante_sucursal","estado=1 and sucursal_id=".$this->session->userdata("sucursal")), 
 			"proveedores" => $this->Comun_model->get_records("proveedores","estado=1"),

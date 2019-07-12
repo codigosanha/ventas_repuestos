@@ -1,6 +1,10 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("click",".btn-cerrar-caja", function(){
+        idCaja = $(this).val();
+        $("#idCaja").val(idCaja);
+    });
     $("#btnGuardarDevolucion").on("click", function(){
         var productos = $("#tbDevolucion tbody tr").length;
         if (productos == 0) {
@@ -575,13 +579,20 @@ $(document).ready(function () {
         codigo_barra = $(this).val();
 
         if (event.which == '10' || event.which == '13') {
+            var sucursal_id = $("#sucursal").val();
+            var bodega_id = $("#bodega").val();
             
+            var dataForm = {
+                bodega_id: bodega_id,
+                sucursal_id: sucursal_id,
+                codigo_barra: codigo_barra
+            };
             
             $.ajax({
                 url: base_url+"movimientos/compras/getProductoByCode",
                 type: "POST",
                 dataType:"json",
-                data:{ codigo_barra: codigo_barra},
+                data: dataForm,
                 success:function(data){
                 
                     if (data =="0") {
@@ -594,12 +605,17 @@ $(document).ready(function () {
                         });
                     }else{
                         html = "<tr>";
-                        html +="<td><input type='hidden' name='idproductos[]' value='"+data.id+"'>"+data.codigo_barras+"</td>";
+                        html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
                         html +="<td>"+data.nombre+"</td>";
-                        html +="<td>"+data.marca+"</td>";
-                        html +="<td><input type='hidden' name='precios[]' value='"+data.precio_compra+"'>"+data.precio_compra+"</td>";
-                        html +="<td><input type='text' name='cantidades[]' class='cantidadesCompra' value='1'></td>";
-                        html +="<td><input type='hidden' name='importes[]' value='"+data.precio_compra+"'><p>"+data.precio_compra+"</p></td>";
+                        precios = "<option value=''>Seleccione</option>";
+                        $.each(data.precios, function(key, value){
+                            precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
+                        });
+                        html +="<td><select class='form-control' id='precios'>"+precios+"</select></td>";
+                        html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
+
+                        html +="<td><input type='text' name='cantidades[]' class='cantidadesCompra' value='1' style='width:60px;'></td>";
+                        html +="<td><input type='hidden' name='importes[]'><p></p></td>";
                         html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
                         html +="</tr>"
 
@@ -1181,6 +1197,16 @@ $(document).ready(function () {
 
         });
 
+    });
+    $(document).on("click", ".btn-view-corte-caja", function(){
+        idCaja = $(this).val();
+        $.ajax({
+            url: base_url + "caja/apertura_cierre/viewCorte/" + idCaja,
+            type: "POST",
+            success: function(resp){
+                $("#modal-corte .modal-body").html(resp);
+            }
+        });
     });
   
     $(".btn-view-cliente").on("click", function(){
@@ -2010,4 +2036,15 @@ function validate(e) {
     ev.returnValue = false;
     if(ev.preventDefault) ev.preventDefault();
   }
+}
+
+function showCorte(id){
+    $.ajax({
+        url: base_url + "caja/apertura_cierre/viewCorte/" + id,
+        type: "POST",
+        success: function(resp){
+            $("#modal-corte").modal("show");
+            $("#modal-corte .modal-body").html(resp);
+        }
+    });
 }

@@ -99,7 +99,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.sucursal_id", $sucursal_id);
 		$this->db->where("bsp.bodega_id", $bodega_id);
 		$this->db->where("p.codigo_barras", $codigo_barra);
-		$this->db->where("p.stock > ",0);
+		$this->db->where("bsp.stock > ",0);
 		$resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->row();

@@ -132,9 +132,10 @@ class Apertura_cierre extends CI_Controller {
 
 	public function view($id){
 		$data  = array(
-			"calidad" => $this->Comun_model->get_record("caja", "id=$id"), 
+			'tarjetas' => $this->Comun_model->get_records("tarjetas"),
+			'caja' => $this->Comun_model->get_record("caja","id=".$id)
 		);
-		$this->load->view("admin/caja/view",$data);
+		$this->load->view("admin/caja/corte",$data); 
 	}
 
 	public function habilitar($id){
@@ -152,4 +153,40 @@ class Apertura_cierre extends CI_Controller {
 		$this->Comun_model->update("caja","id=$id",$data);
 		echo "almacen/calidades";
 	}
+
+	public function cerrarCaja(){
+		
+		$idCaja = $this->input->post("idCaja");
+		$observacion = $this->input->post("observaciones");
+		$montoEfectivo = $this->input->post("monto_efectivo");
+		$fecha = date("Y-m-d H:i:s");
+		$data  = array( 
+			'fecha_cierre' => $fecha,
+			'estado' => 0,
+			'observaciones' => $observacion,
+			'monto_efectivo' => $montoEfectivo
+		);
+
+		if ($this->Comun_model->update("caja","id=".$idCaja,$data)) {
+
+			$this->session->set_flashdata("cierre",$idCaja);
+			redirect(base_url()."caja/apertura_cierre");
+		}
+		else{
+
+			$this->session->set_flashdata("error","No se pudo cerrar la caja");
+			redirect(base_url()."caja/apertura_cierre");
+		}
+		
+		
+	}
+
+	public function viewCorte($id){
+		$data  = array(
+			'tarjetas' => $this->Comun_model->get_records("tarjetas"),
+			'caja' => $this->Comun_model->get_record("caja","id=".$id)
+		);
+		$this->load->view("admin/caja/corte",$data);
+	}
+
 }

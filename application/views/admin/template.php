@@ -41,6 +41,11 @@
             width: 320px;
            
         }
+
+        #modal-corte .modal-dialog {
+            width: 320px;
+           
+        }
         
         #modal-productos .modal-dialog {
             width: 900px;

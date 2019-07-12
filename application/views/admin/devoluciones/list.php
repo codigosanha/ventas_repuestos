@@ -29,8 +29,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Sucursal</th>
-                                    <th>Bodega</th>
+                                    <th>N° de Comprobante</th>
+                                    <th>Desde que Sucursal</th>
+                                    <th>Desde que Bodega</th>
                                     <th>Fecha</th>
                                     <th>Usuario</th>
                                     <th>Opciones</th>
@@ -39,8 +40,10 @@
                             <tbody>
                                 <?php if(!empty($devoluciones)):?>
                                     <?php foreach($devoluciones as $devolucion):?>
+                                        <?php $venta = get_record("ventas", "id='$devolucion->venta_id'")?>
                                         <tr>
                                             <td><?php echo $devolucion->id;?></td>
+                                            <td><?php echo $venta->numero_comprobante;?></td>
                                             <td><?php echo get_record("sucursales","id=".$devolucion->sucursal_id)->nombre;?></td>
                                             <td><?php echo get_record("bodegas","id=".$devolucion->bodega_id)->nombre;?></td>
                                             <td><?php echo $devolucion->fecha;?></td>

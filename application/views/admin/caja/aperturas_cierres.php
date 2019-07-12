@@ -104,7 +104,7 @@
                                                     <?php endif ?>
                                                     <?php if ($this->session->userdata("rol")==1 || $this->session->userdata("id") == $caja->usuario_id): ?>
                                                         <?php if ($caja->estado == 1): ?>
-                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>">
+                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" data-toggle="modal" data-target="#modal-cierre" value="<?php echo $caja->id;?>">
                                                                 <i class="fa fa-times"></i>
                                                                 Cerrar Caja
                                                             </button>

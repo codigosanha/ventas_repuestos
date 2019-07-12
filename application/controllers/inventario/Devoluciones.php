@@ -144,7 +144,8 @@ class Devoluciones extends CI_Controller {
 
 	public function view($id){
 		$data  = array(
-			"calidad" => $this->Comun_model->get_record("devoluciones", "id=$id"), 
+			"devolucion" => $this->Comun_model->get_record("devoluciones", "id=$id"),
+			"productos" => $this->Comun_model->get_records("devoluciones_productos","devolucion_id='$id'") 
 		);
 		$this->load->view("admin/devoluciones/view",$data);
 	}
