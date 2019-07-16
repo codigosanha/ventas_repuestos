@@ -48,7 +48,7 @@
         }
         
         #modal-productos .modal-dialog {
-            width: 900px;
+            width: 1024px;
            
         }
         .menu-notificaciones li{

@@ -2,6 +2,70 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ventas_model extends CI_Model {
+	function __construct() {
+        parent::__construct(); 
+    }
+
+    function allproducts_count($bodega,$sucursal)
+    {   
+    	$this->db->where("bodega_id",$bodega);
+    	$this->db->where("sucursal_id",$sucursal);
+    	$query = $this->db->get("bodega_sucursal_producto");
+        return $query->num_rows();  
+
+    }
+    
+    function allproducts($limit,$start,$col,$dir)
+    {   
+    	$this->db->
+       $query = $this
+                ->db
+                ->limit($limit,$start)
+                ->order_by($col,$dir)
+                ->get('clientes_juridicos');
+        
+        if($query->num_rows()>0)
+        {
+            return $query->result(); 
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+   
+    function clients_search($limit,$start,$search,$col,$dir)
+    {
+        $query = $this
+                ->db
+                ->like('rnc',$search)
+                ->or_like('razon_social',$search)
+                ->limit($limit,$start)
+                ->order_by($col,$dir)
+                ->get('clientes_juridicos');
+        
+       
+        if($query->num_rows()>0)
+        {
+            return $query->result();  
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    function clients_search_count($search)
+    {
+        $query = $this
+                ->db
+                ->like('rnc',$search)
+                ->or_like('razon_social',$search)
+                ->get('clientes_juridicos');
+    
+        return $query->num_rows();
+    } 
 
 	public function getVentas(){
 		$this->db->select("v.*,c.nombre,tc.nombre as tipocomprobante, u.nombres");

@@ -311,7 +311,11 @@ class Ventas extends CI_Controller {
 				"stock" => $p->stock,
 				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
 				"imagen" => $producto->imagen,
-				"localizacion" => $p->localizacion
+				"localizacion" => $p->localizacion,
+				"year" => get_record("years","id=".$producto->year_id)->year,
+				"marca" => get_record("marcas","id=".$producto->marca_id)->nombre,
+				"modelo" => get_record("modelos","id=".$producto->modelo_id)->nombre,
+				"categoria" => get_record("categorias","id=".$producto->categoria_id)->nombre
 			);
 		}
 		echo json_encode($data);
@@ -339,5 +343,62 @@ class Ventas extends CI_Controller {
 		}else{
 			echo "0";
 		}
+	}
+
+	public function getProductosPorParametros()
+	{
+
+		$columns = array( 
+                            0 =>'id', 
+                            1 =>'rnc',
+                            2=> 'razon_social',
+                            3=> 'id',
+                        );
+		$bodega = $this->input->post('bodega');
+		$sucursal = $this->input->post('sucursal');
+		$marca = $this->input->post('marca');
+		$year = $this->input->post('year');
+		$modelo = $this->input->post('modelo');
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Ventas_model->allproducts_count();
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Ventas_model->allclients($limit,$start,$order,$dir);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Ventas_model->clients_search($limit,$start,$search,$order,$dir);
+
+            $totalFiltered = $this->Ventas_model->clients_search_count($search);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+            foreach ($productos as $p)
+            {
+            	$producto = get_record("productos", "id=".$p->producto_id);
+                
+                $data[] = $nestedData;
+
+            }
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
 	}
 }

@@ -390,59 +390,57 @@
         <h4 class="modal-title">Busqueda de Productos</h4>
       </div>
       <div class="modal-body">
-        <div class="row">
-            <div class="col-md-3">
-                <form action="<?php echo base_url();?>movimientos/ventas/searchProducto" method="POST" id="formSearchProducto">
-                    <div class="form-group">
-                        <label for="">Año</label>
-                        <select name="year" id="year" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach ($years as $year): ?>
-                                <option value="<?php echo $year->id?>"><?php echo $year->year;?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Marca</label>
-                        <select name="marca" id="marca" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach ($marcas as $marca): ?>
-                                <option value="<?php echo $marca->id?>"><?php echo $marca->nombre;?></option>
-                            <?php endforeach ?>
+        <form action="<?php echo base_url();?>movimientos/ventas/searchProducto" method="POST" id="formSearchProducto">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <select name="year" id="year" class="form-control">
+                        <option value="">Seleccione Año...</option>
+                        <?php foreach ($years as $year): ?>
+                            <option value="<?php echo $year->id?>"><?php echo $year->year;?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <select name="marca" id="marca" class="form-control">
+                        <option value="">Seleccione Marca...</option>
+                        <?php foreach ($marcas as $marca): ?>
+                            <option value="<?php echo $marca->id?>"><?php echo $marca->nombre;?></option>
+                        <?php endforeach ?>
 
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Modelo</label>
-                        <select name="modelo" id="modelo" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach ($modelos as $modelo): ?>
-                                <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
-                            <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <select name="modelo" id="modelo" class="form-control">
+                        <option value="">Seleccione Modelo...</option>
+                        <?php foreach ($modelos as $modelo): ?>
+                            <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
+                        <?php endforeach ?>
 
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-success btn-block" id="btn-search-producto">Buscar</button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-9">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="tbProductos">
-                        <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Producto</th>
-                                <th width="10%">Seleccionar</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <button type="submit" class="btn btn-success btn-block" id="btn-search-producto">Buscar</button>
                 </div>
             </div>
-        </div>
+        </form>
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="tbProductos">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Localizacion</th>
+                        <th>Categoria</th>
+                        <th>Año</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th width="10%">Seleccionar</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>  
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>

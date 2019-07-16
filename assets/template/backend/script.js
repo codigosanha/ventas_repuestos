@@ -231,15 +231,35 @@ $(document).ready(function () {
                 data: dataForm + "&sucursal_id="+sucursal_id+"&bodega_id="+bodega_id,
                 success: function(data){
                     //alert(data);
-                    html = "";
+                    $('#tbProductos').dataTable( {
+                        "aaData": data,
+                        "columns": [
+                            { "data": "nombre" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                            { "data": "codigo_barras" },
+                        ]
+                    })
+                    /*html = "";
                     $.each(data, function(key, value){
                         html += "<tr>";
+                        html += "<td>"+value.codigo_barras+"</td>";
                         html += "<td><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' width='100px' class='img-responsive'></td>";
                         html += "<td>"+value.nombre+"</td>";
+                        html += "<td>"+value.localizacion+"</td>";
+                        html += "<td>"+value.categoria+"</td>";
+                        html += "<td>"+value.year+"</td>";
+                        html += "<td>"+value.marca+"</td>";
+                        html += "<td>"+value.modelo+"</td>";
                         html += "<td><button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>";
                         html += "</tr>";
                     });
-                    $("#tbProductos tbody").html(html);
+                    $("#tbProductos tbody").html(html);*/
                 }
             });
         }else{
@@ -358,12 +378,12 @@ $(document).ready(function () {
     });
     $(document).on("change", "#preciosVentas", function(){
         precio_venta = $(this).val();
-        cantidad = $(this).closest("tr").children("td:eq(5)").find("input").val();
+        cantidad = $(this).closest("tr").children("td:eq(7)").find("input").val();
         importe = precio_venta*cantidad;
-        $(this).closest("tr").children("td:eq(3)").find("input").val(precio_venta);
-        $(this).closest("tr").children("td:eq(6)").find("input").val(importe.toFixed(2));
-        $(this).closest("tr").children("td:eq(6)").find("p").text(importe.toFixed(2));
-
+        $(this).closest("tr").children("td:eq(5)").find("input").val(precio_venta);
+        $(this).closest("tr").children("td:eq(8)").find("input").val(importe.toFixed(2));
+        $(this).closest("tr").children("td:eq(8)").find("p").text(importe.toFixed(2));
+        sumarVenta();
     });
     $(document).on("click", "#btn-guardar", function(){
         var totalProductosNuevos = $("#tbProductosNuevos tbody tr").length;
@@ -707,8 +727,8 @@ $(document).ready(function () {
     $(document).on("keyup mouseup","#tbventas input.cantidadesVenta", function(){
 
         cantidad = $(this).val();
-        precio = Number($(this).closest("tr").children("td:eq(3)").find("input").val());
-        stock = Number($(this).closest("tr").find("td:eq(4)").text());
+        precio = Number($(this).closest("tr").children("td:eq(5)").find("input").val());
+        stock = Number($(this).closest("tr").find("td:eq(6)").text());
 
         if (cantidad!='') {
             if (cantidad == 0) {
@@ -726,8 +746,8 @@ $(document).ready(function () {
             importe = 0;
         }
 
-        $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
-        $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
+        $(this).closest("tr").find("td:eq(8)").children("p").text(importe.toFixed(2));
+        $(this).closest("tr").find("td:eq(8)").children("input").val(importe.toFixed(2));
         sumarVenta();
         
           
@@ -1430,6 +1450,54 @@ $(document).ready(function () {
                 "previous": "Anterior"
             },
         }
+    });
+    $(document).ready(function () {
+        $('#tbProductos1').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+                "url": base_url + "movimientos/ventas/getProductosPorParametros",
+                "dataType": "json",
+                "type": "POST",
+                "data":{  
+                    '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>',
+                    sucursal: $("#sucursal-venta").val(),
+                    bodega: $("#bodega").val(),
+                    marca: $("#marca").val(),
+                    modelo: $("#modelo").val(),
+                    year: $("#year").val()
+                }
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "rnc" },
+                { "data": "razon_social" },
+                {
+                    mRender: function (data, type, row) {
+                        var valueBtnView = row.id + "*" + row.rnc + "*" + row.razon_social;
+                        var btnView = '<button class="btn btn-primary" value="'+valueBtnView+'"><span class="fa fa-eye"></span></button>';
+                        var btnEdit = '<a class="btn btn-warning" href="' + base_url+"mantenimiento/clients/"+ row.id + '"><span class="fa fa-pencil"></span></a>';
+                        return btnView +" "+btnEdit;
+                    }
+                } 
+            ],
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                "zeroRecords": "No se encontraron resultados en su busqueda",
+                "searchPlaceholder": "Buscar registros",
+                "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
+                "infoEmpty": "No existen registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+            }    
+
+        });
     });
     $('.example1').DataTable({
         "language": {
