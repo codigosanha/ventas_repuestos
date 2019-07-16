@@ -87,49 +87,31 @@ class Productos extends CI_Controller {
 	public function edit($id){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"calidad" => $this->Comun_model->get_record("calidades","id=$id"), 
+			"producto" => $this->Comun_model->get_record("bodega_sucursal_producto","id=$id"), 
 		);
 
 		$contenido_externo = array(
-			"title" => "calidades", 
+			"title" => "Productos", 
 			"contenido" => $this->load->view("admin/inventario_productos/edit", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}
 
 	public function update(){
-		$idCalidad = $this->input->post("idCalidad");
-		$nombre = $this->input->post("nombre");
-		$descripcion = $this->input->post("descripcion");
+		$idProducto = $this->input->post("idProducto");
+		$localizacion = $this->input->post("localizacion");
+	
+		$data = array(
+			"localizacion" => $localizacion,
+		);
 
-		$sucursalActual = $this->Comun_model->get_record("calidades","id=$idCalidad");
-
-		if ($nombre == $sucursalActual->nombre) {
-			$is_unique_nombre = "";
-		}else{
-			$is_unique_nombre = "|is_unique[calidades.nombre]";
+		if ($this->Comun_model->update("bodega_sucursal_producto","id=$idProducto",$data)) {
+			redirect(base_url()."inventario/productos");
 		}
-
-		$this->form_validation->set_rules("nombre","Nombre","required".$is_unique_nombre);
-
-		if ($this->form_validation->run()==TRUE) {
-			$data = array(
-				"nombre" => $nombre,
-				"descripcion" => $descripcion,
-			);
-
-			if ($this->Comun_model->update("calidades","id=$idCalidad",$data)) {
-				redirect(base_url()."inventario/productos");
-			}
-			else{
-				$this->session->set_flashdata("error","No se pudo actualizar la informacion");
-				redirect(base_url()."inventario/productos/edit/".$idCalidad);
-			}
-		}else{
-			$this->edit($idCalidad);
+		else{
+			$this->session->set_flashdata("error","No se pudo actualizar la informacion");
+			redirect(base_url()."inventario/productos/edit/".$idProducto);
 		}
-
-		
 	}
 
 	public function view($id){

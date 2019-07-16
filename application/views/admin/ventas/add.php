@@ -19,7 +19,7 @@
 
                         <div class="col-md-9">
                             <?php if ($this->session->userdata("sucursal")): ?>
-                                <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>" id="sucursal">
+                                <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>" id="sucursal-venta">
                             <?php else: ?>
                                 <div class="form-group">
                                     <label for="sucursal_id">Sucursal:</label>
@@ -69,8 +69,9 @@
                                     <thead>
                                         <tr>
                                             <th>Codigo</th>
+                                            <th>Imagen</th>
                                             <th>Nombre</th>
-                                          
+                                            <th>Localicacion</th>
                                             <th>Precios</th>
                                             <th>P. Venta</th>
                                             <th>Stock Max.</th>
@@ -340,6 +341,26 @@
 </div>
 <!-- /.modal -->
 <div class="modal fade" id="modal-venta">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Informacion de la Venta</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-flat btn-print-venta"><span class="fa fa-print"></span> Imprimir</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal-image">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

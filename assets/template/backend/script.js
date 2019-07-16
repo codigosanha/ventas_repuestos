@@ -196,7 +196,10 @@ $(document).ready(function () {
         data = JSON.parse($(this).val());
         html = "<tr>";
         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
+        html +="<td><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></td>";
         html +="<td>"+data.nombre+"</td>";
+        html +="<td>"+data.localizacion+"</td>";
+
         precios = "<option value=''>Seleccione</option>";
         $.each(data.precios, function(key, value){
             precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
@@ -552,7 +555,9 @@ $(document).ready(function () {
                     }else{
                         html = "<tr>";
                         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
+                        html +="<td><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></td>";
                         html +="<td>"+data.nombre+"</td>";
+                        html +="<td>"+data.localizacion+"</td>";
                         precios = "<option value=''>Seleccione</option>";
                         $.each(data.precios, function(key, value){
                             precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
@@ -775,7 +780,7 @@ $(document).ready(function () {
     function sumarVenta(){
         subtotal = 0;
         $("#tbventas tbody tr").each(function(){
-            subtotal = subtotal + Number($(this).children("td:eq(6)").find('input').val());
+            subtotal = subtotal + Number($(this).children("td:eq(8)").find('input').val());
         });
 
         $("input[name=subtotal]").val(subtotal.toFixed(2));
@@ -1533,7 +1538,9 @@ $(document).ready(function () {
         select:function(event, ui){
             html = "<tr>";
             html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
+            html +="<td><img src='"+base_url+"assets/imagenes_productos/"+ui.item.imagen+"' class='img-responsive' style='width:50px;'></td>";
             html +="<td>"+ui.item.nombre+"</td>";
+            html +="<td>"+ui.item.localizacion+"</td>";
             precios = "<option value=''>Seleccione</option>";
             $.each(ui.item.precios, function(key, value){
                 precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";

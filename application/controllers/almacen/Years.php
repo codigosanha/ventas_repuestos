@@ -64,7 +64,7 @@ class Years extends CI_Controller {
 	public function edit($id){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"año" => $this->Comun_model->get_record("years","id=$id"), 
+			"year" => $this->Comun_model->get_record("years","id=$id"), 
 		);
 
 		$contenido_externo = array(

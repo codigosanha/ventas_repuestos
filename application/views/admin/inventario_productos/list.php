@@ -35,6 +35,7 @@
                                     <th>Bodega</th>
                                     <th>Producto</th>
                                     <th>Stock</th>
+                                    <th>Localizacion</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -49,6 +50,7 @@
                                             <td><?php echo get_record("bodegas","id=".$p->bodega_id)->nombre;?></td>
                                             <td><?php echo get_record("productos","id=".$p->producto_id)->nombre;?></td>
                                             <td><?php echo $p->stock;?></td>
+                                            <td><?php echo $p->localizacion;?></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $p->id;?>">

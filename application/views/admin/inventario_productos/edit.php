@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        Calidades
+        Producto
         <small>Editar</small>
         </h1>
     </section>
@@ -22,16 +22,23 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>almacen/calidades/update" method="POST">
-                            <input type="hidden" value="<?php echo $categoria->id;?>" name="idCalidad">
-                            <div class="form-group <?php echo form_error('nombre') == true ? 'has-error': '';?>">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$categoria->nombre?>">
-                                <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
+                        <form action="<?php echo base_url();?>inventario/productos/update" method="POST">
+                            <input type="hidden" value="<?php echo $producto->id;?>" name="idProducto">
+                            <div class="form-group">
+                                <label for="nombre">Sucursal:</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo get_record('sucursales','id='.$producto->sucursal_id)->nombre;?>" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$categoria->descripcion?>">
+                                <label for="descripcion">Bodega:</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo get_record('bodegas','id='.$producto->bodega_id)->nombre;?>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Producto:</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo get_record('productos','id='.$producto->producto_id)->nombre;?>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Localización:</label>
+                                <input type="text" class="form-control" id="localizacion" name="localizacion" placeholder="Localizacion del producto"value="<?php echo $producto->localizacion;?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

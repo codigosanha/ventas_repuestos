@@ -260,6 +260,8 @@ class Ventas extends CI_Controller {
 				"codigo_barras" => $producto->codigo_barras,
 				"stock" => $p->stock,
 				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
+				"imagen" => $producto->imagen,
+				"localizacion" => $p->localizacion
 			);
 		}
 		echo json_encode($data);
@@ -308,6 +310,8 @@ class Ventas extends CI_Controller {
 				"imagen" => $producto->imagen,
 				"stock" => $p->stock,
 				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
+				"imagen" => $producto->imagen,
+				"localizacion" => $p->localizacion
 			);
 		}
 		echo json_encode($data);
@@ -328,6 +332,8 @@ class Ventas extends CI_Controller {
 				"imagen" => $producto->imagen,
 				"stock" => $productoEncontrado->stock,
 				"precios" => $this->Ventas_model->getPrecios($productoEncontrado->producto_id),
+				"imagen" => $producto->imagen,
+				"localizacion" => $productoEncontrado->localizacion
 			);
 			echo json_encode($data);
 		}else{

@@ -16,7 +16,7 @@ class Apertura_cierre extends CI_Controller {
 		$numero_sucursales = count($this->Comun_model->get_records("sucursales"));
 		$cajas_abiertas = count($this->Comun_model->get_records("caja","estado=1"));
 
-		$caja_abierta = $this->Comun_model->get_record("caja","sucursal_id=".$this->session->userdata("sucursal"));
+		$caja_abierta = $this->Comun_model->get_record("caja","estado=1 and sucursal_id=".$this->session->userdata("sucursal"));
 
 		$sucursalesDisponibles = array();
 
