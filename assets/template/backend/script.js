@@ -1,6 +1,13 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("click",".show-image",function(){
+        var info = $(this).attr("data-href");
+        var data = info.split("*");
+        $("#modal-image .modal-title").text(data[0]);
+        imagen = "<img class='img-responsive' src='"+base_url+"assets/imagenes_productos/"+data[1]+"' style='width:100%;'>";
+        $("#modal-image .modal-body").html(imagen);
+    })
     $("#search").on("keyup", function(){
         cargarProductos();
     });
@@ -205,7 +212,7 @@ $(document).ready(function () {
         data = JSON.parse($(this).val());
         html = "<tr>";
         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
-        html +="<td><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></td>";
+        html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+data.nombre+"*"+data.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
         html +="<td>"+data.nombre+"</td>";
         html +="<td>"+data.localizacion+"</td>";
 
@@ -584,7 +591,7 @@ $(document).ready(function () {
                     }else{
                         html = "<tr>";
                         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
-                        html +="<td><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></td>";
+                        html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+data.nombre+"*"+data.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
                         html +="<td>"+data.nombre+"</td>";
                         html +="<td>"+data.localizacion+"</td>";
                         precios = "<option value=''>Seleccione</option>";
@@ -1485,7 +1492,7 @@ $(document).ready(function () {
                     $.each(data, function(key, value){
                         html += "<tr>";
                         html += "<td>"+value.codigo_barras+"</td>";
-                        html += "<td><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' width='100px' class='img-responsive'></td>";
+                        html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+value.nombre+"*"+value.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
                         html += "<td>"+value.nombre+"</td>";
                         html += "<td>"+value.localizacion+"</td>";
                         html += "<td>"+value.categoria+"</td>";
@@ -1607,7 +1614,7 @@ $(document).ready(function () {
         select:function(event, ui){
             html = "<tr>";
             html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
-            html +="<td><img src='"+base_url+"assets/imagenes_productos/"+ui.item.imagen+"' class='img-responsive' style='width:50px;'></td>";
+            html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+ui.item.nombre+"*"+ui.item.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+ui.item.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
             html +="<td>"+ui.item.nombre+"</td>";
             html +="<td>"+ui.item.localizacion+"</td>";
             precios = "<option value=''>Seleccione</option>";

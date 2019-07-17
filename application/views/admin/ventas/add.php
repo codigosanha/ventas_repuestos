@@ -360,20 +360,19 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
-<div class="modal fade" id="modal-image">
+<div class="modal fade" id="modal-image" style="z-index: 1400;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Informacion de la Venta</h4>
+        <h4 class="modal-title"></h4>
       </div>
       <div class="modal-body">
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary btn-flat btn-print-venta"><span class="fa fa-print"></span> Imprimir</button>
       </div>
     </div>
     <!-- /.modal-content -->
