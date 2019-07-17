@@ -349,17 +349,26 @@ class Ventas_model extends CI_Model {
 		return $resultados->result();
 	}
 
-	public function searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo){
+	public function searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo,$value){
 		$this->db->select("bsp.*");
 		$this->db->from("bodega_sucursal_producto bsp");
 		$this->db->join("productos p","bsp.producto_id = p.id");
 		$this->db->where("bsp.sucursal_id",$sucursal_id);
 		$this->db->where("bsp.bodega_id",$bodega_id);
-		$this->db->where("p.marca_id",$marca);
-		$this->db->where("p.year_id",$year);
-		$this->db->where("p.modelo_id",$modelo);
 		$this->db->where("p.estado","1");
 		$this->db->where("bsp.stock >=", 1);
+		if (!empty($year)) {
+			$this->db->where("p.year_id",$year);
+		}
+		if (!empty($marca)) {
+			$this->db->where("p.marca_id",$marca);
+		}
+		if (!empty($modelo)) {
+			$this->db->where("p.modelo_id",$modelo);
+		}
+		if (!empty($value)) {
+			$this->db->like("p.nombre",$value);
+		}
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}

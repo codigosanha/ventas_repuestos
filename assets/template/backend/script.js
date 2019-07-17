@@ -1,6 +1,15 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $("#search").on("keyup", function(){
+        cargarProductos();
+    });
+    $("#year,#modelo,#marca").on("change", function(){
+        cargarProductos();
+    });
+    $("#btn-buscarProductos").on("click", function(){
+        cargarProductos();
+    });
     $(document).on("click",".btn-cerrar-caja", function(){
         idCaja = $(this).val();
         $("#idCaja").val(idCaja);
@@ -1451,54 +1460,46 @@ $(document).ready(function () {
             },
         }
     });
-    $(document).ready(function () {
-        $('#tbProductos1').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax":{
-                "url": base_url + "movimientos/ventas/getProductosPorParametros",
-                "dataType": "json",
-                "type": "POST",
-                "data":{  
-                    '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>',
-                    sucursal: $("#sucursal-venta").val(),
-                    bodega: $("#bodega").val(),
-                    marca: $("#marca").val(),
-                    modelo: $("#modelo").val(),
-                    year: $("#year").val()
-                }
+    function cargarProductos(){
+        search = $("#search").val();
+        bodega = $("#bodega").val();
+        sucursal = $("#sucursal-venta").val();
+        marca = $("#marca").val();
+        year = $("#year").val();
+        modelo = $("#modelo").val();
+       
+        $.ajax({
+            url: base_url + "movimientos/ventas/searchProductos",
+            type:"POST",
+            dataType: 'json',
+            data: {
+                value:search, 
+                bodega:bodega, 
+                sucursal:sucursal, 
+                marca:marca, 
+                year:year, 
+                modelo:modelo, 
             },
-            "columns": [
-                { "data": "id" },
-                { "data": "rnc" },
-                { "data": "razon_social" },
-                {
-                    mRender: function (data, type, row) {
-                        var valueBtnView = row.id + "*" + row.rnc + "*" + row.razon_social;
-                        var btnView = '<button class="btn btn-primary" value="'+valueBtnView+'"><span class="fa fa-eye"></span></button>';
-                        var btnEdit = '<a class="btn btn-warning" href="' + base_url+"mantenimiento/clients/"+ row.id + '"><span class="fa fa-pencil"></span></a>';
-                        return btnView +" "+btnEdit;
-                    }
-                } 
-            ],
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ registros por pagina",
-                "zeroRecords": "No se encontraron resultados en su busqueda",
-                "searchPlaceholder": "Buscar registros",
-                "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-                "infoEmpty": "No existen registros",
-                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-                "search": "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-            }    
-
+            success: function(data){
+               html = "";
+                    $.each(data, function(key, value){
+                        html += "<tr>";
+                        html += "<td>"+value.codigo_barras+"</td>";
+                        html += "<td><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' width='100px' class='img-responsive'></td>";
+                        html += "<td>"+value.nombre+"</td>";
+                        html += "<td>"+value.localizacion+"</td>";
+                        html += "<td>"+value.categoria+"</td>";
+                        html += "<td>"+value.year+"</td>";
+                        html += "<td>"+value.marca+"</td>";
+                        html += "<td>"+value.modelo+"</td>";
+                        html += "<td><button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>";
+                        html += "</tr>";
+                    });
+                    $("#tbProductos tbody").html(html);
+                
+            }
         });
-    });
+    }
     $('.example1').DataTable({
         "language": {
             "lengthMenu": "Mostrar _MENU_ registros por pagina",

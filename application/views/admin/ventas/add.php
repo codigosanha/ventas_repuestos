@@ -57,7 +57,7 @@
                                     </div>
                                     <input type="text" class="form-control" id="searchProductoVenta" placeholder="Buscar por codigo de barras o nombre del proucto">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-productos">
+                                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-productos" id="btn-buscarProductos">
                                             <span class="fa fa-search"></span>
                                             Buscar
                                         </button>
@@ -419,11 +419,10 @@
                     </select>
                 </div>
                 <div class="form-group col-md-3">
-                    <button type="submit" class="btn btn-success btn-block" id="btn-search-producto">Buscar</button>
+                    <input type="text" class="form-control" name="search" id="search" placeholder="Buscar...">
                 </div>
             </div>
         </form>
-        <hr>
         <div class="table-responsive">
             <table class="table table-bordered" id="tbProductos">
                 <thead>
@@ -439,7 +438,9 @@
                         <th width="10%">Seleccionar</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
+            <ul class="pagination"></ul>
         </div>  
       </div>
       <div class="modal-footer">

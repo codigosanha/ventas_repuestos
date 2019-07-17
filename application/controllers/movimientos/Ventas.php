@@ -292,14 +292,15 @@ class Ventas extends CI_Controller {
 		));
 	}
 
-	public function searchProducto(){
+	public function searchProductos(){
 		$year =$this->input->post("year");
 		$marca = $this->input->post("marca");
 		$modelo = $this->input->post("modelo");
-		$sucursal_id = $this->input->post("sucursal_id");
-		$bodega_id = $this->input->post("bodega_id");
+		$sucursal_id = $this->input->post("sucursal");
+		$bodega_id = $this->input->post("bodega");
+		$value = $this->input->post("value");
 
-		$productos = $this->Ventas_model->searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo);
+		$productos = $this->Ventas_model->searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo,$value);
 		$data = array();
 		foreach ($productos as $p) {
 			$producto = get_record("productos", "id=".$p->producto_id);
