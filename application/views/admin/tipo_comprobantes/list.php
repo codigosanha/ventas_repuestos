@@ -15,10 +15,32 @@
             <div class="box-body">
                 <input type="hidden" id="modulo" value="administrador/tipo_comprobantes">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                       
                         <a href="<?php echo base_url();?>administrador/tipo_comprobantes/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tipo de Comprobante</a>
                       
+                    </div>
+                    <div class="col-md-6">
+                        <form action="<?php echo base_url();?>administrador/tipo_comprobantes/set_comprobante_venta" method="POST">
+                            <div class="input-group">
+                                <span class="input-group-addon">Indique el Comprobante para ventas</span>
+                                <select name="comprobante_venta" id="comprobante_venta" class="form-control" required="required">
+                                    <option value="">Seleccione..</option>
+                                    <?php foreach ($comprobantes as $comprobante): ?>
+                                        <?php 
+                                            $selected = '';
+                                            if ($comprobante_venta && $comprobante_venta->id == $comprobante->id){
+                                                $selected = 'selected';
+                                            }
+                                        ?>
+                                        <option value="<?php echo $comprobante->id;?>" <?php echo $selected;?>><?php echo $comprobante->nombre;?></option>
+                                    <?php endforeach ?>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success" type="submit">Guardar</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </form>
                     </div>
                 </div>
                 <hr>

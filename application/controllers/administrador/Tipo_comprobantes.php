@@ -16,6 +16,7 @@ class Tipo_comprobantes extends CI_Controller {
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"comprobantes" => $this->Comun_model->get_records("comprobantes"), 
+			"comprobante_venta" => $this->Comun_model->get_record("comprobantes","seleccion_ventas='1'"),
 		);
 
 		$contenido_externo = array(
@@ -143,5 +144,19 @@ class Tipo_comprobantes extends CI_Controller {
 		$this->Comun_model->update("comprobantes","id=$id",$data);
 		//echo "administrador/tipo_comprobantes";
 		redirect(base_url()."administrador/tipo_comprobantes");
+	}
+	public function set_comprobante_venta(){
+		$comprobante_venta = $this->input->post("comprobante_venta");
+		$dataUpdate = array('seleccion_ventas' => 0, );
+		$dataSeleccion  = array(
+			'seleccion_ventas' => 1, 
+		);
+		$this->Comun_model->update("comprobantes","",$dataUpdate);
+		if ($this->Comun_model->update("comprobantes","id=$comprobante_venta",$dataSeleccion)) {
+			redirect(base_url()."administrador/tipo_comprobantes");
+		}else{
+			$this->session->set_flashdata("error","No se pudo actualizar la informacion");
+			redirect(base_url()."administrador/tipo_comprobantes");
+		}
 	}
 }
