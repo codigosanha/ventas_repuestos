@@ -58,7 +58,12 @@
                                                     </button>
                                                     
                                                     <a href="<?php echo base_url()?>inventario/productos/edit/<?php echo $p->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>inventario/productos/delete/<?php echo $p->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($p->estado): ?>
+                                                        <a href="<?php echo base_url();?>inventario/productos/deshabilitar/<?php echo $p->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url();?>inventario/productos/habilitar/<?php echo $p->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php endif ?>
+                                                    
                                                   
                                                 </div>
                                             </td>

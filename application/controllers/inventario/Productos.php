@@ -125,16 +125,16 @@ class Productos extends CI_Controller {
 		$data  = array(
 			"estado" => "1", 
 		);
-		$this->Comun_model->update("calidades","id=$id",$data);
-		echo "inventario/productos";
+		$this->Comun_model->update("bodega_sucursal_producto","id=$id",$data);
+		redirect(base_url()."inventario/productos");
 	}
 
 	public function deshabilitar($id){
 		$data  = array(
 			"estado" => "0", 
 		);
-		$this->Comun_model->update("calidades","id=$id",$data);
-		echo "inventario/productos";
+		$this->Comun_model->update("bodega_sucursal_producto","id=$id",$data);
+		redirect(base_url()."inventario/productos");
 	}
 
 	public function getBodegas(){

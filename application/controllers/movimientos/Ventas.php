@@ -271,7 +271,7 @@ class Ventas extends CI_Controller {
 	public function getBodegasAndComprobantes(){
 		$sucursal_id = $this->input->post("idSucursal");
 		$bodegas = $this->Comun_model->get_records("bodega_sucursal", "sucursal_id='$sucursal_id' and estado=1");
-		$comprobantes = $this->Comun_model->get_records("comprobante_sucursal", "sucursal_id='$sucursal_id' and estado=1");
+		$comprobantes = $this->Comun_model->get_records("comprobante_sucursal", "sucursal_id='$sucursal_id' and estado=1 and limite > realizados and fecha_vencimiento_sat >= '".date('Y-m-d')."'");
 		$dataBodegas = array();
 		foreach ($bodegas as $b) {
 			$dataBodegas[] = array(

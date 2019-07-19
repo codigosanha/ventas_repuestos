@@ -36,6 +36,7 @@
                                     <th>Serie</th>
                                     <th>Numero Inicial</th>
                                     <th>Limite</th>
+                                    <th>Disponibilidad</th>
                                     <th>Fecha Aprobacion SAT</th>
                                     <th>Fecha Vencimiento SAT</th>
                                     <th>Dias de Vencimiento</th>
@@ -54,6 +55,7 @@
                                             <td><?php echo $c->serie;?></td>
                                             <td><?php echo $c->numero_inicial;?></td>
                                             <td><?php echo $c->limite;?></td>
+                                            <td><?php echo $c->limite-$c->realizados;?></td>
                                             <td><?php echo $c->fecha_aprobacion_sat;?></td>
                                             <td><?php echo $c->fecha_vencimiento_sat;?></td>
                                             <td><?php echo $c->dias_vencimiento;?></td>
