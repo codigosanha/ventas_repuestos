@@ -152,16 +152,7 @@ $(document).ready(function () {
         showAjuste(id);
 
     });
-    function showAjuste(id){
-        $.ajax({
-            url: base_url + "inventario/ajuste/view/" + id,
-            type: "POST",
-            success: function(resp){
-                $("#modal-ajuste").modal("show");
-                $("#modal-ajuste .modal-body").html(resp);
-            }
-        });
-    }
+  
     $(document).on("keyup mouseup", ".stocks_fisico", function(){
         stocks_fisico = Number($(this).val());
         stocks_bd = Number($(this).closest("tr").find("td:eq(1)").text());
@@ -2131,3 +2122,14 @@ function showCorte(id){
         }
     });
 }
+
+  function showAjuste(id){
+        $.ajax({
+            url: base_url + "inventario/ajuste/view/" + id,
+            type: "POST",
+            success: function(resp){
+                $("#modal-ajuste").modal("show");
+                $("#modal-ajuste .modal-body").html(resp);
+            }
+        });
+    }

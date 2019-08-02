@@ -55,11 +55,6 @@ class Ajuste extends CI_Controller {
 		$bodega_id = $this->input->post("bodega_id");
 		$sucursal_id = $this->input->post("sucursal_id");
 
-		$existe_ajuste = $this->Comun_model->get_record("ajustes","bodega_id='$bodega_id' and sucursal_id='$sucursal_id' and DATE(fecha)='".date("Y-m-d")."'");
-		if ($existe_ajuste) {
-			$this->session->set_flashdata("error","Ya se ha realizado un ajuste con la sucursal y bodega seleccionada");
-			redirect(base_url()."inventario/ajuste");
-		}else{
 			$data  = array(
 				'fecha' => $fecha, 
 				'usuario_id' => $usuario_id,
@@ -78,7 +73,7 @@ class Ajuste extends CI_Controller {
 				$this->session->set_flashdata("error","No se pudo guardar la informacion");
 				redirect(base_url()."inventario/ajuste/add");
 			}
-		}
+		
 
 		
 	}
