@@ -156,15 +156,26 @@ class Productos extends CI_Controller {
 	public function getProductos(){
 		$sucursal_id = $this->input->post("idSucursal");
 		$bodega_id = $this->input->post("idBodega");
-		$productos = $this->Comun_model->get_records("bodega_sucursal_producto","sucursal_id='$sucursal_id' and bodega_id='$bodega_id'");
-		$data = array();
-		foreach ($productos as $p) {
-			$data[] = array(
+		$productos = $this->Comun_model->get_records("productos");
+		$dataProductosRestantes = array();
+		foreach ($productos as $producto) {
+			$existe_producto = $this->Comun_model->get_record("bodega_sucursal_producto","sucursal_id='$sucursal_id' and bodega_id='$bodega_id' and producto_id='$producto->id'");
+			if (!$existe_producto) {
+				$dataProductosRestantes[] = $producto->id;
+			}
+		}
+		$productosRegistrados = $this->Comun_model->get_records("bodega_sucursal_producto","sucursal_id='$sucursal_id' and bodega_id='$bodega_id'");
+		$dataProductosRegistrados = array();
+		foreach ($productosRegistrados as $p) {
+			$dataProductosRegistrados[] = array(
 				"producto_id" => $p->producto_id,
 				"nombre" => get_record("productos", "id=".$p->producto_id)->nombre
 			);
 		}
-		echo json_encode($data);
+		echo json_encode(array(
+			'productosRegistrados' => $dataProductosRegistrados,
+			'productosRestantes' => $dataProductosRestantes
+		));
 
 	}
 }

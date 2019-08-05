@@ -48,13 +48,41 @@ class Ajuste extends CI_Controller {
 
 		$usuario_id = $this->session->userdata("id");
 		$fecha = date("Y-m-d H:i:s");
-		$productos = $this->input->post("productos");
-		$stocks_bd = $this->input->post("stocks_bd");
-		$stocks_fisico = $this->input->post("stocks_fisico");
-		$stocks_diferencia = $this->input->post("stocks_diferencia");
+		$productos = json_decode($this->input->post("productos"));
+		$stocks_bd = json_decode($this->input->post("stocks_bd"));
+		$stocks_fisico = json_decode($this->input->post("stocks_fisico"));
+		$stocks_diferencia = json_decode($this->input->post("stocks_diferencia"));
 		$bodega_id = $this->input->post("bodega_id");
 		$sucursal_id = $this->input->post("sucursal_id");
 
+		$data  = array(
+			'fecha' => $fecha, 
+			'usuario_id' => $usuario_id,
+			"bodega_id" => $bodega_id,
+			"sucursal_id" => $sucursal_id,
+		);
+
+		$ajuste = $this->Comun_model->insert("ajustes", $data);
+
+		if ($ajuste) {
+			ini_set('max_execution_time', 0); 
+			ini_set('memory_limit','2048M');
+			$this->saveAjusteProductos($ajuste->id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id);
+			echo $ajuste->id;
+			// $this->session->set_flashdata("success",$ajuste->id);
+			// redirect(base_url()."inventario/ajuste");
+		}
+		else{
+			echo "0";
+			// $this->session->set_flashdata("error","No se pudo guardar la informacion");
+			// redirect(base_url()."inventario/ajuste/add");
+		}
+
+		/*$existe_ajuste = $this->Comun_model->get_record("ajustes","bodega_id='$bodega_id' and sucursal_id='$sucursal_id' and DATE(fecha)='".date("Y-m-d")."'");
+		if ($existe_ajuste) {
+			$this->session->set_flashdata("error","Ya se ha realizado un ajuste con la sucursal y bodega seleccionada");
+			redirect(base_url()."inventario/ajuste");
+		}else{
 			$data  = array(
 				'fecha' => $fecha, 
 				'usuario_id' => $usuario_id,
@@ -73,7 +101,7 @@ class Ajuste extends CI_Controller {
 				$this->session->set_flashdata("error","No se pudo guardar la informacion");
 				redirect(base_url()."inventario/ajuste/add");
 			}
-		
+		}*/
 
 		
 	}

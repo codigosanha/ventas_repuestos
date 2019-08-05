@@ -31,63 +31,7 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/sweetalert/sweetalert.css">
     
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/jquery/jquery-confirm.min.css">
-    
-    <style>
-        #modal-venta .modal-dialog {
-            width: 300px;
-           
-        }
-        #modal-ajuste .modal-dialog {
-            width: 320px;
-           
-        }
-
-        #modal-corte .modal-dialog {
-            width: 320px;
-           
-        }
-        
-        #modal-productos .modal-dialog {
-            width: 1024px;
-           
-        }
-        .menu-notificaciones li{
-            padding: 7px;
-        }
-        .menu-notificaciones li span a{
-            text-decoration: : none;
-            color: #BDBBBA;
-        }
-        .menu-notificaciones li span a:hover{
-            color: #848484;
-        }
-        .navbar-nav>.notifications-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.tasks-menu>.dropdown-menu>li .menu>li>a{
-            white-space: normal;
-        }
-
-        .contenido-venta{
-            width: 275px;
-        }
-       
-        .contenido{
-            width: 280px;
-        }
-        .contenido label{
-            margin-bottom: 0px;
-        }
-        .contenido p{
-            margin: 0px;
-        }
-        .impresion{
-            padding: 10px;
-        }
-        @page { size: auto;  margin: 0mm;}
-        @media (max-width: 480px) {
-            .input-cantidad {
-                width: 60px !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/template/backend/css/style.css">
     <!-- jQuery 3 -->
     <script src="<?php echo base_url();?>assets/template/jquery/jquery.min.js"></script>
     <script src="<?php echo base_url();?>assets/template/sweetalert/sweetalert.min.js"></script>

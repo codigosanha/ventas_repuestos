@@ -24,7 +24,7 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <form action="<?php echo base_url();?>inventario/ajuste/store" method="POST"> 
+                <form action="<?php echo base_url();?>inventario/ajuste/store" method="POST" id="form-add-ajuste"> 
                 <div class="row">
                     <?php if ($this->session->userdata("sucursal")): ?>
                         <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>" id="sucursal">
@@ -114,9 +114,7 @@
 
 <!-- /.content-wrapper -->
 
-
-
-<div class="modal fade" id="modal-default">
+<div class="modal fade" id="modal-ajuste">
 
   <div class="modal-dialog">
 
@@ -128,12 +126,12 @@
 
           <span aria-hidden="true">&times;</span></button>
 
-        <h4 class="modal-title">Informacion de la Categoria</h4>
+        <h4 class="modal-title">Informacion del Ajuste</h4>
 
       </div>
 
       <div class="modal-body">
-
+        <p></p>
         
 
       </div>
@@ -141,6 +139,7 @@
       <div class="modal-footer">
 
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-print">Imprimir</button>
 
       </div>
 

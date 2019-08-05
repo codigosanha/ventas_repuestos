@@ -55,19 +55,35 @@
                                 </select>
                             </div>
                         <?php endif ?>
-                        <table class="table table-bordered" id="tbProductosNuevos">
-                            <caption class="text-center"><strong>Nuevos Productos</strong></caption>
+                        <p class="text-center">Seleccione los nuevos productos a inventariar</p>
+                        <table id="tableSimple" class="table table-bordered tbProductos">
                             <thead>
                                 <tr>
-                                    
-                                    <th>Nombre</th>
                                     <th></th>
+                                    <th>Nombre</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                
+                                <?php if (!empty($productos)): ?>
+                                    <?php foreach ($productos as $producto): ?>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="checkProducto" id="<?php echo "p".$producto->id;?>" value="<?php echo $producto->id?>" disabled="disabled" class="checkProducto">
+                                            </td>
+                                            <td><?php echo $producto->nombre;?></td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                <?php endif ?>
                             </tbody>
                         </table>
+                        <div id="productos-seleccionados">
+                            
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-flat" id="btn-guardar">Guardar</button>
+                            <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
+                            <button type="button" class="btn btn-primary btn-check-all-products" disabled="disabled">Marcar todos</button>
+                        </div>
                             
                     </div>
                     <div class="col-md-4">
@@ -81,15 +97,6 @@
                             </thead>
                             <tbody></tbody>
                         </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-flat" id="btn-guardar">Guardar</button>
-                            <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
-                            <button type="button" class="btn btn-primary btn-select-products" data-toggle="modal" data-target="#modal-productos" disabled="disabled">Seleccionar Productos</button>
-                        </div>
                     </div>
                 </div>
                 </form>

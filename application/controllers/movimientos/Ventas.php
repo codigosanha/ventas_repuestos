@@ -274,16 +274,20 @@ class Ventas extends CI_Controller {
 		$comprobantes = $this->Comun_model->get_records("comprobante_sucursal", "sucursal_id='$sucursal_id' and estado=1 and limite > realizados and fecha_vencimiento_sat >= '".date('Y-m-d')."'");
 		$dataBodegas = array();
 		foreach ($bodegas as $b) {
+			$bodega = get_record("bodegas", "id=".$b->bodega_id);
 			$dataBodegas[] = array(
 				'bodega_id' => $b->bodega_id,
-				'nombre' => get_record("bodegas", "id=".$b->bodega_id)->nombre, 
+				'nombre' => $bodega->nombre, 
+				'seleccion_ventas' => $bodega->seleccion_ventas, 
 			);
 		}
 		$dataComprobantes = array();
 		foreach ($comprobantes as $c) {
+			$comprobante = get_record("comprobantes", "id=".$c->comprobante_id);
 			$dataComprobantes[] = array(
 				'comprobante_id' => $c->comprobante_id,
-				'nombre' => get_record("comprobantes", "id=".$c->comprobante_id)->nombre, 
+				'nombre' =>$comprobante->nombre, 
+				'seleccion_ventas' =>$comprobante->seleccion_ventas, 
 			);
 		}
 		echo json_encode(array(
