@@ -302,9 +302,9 @@ class Ventas extends CI_Controller {
 		$modelo = $this->input->post("modelo");
 		$sucursal_id = $this->input->post("sucursal");
 		$bodega_id = $this->input->post("bodega");
-		$value = $this->input->post("value");
+		
 
-		$productos = $this->Ventas_model->searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo,$value);
+		$productos = $this->Ventas_model->searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo);
 		$data = array();
 		foreach ($productos as $p) {
 			$producto = get_record("productos", "id=".$p->producto_id);
@@ -320,7 +320,8 @@ class Ventas extends CI_Controller {
 				"year" => get_record("years","id=".$producto->year_id)->year,
 				"marca" => get_record("marcas","id=".$producto->marca_id)->nombre,
 				"modelo" => get_record("modelos","id=".$producto->modelo_id)->nombre,
-				"categoria" => get_record("categorias","id=".$producto->categoria_id)->nombre
+				"categoria" => get_record("categorias","id=".$producto->categoria_id)->nombre,
+				"compatibilidades" => $this->Ventas_model->getCompatibilidadesProducto($p->producto_id)
 			);
 		}
 		echo json_encode($data);

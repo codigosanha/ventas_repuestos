@@ -360,7 +360,7 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
-<div class="modal fade" id="modal-image" style="z-index: 1400;">
+<div class="modal fade" id="modal-image">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -380,7 +380,7 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<div class="modal fade" id="modal-productos">
+<div class="modal fade" id="modal-productos" style="z-index: 1400;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -417,9 +417,6 @@
 
                     </select>
                 </div>
-                <div class="form-group col-md-3">
-                    <input type="text" class="form-control" name="search" id="search" placeholder="Buscar...">
-                </div>
             </div>
         </form>
         <div class="table-responsive">
@@ -434,7 +431,8 @@
                         <th>Año</th>
                         <th>Marca</th>
                         <th>Modelo</th>
-                        <th width="10%">Seleccionar</th>
+                        <th>Compatibilidades</th>
+                        <th width="10">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

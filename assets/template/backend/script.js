@@ -28,9 +28,6 @@ $(document).ready(function () {
         imagen = "<img class='img-responsive' src='"+base_url+"assets/imagenes_productos/"+data[1]+"' style='width:100%;'>";
         $("#modal-image .modal-body").html(imagen);
     })
-    $("#search").on("keyup", function(){
-        cargarProductos();
-    });
     $("#year,#modelo,#marca").on("change", function(){
         cargarProductos();
     });
@@ -1526,7 +1523,6 @@ $(document).ready(function () {
         }
     });
     function cargarProductos(){
-        search = $("#search").val();
         bodega = $("#bodega").val();
         sucursal = $("#sucursal-venta").val();
         marca = $("#marca").val();
@@ -1538,15 +1534,55 @@ $(document).ready(function () {
             type:"POST",
             dataType: 'json',
             data: {
-                value:search, 
                 bodega:bodega, 
                 sucursal:sucursal, 
                 marca:marca, 
                 year:year, 
                 modelo:modelo, 
             },
-            success: function(data){
-               html = "";
+            success: function(resp){
+
+                $('#tbProductos').dataTable( {
+                   
+                     destroy: true,
+                    data : resp,
+                    columns: [
+                        {"data" : "codigo_barras"},
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var image = "<a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+row.nombre+"*"+row.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+row.imagen+"' class='img-responsive' style='width:50px;'></a>";
+                                return image;
+                            }
+                        },
+                        {"data" : "nombre"},
+                        {"data" : "localizacion"},
+                        
+                        {"data" : "categoria"},
+                        {"data" : "year"},
+                        {"data" : "marca"},
+                        {"data" : "modelo"},
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var compatibilidades = "";
+                                $.each(row.compatibilidades, function(key, value){
+                                    compatibilidades += value.nombre + "<br>";
+                                });
+                                return compatibilidades;
+                            }
+                        }, 
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var button = "<button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(row)+"'><span class='fa fa-check'></span></button>";
+                                return button;
+                            }
+                        }
+
+                    ],
+                });
+               /*html = "";
                     $.each(data, function(key, value){
                         html += "<tr>";
                         html += "<td>"+value.codigo_barras+"</td>";
@@ -1560,11 +1596,22 @@ $(document).ready(function () {
                         html += "<td><button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>";
                         html += "</tr>";
                     });
-                    $("#tbProductos tbody").html(html);
+                    $("#tbProductos tbody").html(html);*/
                 
             }
         });
     }
+
+    $(document).on('show.bs.modal', '.modal', function () {
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
+    $(document).on('hidden.bs.modal', '.modal', function () {
+    $('.modal:visible').length && $(document.body).addClass('modal-open');
+});
     $('.example1').DataTable({
         "language": {
             "lengthMenu": "Mostrar _MENU_ registros por pagina",
