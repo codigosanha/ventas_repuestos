@@ -33,6 +33,15 @@
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:''?>">
                             </div>
                             <div class="form-group">
+                                <label for="marca_id">Marca:</label>
+                                <select name="marca_id" id="marca_id" class="form-control" required="required">
+                                    <option value="">Seleccione</option>
+                                    <?php foreach ($marcas as $marca): ?>
+                                        <option value="<?php echo $marca->id; ?>"><?php echo $marca->nombre ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>
                                 <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat">Volver</a>
                             </div>

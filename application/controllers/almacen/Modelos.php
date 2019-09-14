@@ -27,9 +27,13 @@ class Modelos extends CI_Controller {
 	}
 
 	public function add(){
+		$contenido_interno  = array(
+			//'permisos' => $this->permisos,
+			'marcas' => $this->Comun_model->get_records('marcas',"estado=1"), 
+		);
 		$contenido_externo = array(
 			'title' => 'Modelos', 
-			'contenido' => $this->load->view("admin/modelos/add", '', TRUE)
+			'contenido' => $this->load->view("admin/modelos/add", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
 	}
@@ -38,6 +42,7 @@ class Modelos extends CI_Controller {
 
 		$nombre = $this->input->post("nombre");
 		$descripcion = $this->input->post("descripcion");
+		$marca_id = $this->input->post("marca_id");
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[modelos.nombre]");
 
 		if ($this->form_validation->run()==TRUE) {
@@ -45,7 +50,8 @@ class Modelos extends CI_Controller {
 			$data  = array(
 				'nombre' => $nombre, 
 				'descripcion' => $descripcion,
-				'estado' => "1"
+				'estado' => "1",
+				'marca_id' => $marca_id,
 			);
 
 			if ($this->Comun_model->insert('modelos', $data)) {
@@ -65,6 +71,7 @@ class Modelos extends CI_Controller {
 		$contenido_interno  = array(
 			//'permisos' => $this->permisos,
 			'modelo' => $this->Comun_model->get_record('modelos',"id=$id"), 
+			'marcas' => $this->Comun_model->get_records('marcas',"estado=1"), 
 		);
 
 		$contenido_externo = array(
@@ -78,7 +85,7 @@ class Modelos extends CI_Controller {
 		$idModulo = $this->input->post("idModulo");
 		$nombre = $this->input->post("nombre");
 		$descripcion = $this->input->post("descripcion");
-
+		$marca_id = $this->input->post("marca_id");
 		$modeloActual = $this->Comun_model->get_record('modelos',"id=$idModulo");
 
 		if ($nombre == $modeloActual->nombre) {
@@ -93,6 +100,7 @@ class Modelos extends CI_Controller {
 			$data = array(
 				'nombre' => $nombre,
 				'descripcion' => $descripcion,
+				'marca_id' => $marca_id,
 			);
 
 			if ($this->Comun_model->update('modelos',"id=$idModulo",$data)) {

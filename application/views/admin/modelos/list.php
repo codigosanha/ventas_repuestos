@@ -31,6 +31,7 @@
                                     <th>#</th>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>
+                                    <th>Marca</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -41,6 +42,7 @@
                                             <td><?php echo $modelo->id;?></td>
                                             <td><?php echo $modelo->nombre;?></td>
                                             <td><?php echo $modelo->descripcion;?></td>
+                                            <td><?php echo get_record("marcas","id=".$modelo->marca_id)->nombre;?></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $modelo->id;?>">

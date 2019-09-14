@@ -37,7 +37,13 @@
                                     <select name="bodega_id" id="bodega" class="form-control">
                                         <option value="">Seleccione...</option>
                                         <?php foreach ($bodegas as $b): ?>
-                                            <option value="<?php echo $b->bodega_id;?>"><?php echo get_record("bodegas","id=".$b->bodega_id)->nombre;?></option>
+                                            <?php
+                                                $selected = "";
+                                                if (get_record("bodegas","id=".$b->bodega_id)->seleccion_ventas) {
+                                                    $selected = "selected";
+                                                }
+                                            ?>
+                                            <option value="<?php echo $b->bodega_id;?>" <?php echo $selected ?>><?php echo get_record("bodegas","id=".$b->bodega_id)->nombre;?></option>
                                         <?php endforeach ?>
                                     </select>
                                 </div>
@@ -101,7 +107,13 @@
                                     <option value="">Seleccione...</option>
                                     <?php if ($this->session->userdata("sucursal")): ?>
                                         <?php foreach ($comprobantes as $c): ?>
-                                            <option value="<?php echo $c->comprobante_id;?>"><?php echo get_record("comprobantes","id='$c->comprobante_id'")->nombre;?></option>
+                                            <?php
+                                                $selected = "";
+                                                if (get_record("comprobantes","id=".$c->comprobante_id)->seleccion_ventas) {
+                                                    $selected = "selected";
+                                                }
+                                            ?>
+                                            <option value="<?php echo $c->comprobante_id;?>" <?php echo $selected ?>><?php echo get_record("comprobantes","id='$c->comprobante_id'")->nombre;?></option>
                                         <?php endforeach ?>
                                     <?php endif ?>
                                 </select>
