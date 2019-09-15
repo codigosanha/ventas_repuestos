@@ -163,6 +163,11 @@
 
 <script src="<?php echo base_url();?>assets/template/jquery/jquery-confirm.min.js"></script>
 <script src="<?php echo base_url();?>assets/template/jsbarcode/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/es.js"></script>
+<!-- Datepicker -->
+<script src="<?php echo base_url(); ?>assets/template/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="<?php echo base_url(); ?>assets/template/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js"></script>
 <script>
     var base_url = "<?php echo base_url();?>";
 
