@@ -317,9 +317,8 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function getLastProductos(){
-		$this->db->select("p.*, c.nombre as categoria");
+		$this->db->select("p.*");
 		$this->db->from("productos p");
-		$this->db->join("categorias c","p.categoria_id = c.id");
 		$this->db->order_by('id',"desc");
 		$this->db->limit(5);
 		$resultados = $this->db->get();
@@ -327,9 +326,9 @@ class Ventas_model extends CI_Model {
 	}
 	
 	public function getProductosStockMinimo(){
-		$this->db->select("p.*,c.nombre as categoria");
+		$this->db->select("p.*");
 		$this->db->from("productos p");
-		$this->db->join("categorias c","p.categoria_id = c.id");
+
 		$this->db->where("p.estado","1");
 		$this->db->where("stock <", 10);
 		$resultados = $this->db->get();
@@ -337,11 +336,11 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function getProductosmasVendidos(){
-		$this->db->select("p.id, p.codigo_barras, p.nombre, p.stock, p.precio,SUM(dv.cantidad) as totalVendidos, c.nombre as categoria");
+		$this->db->select("p.id, p.codigo_barras, p.nombre, p.stock, p.precio,SUM(dv.cantidad) as totalVendidos");
 		$this->db->from("detalle_venta dv");
 		$this->db->join("productos p", "dv.producto_id = p.id");
 		$this->db->join("ventas v", "dv.venta_id = v.id");
-		$this->db->join("categorias c","p.categoria_id = c.id");
+		
 		$this->db->order_by("totalVendidos", "desc"); 
 		$this->db->limit(10);
 		$this->db->group_by("dv.producto_id");

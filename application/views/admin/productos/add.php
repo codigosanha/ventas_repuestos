@@ -35,22 +35,27 @@
                     </select>
                 </div>
                 <div id="html-years" style="display: none;">
-                    <div class="input-group">
+                    
                       
-                        <select name="year_from[]" class="year_from form-control">
-                            <?php foreach ($years as $year): ?>
-                                <option value="<?php echo $year->id ?>"><?php echo $year->year ?></option>
-                            <?php endforeach ?>
+                        <select name="year_from[]" class="form-control year_from">
+                            <?php 
+                                $year_from = 1975; 
+                                $year_until = date("Y") + 5;
+                            ?>
+
+                            <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
+                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
                             
                         </select>
-                        <span class="input-group-addon" style="display: none">-</span>
-                        <select name="year_until[]" class="year_until form-control" style="display: none">
-                            <?php foreach ($years as $year): ?>
-                                <option value="<?php echo $year->id ?>"><?php echo $year->year ?></option>
-                            <?php endforeach ?>
+                        <span style="display: none">-</span>
+                        <select name="year_until[]" class="form-control year_until" style="display: none; ">
+                            <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
+                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
                             
                         </select>
-                    </div>
+                    
                 </div>
                 <div id="html-button" style="display: none;">
                     <button type="button" class="btn btn-danger btn-remove-compatiblidad">
