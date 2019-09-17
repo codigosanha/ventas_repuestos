@@ -13,6 +13,50 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
+                <div id="html-select-marcas" style="display: none;">
+                   
+                    <select name="marcas[]" class="marcas form-control" required="required">
+                        <option value="">Seleccione</option>
+                        <?php foreach ($marcas as $marca): ?>
+                            <option value="<?php echo $marca->id; ?>"><?php echo $marca->nombre; ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div id="html-select-modelos" style="display: none;">
+                    <select name="modelos[]" class="modelos form-control" required="required">
+                        <option value="">Seleccione</option>
+                    </select>
+                </div>
+                <div id="html-select-range" style="display: none;">
+                    <select name="range_year[]" class="range_year form-control">
+                        <option value="0">Año</option>
+                        <option value="1">Rango de Años</option>
+                        
+                    </select>
+                </div>
+                <div id="html-years" style="display: none;">
+                    <div class="input-group">
+                      
+                        <select name="year_from[]" class="year_from form-control">
+                            <?php foreach ($years as $year): ?>
+                                <option value="<?php echo $year->id ?>"><?php echo $year->year ?></option>
+                            <?php endforeach ?>
+                            
+                        </select>
+                        <span class="input-group-addon" style="display: none">-</span>
+                        <select name="year_until[]" class="year_until form-control" style="display: none">
+                            <?php foreach ($years as $year): ?>
+                                <option value="<?php echo $year->id ?>"><?php echo $year->year ?></option>
+                            <?php endforeach ?>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div id="html-button" style="display: none;">
+                    <button type="button" class="btn btn-danger btn-remove-compatiblidad">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
                 
                 <form action="<?php echo base_url();?>almacen/productos/store" method="POST" enctype="multipart/form-data">
                     <?php if($this->session->flashdata("error")):?>
@@ -24,16 +68,6 @@
                     <?php endif;?>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="categoria_id">Categoria:</label>
-                                <select name="categoria_id" id="categoria_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($categorias as $categoria):?>
-
-                                        <option value="<?php echo $categoria->id?>"><?php echo $categoria->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
                             <div class="form-group <?php echo !empty(form_error('codigo_barras')) ? 'has-error':'';?>">
                                 <label for="codigo_barras">Codigo de Barra:</label>
                                 <input type="text" class="form-control" id="codigo_barras" name="codigo_barras" required value="<?php echo set_value('codigo_barras');?>">
@@ -45,77 +79,13 @@
                                 <input type="text" class="form-control" id="nombre" name="nombre" required value="<?php echo set_value('nombre');?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
-                            <div class="form-group">
-                                <label for="fabricante_id">Fabricante:</label>
-                                <select name="fabricante_id" id="fabricante_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($fabricantes as $fabricante):?>
-
-                                        <option value="<?php echo $fabricante->id?>"><?php echo $fabricante->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="year_id">Año:</label>
-                                <select name="year_id" id="year_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($years as $year):?>
-
-                                        <option value="<?php echo $year->id?>"><?php echo $year->year;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                        
-                            <div class="form-group">
-                                <label for="">Imagen del producto:</label>
-                                <input type="file" name="imagen" required="required" class="form-control" accept=".jpg, .png, .gif">
-                            </div>
                                 
-                            <div class="form-group ">
-                                <label for="stock_minimo">Stock Minimo:</label>
-                                <input type="text" class="form-control" id="stock_minimo" name="stock_minimo">
-                            </div>
-                        
+                                    
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="subcategoria_id">Subcategoria:</label>
-                                <select name="subcategoria_id" id="subcategoria_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                </select>
-                            </div>
-                            
                             <div class="form-group ">
                                 <label for="descripcion">Descripcion:</label>
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="modelo_id">Modelo:</label>
-                                <select name="modelo_id" id="modelo_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($modelos as $modelo):?>
-
-                                        <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="presentacion_id">Presentacion:</label>
-                                <select name="presentacion_id" id="presentacion_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($presentaciones as $presentacion):?>
-                                        <option value="<?php echo $presentacion->id?>"><?php echo $presentacion->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="marca_id">Marca:</label>
-                                <select name="marca_id" id="marca_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($marcas as $marca):?>
-                                        <option value="<?php echo $marca->id?>"><?php echo $marca->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="calidad_id">Calidad:</label>
@@ -127,19 +97,46 @@
                                     <?php endforeach;?>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="modelos">Compatibilidad:</label>
-                                <select name="modelos[]" id="modelos" class="form-control select2" multiple="multiple">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($modelos as $modelo):?>
-
-                                        <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            
                         </div>
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Imagen del producto:</label>
+                                <input type="file" name="imagen" required="required" class="form-control" accept=".jpg, .png, .gif">
+                            </div>
+                            <div class="form-group ">
+                                <label for="stock_minimo">Stock Minimo:</label>
+                                <input type="text" class="form-control" id="stock_minimo" name="stock_minimo">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group text-center">
+                                <button type="button" class="btn btn-primary btn-add-compatibilidad">
+                                    <span class="fa fa-plus"></span>
+                                    Agregar Compatibilidad
+                                </button>
+                            </div> 
+                            <table class="table table-bordered" id="tbCompatibilidades">
+                                <thead>
+                                    <tr>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Año/Rango de Año</th>
+                                        <th>Valor del Año</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Productos a Asociar</label>
                                 <input type="text" id="productosA" class="form-control">
@@ -156,7 +153,8 @@
                                     
                                 </tbody>
                             </table>
-                            
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Tipo de Precios</label>
                                 <input type="text" id="tipo_precios" class="form-control">
@@ -175,7 +173,6 @@
                                 </tbody>
                             </table>
                             <p class="text-muted">Nota: Si no se declara un tipo de precio para este producto, la información de este no se visualizara en la parte de compras y ventas</p>
-
                         </div>
                     </div>
                     <div class="row">

@@ -29,12 +29,9 @@ class Productos extends CI_Controller {
 	public function add(){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"categorias" => $this->Comun_model->get_records("categorias","estado=1"), 
 			"years" => $this->Comun_model->get_records("years","estado=1"), 
-			"presentaciones" => $this->Comun_model->get_records("presentaciones","estado=1"), 
 			"modelos" => $this->Comun_model->get_records("modelos","estado=1"), 
 			"marcas" => $this->Comun_model->get_records("marcas","estado=1"), 
-			"fabricantes" => $this->Comun_model->get_records("fabricantes","estado=1"), 
 			"calidades" => $this->Comun_model->get_records("calidades","estado=1"), 
 			"tipo_precios" => $this->Comun_model->get_records("precios","estado=1"), 
 
@@ -340,5 +337,11 @@ class Productos extends CI_Controller {
 	   	$file = Zend_Barcode::draw('code128', 'image', array('text' => $codigo_barras), array());
 	   	//$code = time().$code;
 	   	$store_image = imagepng($file,"./assets/barcode/{$codigo_barras}.png");
+	}
+
+	public function get_modelos(){
+		$marca_id = $this->input->post("marca_id");
+		$modelos = $this->Comun_model->get_records("modelos", "marca_id=".$marca_id);
+		echo json_encode($modelos);
 	}
 }

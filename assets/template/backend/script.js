@@ -1,6 +1,54 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("change", ".marcas", function(){
+        var value = $(this).val();
+        var column = $(this).closest("tr").children("td:eq(1)").find("select");
+        $.ajax({
+            url :  base_url + "almacen/productos/get_modelos",
+            type: "POST",
+            data:{marca_id: value},
+            dataType: "json",
+            success: function (data) {
+                var html = "";
+                $.each(data, function(key, value){
+                    html += "<option value='"+value.id+"'>"+value.nombre+"</option>"
+                });
+                console.log(html);
+
+                column.html(html);
+            }
+        });
+    });
+    $(document).on("change", ".range_year", function(){
+        var value = $(this).val();
+
+        if (value == "1") {
+            $(this).closest("tr").children("td:eq(3)").find("span").show();
+            $(this).closest("tr").children("td:eq(3)").find(".year_until").show();
+        }else{
+            $(this).closest("tr").children("td:eq(3)").find("span").hide();
+            $(this).closest("tr").children("td:eq(3)").find(".year_until").hide();
+        }
+        
+    });
+    $(document).on("click",".btn-add-compatibilidad", function(){
+        var select_marcas = $("#html-select-marcas").html();
+        var select_modelos = $("#html-select-modelos").html();
+        var select_range = $("#html-select-range").html();
+        var html_years = $("#html-years").html();
+        var html_button = $("#html-button").html();
+
+        var html = "<tr>";
+        html += "<td>"+select_marcas+"</td>"
+        html += "<td>"+select_modelos+"</td>"
+        html += "<td>"+select_range+"</td>"
+        html += "<td>"+html_years+"</td>"
+        html += "<td>"+html_button+"</td>"
+        html += "</tr>"
+
+        $("#tbCompatibilidades tbody").append(html);
+    });
     $(document).on("click", ".btn-check-all-products", function(){
         productos = $(this).val();
         infoRestantes = productos.split(",");

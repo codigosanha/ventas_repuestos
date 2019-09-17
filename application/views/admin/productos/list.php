@@ -32,14 +32,8 @@
                                     <th>Cod. Barras</th>
                                     <th>Imagen</th>
                                     <th>Nombre</th>
-                                    <th>Fabricante</th>
-                                    <th>Modelo</th>
-                                    <th>Marca</th>
-                                    <th>Año</th>
-                                    <th>Presentacion</th>
+                                    <th>Calidad</th>
                                     <th>Stock Minimo</th>
-                                    <th>Categoria</th>
-                                    <th>Subcategoria</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -52,18 +46,10 @@
                                             <td>
                                                 <img src="<?php echo base_url().'assets/barcode/'.$producto->codigo_barras.".png";?>" alt="">
                                             </td>
-                                            <td><img src="<?php echo base_url().'assets/imagenes_productos/'.$producto->imagen;?>" alt="<?php echo $producto->nombre?>" style="width: 100px; " class="img-responsive"></td>           
+                                            <td><img src="<?php echo base_url().'assets/imagenes_productos/'.$producto->imagen;?>" alt="<?php echo $producto->nombre?>" style="width: 100px; " class="img-responsive"></td>
                                             <td><?php echo $producto->nombre;?></td>
-                                            <td><?php echo get_record("fabricantes","id=".$producto->fabricante_id)->nombre;?></td>
-                                            <td><?php echo get_record("modelos","id=".$producto->modelo_id)->nombre;?></td>
-                                            <td><?php echo get_record("marcas","id=".$producto->marca_id)->nombre;?></td>
-                                            <td><?php echo get_record("years","id=".$producto->year_id)->year;?></td>
-                                            
-                                            
-                                            <td><?php echo get_record("presentaciones","id=".$producto->presentacion_id)->nombre;?></td>
+                                            <td><?php echo get_record("calidades", "id=".$producto->calidad_id)->nombre; ?></td>
                                             <td><?php echo $producto->stock_minimo;?></td>
-                                            <td><?php echo get_record("categorias","id=".$producto->categoria_id)->nombre;?></td>
-                                            <td><?php echo get_record("subcategorias","id=".$producto->subcategoria_id)->nombre;?></td>
                                             <td>
                                                 <div class="btn-group-vertical">
                                                     <button type="button" class="btn btn-default btn-view-barcode" data-toggle="modal" data-target="#modal-default" value="<?php echo $producto->codigo_barras;?>">
