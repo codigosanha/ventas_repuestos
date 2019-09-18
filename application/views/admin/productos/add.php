@@ -58,7 +58,7 @@
                     
                 </div>
                 <div id="html-button" style="display: none;">
-                    <button type="button" class="btn btn-danger btn-remove-compatiblidad">
+                    <button type="button" class="btn btn-danger btn-remove-compatibilidad">
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
@@ -106,7 +106,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Imagen del producto:</label>
-                                <input type="file" name="imagen" required="required" class="form-control" accept=".jpg, .png, .gif">
+                                <input type="file" name="imagen" class="form-control" accept=".jpg, .png, .gif">
                             </div>
                             <div class="form-group ">
                                 <label for="stock_minimo">Stock Minimo:</label>
@@ -114,9 +114,10 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
+               
                     <div class="row">
                         <div class="col-md-12">
+                            <div style="background-color: #f5f5f5;padding: 10px 0px; margin-bottom:10px; ">
                             <div class="form-group text-center">
                                 <button type="button" class="btn btn-primary btn-add-compatibilidad">
                                     <span class="fa fa-plus"></span>
@@ -128,18 +129,19 @@
                                     <tr>
                                         <th>Marca</th>
                                         <th>Modelo</th>
-                                        <th>Año/Rango de Año</th>
-                                        <th>Valor del Año</th>
-                                        <th></th>
+                                        <th width="180px">Año/Rango de Año</th>
+                                        <th width="250px;">Valor del Año</th>
+                                        <th width="10px"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                    
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
-                    <hr>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">

@@ -1,6 +1,9 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    $(document).on("click", ".btn-remove-compatibilidad", function(){
+        $(this).closest("tr").remove();
+    });
     $(document).on("change", ".marcas", function(){
         var value = $(this).val();
         var column = $(this).closest("tr").children("td:eq(1)").find("select");
@@ -17,6 +20,26 @@ $(document).ready(function () {
                 console.log(html);
 
                 column.html(html);
+            }
+        });
+    });
+
+    $(document).on("change", "#marca", function(){
+        var value = $(this).val();
+        $.ajax({
+            url :  base_url + "movimientos/ventas/get_modelos",
+            type: "POST",
+            data:{marca_id: value},
+            dataType: "json",
+            success: function (data) {
+                var html = "<option value=''>Seleccione Modelo</option>";
+                $.each(data, function(key, value){
+                    html += "<option value='"+value.id+"'>"+value.nombre+"</option>"
+                });
+              
+
+                $("#modelo").html(html);
+                cargarProductos();
             }
         });
     });
@@ -76,7 +99,7 @@ $(document).ready(function () {
         imagen = "<img class='img-responsive' src='"+base_url+"assets/imagenes_productos/"+data[1]+"' style='width:100%;'>";
         $("#modal-image .modal-body").html(imagen);
     })
-    $("#year,#modelo,#marca").on("change", function(){
+    $("#year,#modelo").on("change", function(){
         cargarProductos();
     });
     $("#btn-buscarProductos").on("click", function(){
@@ -1606,20 +1629,9 @@ $(document).ready(function () {
                         {"data" : "nombre"},
                         {"data" : "localizacion"},
                         
-                        {"data" : "categoria"},
                         {"data" : "year"},
                         {"data" : "marca"},
                         {"data" : "modelo"},
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var compatibilidades = "";
-                                $.each(row.compatibilidades, function(key, value){
-                                    compatibilidades += value.nombre + "<br>";
-                                });
-                                return compatibilidades;
-                            }
-                        }, 
                         {
                             mRender: function (data, type, row) {
                                 

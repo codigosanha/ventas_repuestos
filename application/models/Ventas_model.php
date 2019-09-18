@@ -349,21 +349,24 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo){
-		$this->db->select("bsp.*");
-		$this->db->from("bodega_sucursal_producto bsp");
-		$this->db->join("productos p","bsp.producto_id = p.id");
+		$this->db->select("p.*,bsp.stock,bsp.localizacion,mar.nombre as marca,mod.nombre as modelo, c.year_from,c.year_until, c.range_year");
+		$this->db->from("compatibilidades c");
+		$this->db->join("productos p","c.producto_id = p.id");
+		$this->db->join("bodega_sucursal_producto bsp","bsp.producto_id = p.id");
+		$this->db->join("marcas mar","c.marca_id = mar.id");
+		$this->db->join("modelos mod","c.modelo_id = mod.id");
 		$this->db->where("bsp.sucursal_id",$sucursal_id);
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");
 		$this->db->where("bsp.stock >=", 1);
 		if (!empty($year)) {
-			$this->db->where("p.year_id",$year);
+			$this->db->like("c.concat_year",$year);
 		}
 		if (!empty($marca)) {
-			$this->db->where("p.marca_id",$marca);
+			$this->db->where("c.marca_id",$marca);
 		}
 		if (!empty($modelo)) {
-			$this->db->where("p.modelo_id",$modelo);
+			$this->db->where("c.modelo_id",$modelo);
 		}
 		$resultados = $this->db->get();
 		return $resultados->result();

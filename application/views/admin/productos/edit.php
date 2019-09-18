@@ -13,6 +13,55 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
+                <div id="html-select-marcas" style="display: none;">
+                   
+                    <select name="marcas[]" class="marcas form-control" required="required">
+                        <option value="">Seleccione</option>
+                        <?php foreach ($marcas as $marca): ?>
+                            <option value="<?php echo $marca->id; ?>"><?php echo $marca->nombre; ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div id="html-select-modelos" style="display: none;">
+                    <select name="modelos[]" class="modelos form-control" required="required">
+                        <option value="">Seleccione</option>
+                    </select>
+                </div>
+                <div id="html-select-range" style="display: none;">
+                    <select name="range_year[]" class="range_year form-control">
+                        <option value="0">Año</option>
+                        <option value="1">Rango de Años</option>
+                        
+                    </select>
+                </div>
+                <div id="html-years" style="display: none;">
+                    
+                      
+                        <select name="year_from[]" class="form-control year_from">
+                            <?php 
+                                $year_from = 1975; 
+                                $year_until = date("Y") + 5;
+                            ?>
+
+                            <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
+                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
+                            
+                        </select>
+                        <span style="display: none">-</span>
+                        <select name="year_until[]" class="form-control year_until" style="display: none; ">
+                            <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
+                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
+                            
+                        </select>
+                    
+                </div>
+                <div id="html-button" style="display: none;">
+                    <button type="button" class="btn btn-danger btn-remove-compatibilidad">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
                 
                 <form action="<?php echo base_url();?>almacen/productos/update" method="POST" enctype="multipart/form-data">
                     <input type="hidden" id="idProducto" name="idProducto" value="<?php echo $producto->id;?>">
@@ -25,27 +74,6 @@
                     <?php endif;?>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="categoria_id">Categoria:</label>
-                                <select name="categoria_id" id="categoria_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($categorias as $categoria):?>
-
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('categoria_id') && $categoria->id == set_value('categoria_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($categoria->id == $producto->categoria_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-
-                                        <option value="<?php echo $categoria->id?>" <?php echo $selected;?>><?php echo $categoria->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
                             <div class="form-group <?php echo !empty(form_error('codigo_barras')) ? 'has-error':'';?>">
                                 <label for="codigo_barras">Codigo de Barra:</label>
                                 <input type="text" class="form-control" id="codigo_barras" name="codigo_barras" required value="<?php echo set_value('codigo_barras')?:$producto->codigo_barras;?>">
@@ -56,138 +84,12 @@
                                 <label for="nombre">Nombre:</label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" required value="<?php echo set_value('nombre')?:$producto->nombre;?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
-                            </div>
-                            <div class="form-group">
-                                <label for="fabricante_id">Fabricante:</label>
-                                <select name="fabricante_id" id="fabricante_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($fabricantes as $fabricante):?>
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('fabricante_id') && $fabricante->id == set_value('fabricante_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($fabricante->id == $producto->fabricante_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $fabricante->id?>" <?php echo $selected;?>><?php echo $fabricante->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="year_id">Año:</label>
-                                <select name="year_id" id="year_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($years as $year):?>
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('year_id') && $year->id == set_value('year_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($year->id == $producto->year_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $year->id?>" <?php echo $selected;?>><?php echo $year->year;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                        
-                            <div class="form-group">
-                                <label for="">Imagen del producto:</label>
-                                <input type="file" name="imagen" required="required" class="form-control" accept=".jpg, .png, .gif">
-                            </div>
-                                
-                            <div class="form-group ">
-                                <label for="stock_minimo">Stock Minimo:</label>
-                                <input type="text" class="form-control" id="stock_minimo" name="stock_minimo" required="required" value="<?php echo set_value('stock_minimo')?:$producto->stock_minimo;?>">
-                            </div>
-                        
+                            </div>  
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="subcategoria_id">Subcategoria:</label>
-                                <select name="subcategoria_id" id="subcategoria_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($subcategorias as $subcategoria):?>
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('subcategoria_id') && $subcategoria->id == set_value('subcategoria_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($subcategoria->id == $producto->subcategoria_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $subcategoria->id?>" <?php echo $selected;?>><?php echo $subcategoria->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            
                             <div class="form-group ">
                                 <label for="descripcion">Descripcion:</label>
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" required value="<?php echo set_value('descripcion')?:$producto->descripcion;?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="modelo_id">Modelo:</label>
-                                <select name="modelo_id" id="modelo_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($modelos as $modelo):?>
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('modelo_id') && $modelo->id == set_value('modelo_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($modelo->id == $producto->modelo_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $modelo->id?>" <?php echo $selected;?>><?php echo $modelo->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="presentacion_id">Presentacion:</label>
-                                <select name="presentacion_id" id="presentacion_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($presentaciones as $presentacion):?>
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('presentacion_id') && $presentacion->id == set_value('presentacion_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($presentacion->id == $producto->presentacion_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $presentacion->id?>" <?php echo $selected;?>><?php echo $presentacion->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="marca_id">Marca:</label>
-                                <select name="marca_id" id="marca_id" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($marcas as $marca):?>
-                                        <?php 
-                                            $selected ='';
-                                            if (set_value('marca_id') && $marca->id == set_value('marca_id')){
-                                                $selected = 'selected';
-                                            }else{
-                                                if ($marca->id == $producto->marca_id) {
-                                                    $selected = 'selected';
-                                                }
-                                            }
-                                        ?>
-                                        <option value="<?php echo $marca->id?>" <?php echo $selected;?>><?php echo $marca->nombre;?></option>
-                                    <?php endforeach;?>
-                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="calidad_id">Calidad:</label>
@@ -208,33 +110,122 @@
                                     <?php endforeach;?>
                                 </select>
                             </div>
-
-                            <?php 
-                                $selecteds = array();
-
-                                if (!empty($compatibilidades)){
-                                    foreach ($compatibilidades as $compatibilidad){
-                                        $selecteds[] = $compatibilidad->modelo_id;
-                                    }
-                                }
-
-                                $modelosFormatted = array();
-
-                                if (!empty($modelos)) {
-                                    foreach ($modelos as $m) {
-                                        $modelosFormatted[$m->id] = $m->nombre; 
-                                    }
-                                }
-                            ?>
-
-                            <div class="form-group">
-                                <label for="modelos">Compatibilidad:</label>
-                                <?php echo form_multiselect('modelos[]', $modelosFormatted, $selecteds, 'id="modelos" class="form-control select2"');?>
-                               
-                            </div>
-                            
                         </div>
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Imagen del producto:</label>
+                                <input type="file" name="imagen" class="form-control" accept=".jpg, .png, .gif">
+                            </div>
+                            <div class="form-group ">
+                                <label for="stock_minimo">Stock Minimo:</label>
+                                <input type="text" class="form-control" id="stock_minimo" name="stock_minimo" required="required" value="<?php echo set_value('stock_minimo')?:$producto->stock_minimo;?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div style="background-color: #f5f5f5;padding: 10px 0px; margin-bottom:10px; ">
+                            <div class="form-group text-center">
+                                <button type="button" class="btn btn-primary btn-add-compatibilidad">
+                                    <span class="fa fa-plus"></span>
+                                    Agregar Compatibilidad
+                                </button>
+                            </div> 
+                            <table class="table table-bordered" id="tbCompatibilidades">
+                                <thead>
+                                    <tr>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th width="180px">Año/Rango de Año</th>
+                                        <th width="250px;">Valor del Año</th>
+                                        <th width="10px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   <?php foreach ($compatibilidades as $comp): ?>
+                                       <tr>
+                                           <td>
+                                                <select name="marcas[]" class="marcas form-control" required="required">
+
+                                                    <option value="">Seleccione</option>
+                                                    <?php foreach ($marcas as $marca): ?>
+                                                        <?php  
+                                                            $selected = '';
+                                                            if ($comp->marca_id == $marca->id) {
+                                                                $selected = 'selected';
+                                                            }
+                                                        ?>
+                                                        <option value="<?php echo $marca->id; ?>" <?php echo $selected; ?>><?php echo $marca->nombre; ?></option>
+                                                    <?php endforeach ?>
+                                                </select>
+                                           </td>
+                                           <td>
+                                                <?php  
+                                                    $modelos = get_records("modelos","marca_id=".$comp->marca_id);
+                                                ?>
+                                                <select name="modelos[]" class="modelos form-control" required="required">
+                                                    <?php foreach ($modelos as $modelo): ?>
+                                                        <?php  
+                                                            $selected = '';
+                                                            if ($modelo->id == $comp->modelo_id) {
+                                                                $selected = 'selected';
+                                                            }
+                                                        ?>
+                                                        <option value="<?php echo $modelo->id ?>" <?php echo $selected ?>><?php echo $modelo->nombre ?></option>
+                                                    <?php endforeach ?>
+                                                </select>
+                                           </td>
+                                           <td>
+                                                <select name="range_year[]" class="range_year form-control">
+                                                    <option value="0" <?php echo $comp->range_year == "0" ? "selected":"";?>>Año</option>
+                                                    <option value="1" <?php echo $comp->range_year == "1" ? "selected":"";?>>Rango de Años</option>
+                                                    
+                                                </select>
+                                           </td>
+                                           <td>
+                                                <select name="year_from[]" class="form-control year_from">
+                                                <?php 
+                                                    $year_from = 1975; 
+                                                    $year_until = date("Y") + 5;
+                                                ?>
+
+                                                <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
+                                                    $selected = '';
+                                                    if ($comp->year_from == $i) {
+                                                        $selected = 'selected';
+                                                    }
+                                                ?>
+                                                    <option value="<?php echo $i ?>" <?php echo $selected; ?>><?php echo $i ?></option>
+                                                <?php } ?>
+                                                
+                                            </select>
+                                            <span style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?>">-</span>
+                                            <select name="year_until[]" class="form-control year_until" style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?> ">
+                                                <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
+                                                    $selected = '';
+                                                    if ($comp->year_until == $i) {
+                                                        $selected = 'selected';
+                                                    }
+                                                ?>
+                                                    <option value="<?php echo $i ?>" <?php echo $selected ?>><?php echo $i ?></option>
+                                                <?php } ?>
+                                                
+                                            </select>
+                                           </td>
+                                           <td>
+                                                <button type="button" class="btn btn-danger btn-remove-compatibilidad">
+                                                    <span class="fa fa-times"></span>
+                                                </button>
+                                           </td>
+                                       </tr>
+                                   <?php endforeach ?>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Productos a Asociar</label>
                                 <input type="text" id="productosA" class="form-control">
@@ -259,7 +250,8 @@
                                     <?php endif ?>
                                 </tbody>
                             </table>
-                            
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Tipo de Precios</label>
                                 <input type="text" id="tipo_precios" class="form-control">
@@ -287,9 +279,9 @@
                                 </tbody>
                             </table>
                             <p class="text-muted">Nota: Si no se declara un tipo de precio para este producto, la información de este no se visualizara en la parte de compras y ventas</p>
-
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">

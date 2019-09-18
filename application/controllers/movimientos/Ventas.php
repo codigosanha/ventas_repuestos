@@ -307,21 +307,23 @@ class Ventas extends CI_Controller {
 		$productos = $this->Ventas_model->searchProducto($sucursal_id,$bodega_id,$year,$marca,$modelo);
 		$data = array();
 		foreach ($productos as $p) {
-			$producto = get_record("productos", "id=".$p->producto_id);
+			if ($p->range_year) {
+				$year = $p->year_from ."-".$p->year_until; 
+			}else{
+				$year = $p->year_from;
+			}
+		
 			$data[] = array(
-				"producto_id" => $p->producto_id,
-				"nombre" => $producto->nombre,
-				"codigo_barras" => $producto->codigo_barras,
-				"imagen" => $producto->imagen,
+				"producto_id" => $p->id,
+				"nombre" => $p->nombre,
+				"codigo_barras" => $p->codigo_barras,
 				"stock" => $p->stock,
-				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
-				"imagen" => $producto->imagen,
+				"precios" => $this->Ventas_model->getPrecios($p->id),
+				"imagen" => $p->imagen,
 				"localizacion" => $p->localizacion,
-				"year" => get_record("years","id=".$producto->year_id)->year,
-				"marca" => get_record("marcas","id=".$producto->marca_id)->nombre,
-				"modelo" => get_record("modelos","id=".$producto->modelo_id)->nombre,
-				"categoria" => get_record("categorias","id=".$producto->categoria_id)->nombre,
-				"compatibilidades" => $this->Ventas_model->getCompatibilidadesProducto($p->producto_id)
+				"year" => $year,
+				"marca" => $p->marca,
+				"modelo" => $p->modelo,				
 			);
 		}
 		echo json_encode($data);
@@ -406,5 +408,11 @@ class Ventas extends CI_Controller {
                     );
             
         echo json_encode($json_data); 
+	}
+
+	public function get_modelos(){
+		$marca_id = $this->input->post("marca_id");
+		$modelos = $this->Comun_model->get_records("modelos", "marca_id=".$marca_id);
+		echo json_encode($modelos);
 	}
 }

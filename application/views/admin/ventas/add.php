@@ -406,9 +406,14 @@
                 <div class="form-group col-md-3">
                     <select name="year" id="year" class="form-control">
                         <option value="">Seleccione Año...</option>
-                        <?php foreach ($years as $year): ?>
-                            <option value="<?php echo $year->id?>"><?php echo $year->year;?></option>
-                        <?php endforeach ?>
+                        <?php 
+                            $year_from = 1975; 
+                            $year_until = date("Y") + 5;
+                        ?>
+
+                        <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
+                            <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                        <?php } ?>
                     </select>
                 </div>
                 <div class="form-group col-md-3">
@@ -423,27 +428,24 @@
                 <div class="form-group col-md-3">
                     <select name="modelo" id="modelo" class="form-control">
                         <option value="">Seleccione Modelo...</option>
-                        <?php foreach ($modelos as $modelo): ?>
-                            <option value="<?php echo $modelo->id?>"><?php echo $modelo->nombre;?></option>
-                        <?php endforeach ?>
+                        
 
                     </select>
                 </div>
             </div>
         </form>
         <div class="table-responsive">
-            <table class="table table-bordered" id="tbProductos">
+            <table class="table table-bordered" id="tbProductos" width="100%">
                 <thead>
                     <tr>
                         <th>Codigo</th>
                         <th>Imagen</th>
                         <th>Producto</th>
                         <th>Localizacion</th>
-                        <th>Categoria</th>
                         <th>Año</th>
                         <th>Marca</th>
                         <th>Modelo</th>
-                        <th>Compatibilidades</th>
+                        
                         <th width="10">&nbsp;</th>
                     </tr>
                 </thead>
