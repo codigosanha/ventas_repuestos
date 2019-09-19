@@ -38,9 +38,10 @@
                             </thead>
                             <tbody>
                                 <?php if(!empty($bodegas)):?>
+                                    <?php $i= 1; ?>
                                     <?php foreach($bodegas as $bodega):?>
                                         <tr>
-                                            <td><?php echo $bodega->id;?></td>
+                                            <td><?php echo $i;?></td>
                                             <td><?php echo get_record("bodegas","id=".$bodega->bodega_id)->nombre;?></td>
                                             <?php if (!$this->session->userdata("sucursal")): ?>
                                                 <td><?php echo get_record("sucursales","id=".$bodega->sucursal_id)->nombre;?></td>
@@ -63,6 +64,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <?php $i++; ?>
                                     <?php endforeach;?>
                                 <?php endif;?>
                             </tbody>

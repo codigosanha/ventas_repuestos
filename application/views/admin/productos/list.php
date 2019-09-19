@@ -25,10 +25,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                        <table id="tableSimple" class="table table-bordered table-hover">
+                        <table id="tableProductos" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th>Cod. Barras</th>
                                     <th>Imagen</th>
                                     <th>Nombre</th>
@@ -41,8 +40,6 @@
                                 <?php if(!empty($productos)):?>
                                     <?php foreach($productos as $producto):?>
                                          <tr>
-                                            <td><?php echo $producto->id;?></td>
-                                             <!--echo img(array('src'=>'image/picture.jpg', 'alt'=> 'alt information')); -->
                                             <td>
                                                 <img src="<?php echo base_url().'assets/barcode/'.$producto->codigo_barras.".png";?>" alt="">
                                             </td>

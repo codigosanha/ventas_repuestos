@@ -1,6 +1,21 @@
 $(document).ready(function () {
     $('.select2').select2();
     //new code - Compra
+    var datatable_spanish  = {
+            "lengthMenu": "Mostrar _MENU_ registros por pagina",
+            "zeroRecords": "No se encontraron resultados en su busqueda",
+            "searchPlaceholder": "Buscar registros",
+            "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
+            "infoEmpty": "No existen registros",
+            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "search": "Buscar:",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+        };
     $(document).on("click", ".btn-remove-compatibilidad", function(){
         $(this).closest("tr").remove();
     });
@@ -1436,21 +1451,7 @@ $(document).ready(function () {
             }
         ],
 
-        language: {
-            "lengthMenu": "Mostrar _MENU_ registros por pagina",
-            "zeroRecords": "No se encontraron resultados en su busqueda",
-            "searchPlaceholder": "Buscar registros",
-            "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-            "infoEmpty": "No existen registros",
-            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "search": "Buscar:",
-            "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            },
-        }
+        language: datatable_spanish
     });
     $('#inventario').DataTable( {
         dom: 'Bfrtip',
@@ -1481,21 +1482,7 @@ $(document).ready(function () {
             }
         ],
 
-        language: {
-            "lengthMenu": "Mostrar _MENU_ registros por pagina",
-            "zeroRecords": "No se encontraron resultados en su busqueda",
-            "searchPlaceholder": "Buscar registros",
-            "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-            "infoEmpty": "No existen registros",
-            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "search": "Buscar:",
-            "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            },
-        }
+        language: datatable_spanish
     });
 
     $('#inventario-productos').DataTable( {
@@ -1558,40 +1545,12 @@ $(document).ready(function () {
                 
             }
         ],
-        language: {
-            "lengthMenu": "Mostrar _MENU_ registros por pagina",
-            "zeroRecords": "No se encontraron resultados en su busqueda",
-            "searchPlaceholder": "Buscar registros",
-            "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-            "infoEmpty": "No existen registros",
-            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "search": "Buscar:",
-            "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            },
-        }
+        language: datatable_spanish
     });
  
     $('#tableSimple').DataTable({
         "pageLength": 25,
-        "language": {
-            "lengthMenu": "Mostrar _MENU_ registros por pagina",
-            "zeroRecords": "No se encontraron resultados en su busqueda",
-            "searchPlaceholder": "Buscar registros",
-            "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-            "infoEmpty": "No existen registros",
-            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "search": "Buscar:",
-            "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            },
-        }
+        "language": datatable_spanish
     });
     function cargarProductos(){
         bodega = $("#bodega").val();
@@ -1642,22 +1601,6 @@ $(document).ready(function () {
 
                     ],
                 });
-               /*html = "";
-                    $.each(data, function(key, value){
-                        html += "<tr>";
-                        html += "<td>"+value.codigo_barras+"</td>";
-                        html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+value.nombre+"*"+value.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
-                        html += "<td>"+value.nombre+"</td>";
-                        html += "<td>"+value.localizacion+"</td>";
-                        html += "<td>"+value.categoria+"</td>";
-                        html += "<td>"+value.year+"</td>";
-                        html += "<td>"+value.marca+"</td>";
-                        html += "<td>"+value.modelo+"</td>";
-                        html += "<td><button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>";
-                        html += "</tr>";
-                    });
-                    $("#tbProductos tbody").html(html);*/
-                
             }
         });
     }
@@ -1673,21 +1616,13 @@ $(document).ready(function () {
     $('.modal:visible').length && $(document.body).addClass('modal-open');
 });
     $('.example1').DataTable({
-        "language": {
-            "lengthMenu": "Mostrar _MENU_ registros por pagina",
-            "zeroRecords": "No se encontraron resultados en su busqueda",
-            "searchPlaceholder": "Buscar registros",
-            "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-            "infoEmpty": "No existen registros",
-            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "search": "Buscar:",
-            "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            },
-        }
+        "language": datatable_spanish
+    });
+
+    $('#tableProductos').DataTable({
+        "language": datatable_spanish,
+        "order": [[ 2, "asc" ]]
+
     });
 
     $('.sidebar-menu').tree();
