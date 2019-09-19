@@ -37,32 +37,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if(!empty($productos)):?>
-                                    <?php foreach($productos as $producto):?>
-                                         <tr>
-                                            <td>
-                                                <img src="<?php echo base_url().'assets/barcode/'.$producto->codigo_barras.".png";?>" alt="">
-                                            </td>
-                                            <td><img src="<?php echo base_url().'assets/imagenes_productos/'.$producto->imagen;?>" alt="<?php echo $producto->nombre?>" style="width: 100px; " class="img-responsive"></td>
-                                            <td><?php echo $producto->nombre;?></td>
-                                            <td><?php echo get_record("calidades", "id=".$producto->calidad_id)->nombre; ?></td>
-                                            <td><?php echo $producto->stock_minimo;?></td>
-                                            <td>
-                                                <div class="btn-group-vertical">
-                                                    <button type="button" class="btn btn-default btn-view-barcode" data-toggle="modal" data-target="#modal-default" value="<?php echo $producto->codigo_barras;?>">
-                                                        <span class="fa fa-barcode"></span>
-                                                    </button>
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $producto->id;?>">
-                                                        <span class="fa fa-search"></span>
-                                                    </button>
-                                                    <a href="<?php echo base_url()?>almacen/productos/edit/<?php echo $producto->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>almacen/productos/delete/<?php echo $producto->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach;?>
-                                <?php endif;?>
+                                
                             </tbody>
                         </table>
                        </div>

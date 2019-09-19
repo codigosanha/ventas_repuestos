@@ -26,14 +26,73 @@ class Productos extends CI_Controller {
 
 	}
 
+
+	public function getProducts()
+	{
+		$columns = array( 
+                            0 =>'p.codigo_barras', 
+                            1 =>'p.imagen',
+                            2=> 'p.nombre',
+                            3=> 'c.nombre',
+                            4=> 'p.stock_minimo',
+                        );
+
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Productos_model->allproductos_count();
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Productos_model->allproductos($limit,$start,$order,$dir);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Productos_model->productos_search($limit,$start,$search,$order,$dir);
+
+            $totalFiltered = $this->Productos_model->productos_search_count($search);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+            foreach ($productos as $producto)
+            {
+
+                $nestedData['id'] = $producto->id;
+                $nestedData['nombre'] = $producto->nombre;
+                $nestedData['imagen'] = $producto->imagen;
+                $nestedData['codigo_barras'] = $producto->codigo_barras;
+                $nestedData['calidad'] = $producto->calidad;
+                $nestedData['stock_minimo'] = $producto->stock_minimo;
+               
+                $data[] = $nestedData;
+            }
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
+	}
+
 	public function add(){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"years" => $this->Comun_model->get_records("years","estado=1"), 
-			"modelos" => $this->Comun_model->get_records("modelos","estado=1"), 
-			"marcas" => $this->Comun_model->get_records("marcas","estado=1"), 
-			"calidades" => $this->Comun_model->get_records("calidades","estado=1"), 
-			"tipo_precios" => $this->Comun_model->get_records("precios","estado=1"), 
+			"modelos" => $this->Comun_model->get_records("modelos","estado=1 "), 
+			"marcas" => $this->Comun_model->get_records("marcas","estado='1' ORDER BY nombre"), 
+			"calidades" => $this->Comun_model->get_records("calidades","estado='1' ORDER BY nombre"), 
+			"tipo_precios" => $this->Comun_model->get_records("precios","estado='1' ORDER BY nombre"), 
 
 		);
 		$contenido_externo = array(
@@ -335,7 +394,7 @@ class Productos extends CI_Controller {
 
 	public function get_modelos(){
 		$marca_id = $this->input->post("marca_id");
-		$modelos = $this->Comun_model->get_records("modelos", "marca_id=".$marca_id);
+		$modelos = $this->Comun_model->get_records("modelos", "marca_id='".$marca_id."' ORDER BY nombre");
 		echo json_encode($modelos);
 	}
 }

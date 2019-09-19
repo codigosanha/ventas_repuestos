@@ -397,21 +397,6 @@ $(document).ready(function () {
                             { "data": "codigo_barras" },
                         ]
                     })
-                    /*html = "";
-                    $.each(data, function(key, value){
-                        html += "<tr>";
-                        html += "<td>"+value.codigo_barras+"</td>";
-                        html += "<td><img src='"+base_url+"assets/imagenes_productos/"+value.imagen+"' width='100px' class='img-responsive'></td>";
-                        html += "<td>"+value.nombre+"</td>";
-                        html += "<td>"+value.localizacion+"</td>";
-                        html += "<td>"+value.categoria+"</td>";
-                        html += "<td>"+value.year+"</td>";
-                        html += "<td>"+value.marca+"</td>";
-                        html += "<td>"+value.modelo+"</td>";
-                        html += "<td><button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(value)+"'><span class='fa fa-check'></span></button></td>";
-                        html += "</tr>";
-                    });
-                    $("#tbProductos tbody").html(html);*/
                 }
             });
         }else{
@@ -1619,10 +1604,55 @@ $(document).ready(function () {
         "language": datatable_spanish
     });
 
-    $('#tableProductos').DataTable({
-        "language": datatable_spanish,
-        "order": [[ 2, "asc" ]]
+    $(document).ready(function () {
+        /*var url_complete = base_url + "filemanager/archivos/getArchivos";
+        if (uri_segment != '') {
+            url_complete = base_url + "filemanager/archivos/getArchivos/"+uri_segment;
+        }*/
+        $('#tableProductos').DataTable({
+            "pageLength": 25,
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+                "url": base_url + "almacen/productos/getProducts",
+                "dataType": "json",
+                "type": "POST",
+                "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
+            },
+            "columns": [
+                {
+                    mRender: function (data, type, row) {
+                        var barcode = '<img src="'+base_url +'assets/barcode/'+ row.codigo_barras+ '.png" alt="'+row.codigo_barras+'">';
+                        return barcode;
+                    }
+                },
+                {
+                    mRender: function (data, type, row) {
+                        var imagen = '<img src="'+base_url + 'assets/imagenes_productos/'+ row.imagen+'" alt="'+row.nombre+'" style="width: 100px; " class="img-responsive">';
+                        return imagen;
+                    }
+                },
+                { "data": "nombre" },
+                { "data": "calidad" },
+                { "data": "stock_minimo" },
+                {
+                    mRender: function (data, type, row) {
+                        var btnViewBarcode = '<button type="button" class="btn btn-default btn-sm btn-view-barcode" data-toggle="modal" data-target="#modal-default" value="'+row.codigo_barras+'">';
+                        btnViewBarcode += '<span class="fa fa-barcode"></span>';
+                        btnViewBarcode += '</button>';
+                        var btnView = '<button type="button" class="btn btn-info btn-sm btn-view" data-toggle="modal" data-target="#modal-default" value="'+row.id+'">';
+                        btnView += '<span class="fa fa-search"></span>';
+                        btnView += '</button>';
+                        var btnEditar = '<a href="'+base_url+'almacen/productos/edit/'+row.id+'" class="btn btn-warning btn-sm btn-flat"><i class="fa fa-pencil"></i></a>';
+                        var btnEliminar = '<a href="'+base_url+'almacen/productos/delete/'+row.id+'" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-times"></i></a>';
+                        return '<div class="btn-group">' +btnViewBarcode+ btnView+ btnEditar +' '+ btnEliminar+ "</div>";
+                    }
+                } 
+            ],
+            "language": datatable_spanish,
+            "order": [[ 2, "asc" ]]
 
+        });
     });
 
     $('.sidebar-menu').tree();
