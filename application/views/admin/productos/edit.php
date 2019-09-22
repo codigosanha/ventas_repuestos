@@ -253,8 +253,20 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Tipo de Precios</label>
-                                <input type="text" id="tipo_precios" class="form-control">
+                                <label for="">Tipo de Precios </label>
+                                <span class="text-muted">(Selecione un tipo de precio y agreguelo al producto)</span>
+                                <div class="input-group">
+                                    <select name="tipo_precios" id="tipo_precios" class="form-control">
+                                        <option value="">Seleccione..</option>
+                                        <?php foreach ($tipo_precios as $tp): ?>
+                                            <option value='<?php echo json_encode($tp) ?>'><?php echo $tp->nombre ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-success btn-agregar-precio">Agregar</button>
+                                    </span>
+                                   
+                                </div>
                             </div>
                             <table class="table table-bordered" id="tbPrecios">
                                 <thead>

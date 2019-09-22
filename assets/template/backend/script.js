@@ -1388,7 +1388,7 @@ $(document).ready(function () {
         html += "<p><strong>Direccion:</strong>"+infocliente[2]+"</p>"
         $("#modal-default .modal-body").html(html);
     });
-    $(".btn-view").on("click", function(){
+    $(document).on("click", ".btn-view", function(){
         modulo = $("#modulo").val();
         var id = $(this).val();
         $.ajax({
@@ -1793,31 +1793,34 @@ $(document).ready(function () {
         },
     });
 
-    $("#tipo_precios").autocomplete({
-        source:function(request, response){
-            $.ajax({
-                url: base_url+"almacen/productos/getPrecios",
-                type: "POST",
-                dataType:"json",
-                data:{ valor: request.term},
-                success:function(data){
-                    response(data);
-                }
-            });
-        },
-        minLength:2,
-        select:function(event, ui){
+    $(document).on("click", ".btn-agregar-precio", function(){
+        if ($("#tipo_precios").val()!="") {
+            var value = JSON.parse($("#tipo_precios").val());
 
-            html =  '<tr>'+
-                        '<td><input type="hidden" name="idPrecios[]" value="'+ ui.item.id +'">'+ ui.item.label +'</td>'+
-                        '<td><input type="text" name="preciosC[]" class="form-control input-xs" required="required"></td>'+
-                        '<td><input type="text" name="preciosV[]" class="form-control input-xs" required="required"></td>'+
+            if (verificarExistenciaPrecio(value.id)) {
+                swal("Error", "El Tipo de precio seleccionado ya fue agregado", "error");
+            }else{
+                html =  '<tr>'+
+                    '<td><input type="hidden" name="idPrecios[]" value="'+ value.id +'">'+ value.nombre +'</td>'+
+                    '<td><input type="text" name="preciosC[]" class="form-control input-xs" required="required"></td>'+
+                    '<td><input type="text" name="preciosV[]" class="form-control input-xs" required="required"></td>'+
 
-                        '<td><button type="button" class="btn btn-danger btn-quitarAsociado btn-xs"><i class="fa fa-times"></i></button></td>'+
-                    '</tr>';
-            $("#tbPrecios tbody").append(html);
-        },
+                    '<td><button type="button" class="btn btn-danger btn-quitarAsociado"><i class="fa fa-times"></i></button></td>'+
+                '</tr>';
+                $("#tbPrecios tbody").append(html);
+            }
+        }
     });
+
+    function verificarExistenciaPrecio(idPrecio){
+        var existencia = false;
+        $('input[name^="idPrecios"]').each(function() {
+            if ($(this).val() == idPrecio) {
+                existencia = true;
+            }
+        });
+        return existencia;
+    }
 
     $(document).on("click", ".btn-quitarprod", function(){
         data = $(this).val();
