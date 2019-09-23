@@ -54,7 +54,7 @@ class Ventas extends CI_Controller {
 			"tarjetas" => $this->Comun_model->get_records("tarjetas","estado=1"),
 			"clientes" => $this->Comun_model->get_records("clientes","estado=1"),
 			"years" => $this->Comun_model->get_records("years","estado=1"),
-			"marcas" => $this->Comun_model->get_records("marcas","estado=1"),
+			"marcas" => $this->Comun_model->get_records("marcas","estado='1' ORDER BY nombre"),
 			"modelos" => $this->Comun_model->get_records("modelos","estado=1"),
 		);
 		$contenido_externo = array(
@@ -321,9 +321,9 @@ class Ventas extends CI_Controller {
 				"precios" => $this->Ventas_model->getPrecios($p->id),
 				"imagen" => $p->imagen,
 				"localizacion" => $p->localizacion,
-				"year" => $year,
-				"marca" => $p->marca,
-				"modelo" => $p->modelo,				
+				"year" => $year != null ? $year:"Genérico",
+				"marca" => $p->marca != null ? $p->marca :"Genérico",
+				"modelo" => $p->modelo != null ? $p->modelo:"Genérico",				
 			);
 		}
 		echo json_encode($data);
@@ -412,7 +412,61 @@ class Ventas extends CI_Controller {
 
 	public function get_modelos(){
 		$marca_id = $this->input->post("marca_id");
-		$modelos = $this->Comun_model->get_records("modelos", "marca_id=".$marca_id);
+		$modelos = $this->Comun_model->get_records("modelos", "marca_id='".$marca_id."' ORDER BY nombre");
 		echo json_encode($modelos);
+	}
+
+	public function infoProducto($producto_id){
+		$data  = array(
+			"producto" => $this->Comun_model->get_record("productos", "id=$producto_id"), 
+		);
+		$this->load->view("admin/productos/view",$data);
+	}
+
+	public function savecliente(){
+		$nombres = $this->input->post("nombres");
+		$apellidos = $this->input->post("apellidos");
+		$cedula = $this->input->post("cedula");
+		$telefono = $this->input->post("telefono");
+		$direccion = $this->input->post("direccion");
+		$nit = $this->input->post("nit");
+		$this->form_validation->set_rules("cedula","Cedula","required|is_unique[clientes.cedula]");
+		if ($nit) {
+			$this->form_validation->set_rules("nit","NIT","required|is_unique[clientes.nit]");
+		}
+
+		$cliente = "";
+
+		if ($this->form_validation->run()==TRUE) {
+
+			$data  = array(
+				"nombres" => $nombres, 
+				"apellidos" => $apellidos,
+				"telefono" => $telefono,
+				"direccion" => $direccion,
+				"nit" => $nit,
+				"cedula" => $cedula,
+				"estado" => "1"
+			);
+			$cliente = $this->Comun_model->insert("clientes", $data);
+			if ($cliente) {
+				$status = "1";
+				
+			}
+			else{
+				$status = "0";
+				$error = "No se pudo registrar el cliente";
+			}
+		}
+		else{
+			$status = "0";
+			$error =  validation_errors();
+		}
+
+		echo json_encode(array(
+			'status' => $status,
+			'error' => $error,
+			'cliente' => $cliente 
+		));
 	}
 }

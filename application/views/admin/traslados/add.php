@@ -106,7 +106,7 @@
                                 </table>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-flat">
+                                <button type="submit" class="btn btn-success btn-flat" id="btn-guardar-traslado">
                                     <span class="fa fa-save"></span> 
                                     Guardar
                                 </button>

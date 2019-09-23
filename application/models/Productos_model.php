@@ -77,6 +77,12 @@ class Productos_model extends CI_Model {
         return $query->num_rows();
     } 
 
+    public function last_id(){
+       $last_row=$this->db->select('id')->order_by('id',"desc")->limit(1)->get('productos')->row();
+       
+       return $last_row->id;
+    }
+
    
 
 }

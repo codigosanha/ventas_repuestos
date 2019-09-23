@@ -262,32 +262,21 @@
                       <!-- /.tab-pane -->
                       <div class="tab-pane" id="tab_2">
                         <form action="<?php echo base_url();?>movimientos/ventas/savecliente" method="POST" id="form-cliente">
-                            <div class="form-group">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                
+                            <div class="alert alert-danger" id="alert-error-cliente" style="display: none;">
+                              
                             </div>
                             <div class="form-group">
-                                <label for="tipocliente">Tipo de Cliente</label>
-                                <select name="tipocliente" id="tipocliente" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($tipoclientes as $tipocliente) :?>
-                                        <option value="<?php echo $tipocliente->id;?>" ><?php echo $tipocliente->nombre ?></option>
-                                    <?php endforeach;?>
-                                </select>
+                                <label for="nombres">Nombres:</label>
+                                <input type="text" class="form-control" id="nombres" name="nombres" required>
                             </div>
                             <div class="form-group">
-                                <label for="tipodocumento">Tipo de Documento</label>
-                                <select name="tipodocumento" id="tipodocumento" class="form-control" required>
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach ($tipodocumentos as $tipodocumento) :?>
-                                        <option value="<?php echo $tipodocumento->id;?>" ><?php echo $tipodocumento->nombre ?></option>
-                                    <?php endforeach;?>
-                                </select>
+                                <label for="apellidos">Apellidos:</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos" required>
                             </div>
+                            
                             <div class="form-group">
-                                <label for="numero">No. de Documento:</label>
-                                <input type="text" class="form-control" id="numero" name="numero" required>
+                                <label for="cedula">cedula:</label>
+                                <input type="text" class="form-control" id="cedula" name="cedula" required>
                             </div>
                             
                             <div class="form-group">
@@ -297,6 +286,11 @@
                             <div class="form-group">
                                 <label for="direccion">Direccion:</label>
                                 <input type="text" class="form-control" id="direccion" name="direccion">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nit">NIT:</label>
+                                <input type="text" class="form-control" id="nit" name="nit" required>
                             </div>
                             
                             <div class="form-group">
@@ -379,6 +373,25 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal-info-producto">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Información del Producto</h4>
       </div>
       <div class="modal-body">
         

@@ -353,8 +353,8 @@ class Ventas_model extends CI_Model {
 		$this->db->from("compatibilidades c");
 		$this->db->join("productos p","c.producto_id = p.id");
 		$this->db->join("bodega_sucursal_producto bsp","bsp.producto_id = p.id");
-		$this->db->join("marcas mar","c.marca_id = mar.id");
-		$this->db->join("modelos mod","c.modelo_id = mod.id");
+		$this->db->join("marcas mar","c.marca_id = mar.id", "left");
+		$this->db->join("modelos mod","c.modelo_id = mod.id", "left");
 		$this->db->where("bsp.sucursal_id",$sucursal_id);
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");

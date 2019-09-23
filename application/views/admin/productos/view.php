@@ -5,7 +5,7 @@
 <p><strong>Calidad:</strong> <?php echo get_record("calidades","id=".$producto->calidad_id)->nombre;?></p>
 
 <?php $compatibilidades = get_records("compatibilidades","producto_id='$producto->id'");?>
-<?php if (!empty($compatibilidades)): ?>
+<?php if (!empty($compatibilidades) && $producto->compatibilidades): ?>
 	<p class="text-center"><strong>Marcas, modelos y años compatibles</strong></p>
 	<table class="table table-bordered">
 		<thead>

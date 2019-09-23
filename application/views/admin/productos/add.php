@@ -75,7 +75,7 @@
                         <div class="col-md-4">
                             <div class="form-group <?php echo !empty(form_error('codigo_barras')) ? 'has-error':'';?>">
                                 <label for="codigo_barras">Codigo de Barra:</label>
-                                <input type="text" class="form-control" id="codigo_barras" name="codigo_barras" required value="<?php echo set_value('codigo_barras');?>">
+                                <input type="text" class="form-control" id="codigo_barras" name="codigo_barras" required value="<?php echo set_value('codigo_barras') ?:"00".($last_id + 1);?>">
                                 <?php echo form_error("codigo_barras","<span class='help-block'>","</span>");?>
                             </div>
                                 
@@ -84,6 +84,8 @@
                                 <input type="text" class="form-control" id="nombre" name="nombre" required value="<?php echo set_value('nombre');?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
+
+                            
                                 
                                     
                         </div>
@@ -114,10 +116,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="">Compatibilidad</label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" name="compatibilidad" value="1" checked>Definir marcas, modelos y años
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="compatibilidad" value="0"> Establecer como genérico
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                
                     <div class="row">
                         <div class="col-md-12">
-                            <div style="background-color: #f5f5f5;padding: 10px 0px; margin-bottom:10px; ">
+                            <div id="content-compatibilidad" style="background-color: #f5f5f5;padding: 10px 0px; margin-bottom:10px; ">
                             <div class="form-group text-center">
                                 <button type="button" class="btn btn-primary btn-add-compatibilidad">
                                     <span class="fa fa-plus"></span>

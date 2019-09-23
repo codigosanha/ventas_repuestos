@@ -123,8 +123,21 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="">Compatibilidad</label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" name="compatibilidad" value="1" <?php echo $producto->compatibilidades == "1" ? "checked":""; ?>>Definir marcas, modelos y años
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="compatibilidad" value="0" <?php echo $producto->compatibilidades == "0" ? "checked":""; ?>> Establecer como genérico
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-12">
-                            <div style="background-color: #f5f5f5;padding: 10px 0px; margin-bottom:10px; ">
+                            <div id="content-compatibilidad" style="background-color: #f5f5f5;padding: 10px 0px; margin-bottom:10px; display: <?php echo $producto->compatibilidades ? "block":"none";?> ">
                             <div class="form-group text-center">
                                 <button type="button" class="btn btn-primary btn-add-compatibilidad">
                                     <span class="fa fa-plus"></span>
@@ -142,83 +155,86 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <?php foreach ($compatibilidades as $comp): ?>
-                                       <tr>
-                                           <td>
-                                                <select name="marcas[]" class="marcas form-control" required="required">
+                                    <?php if ($producto->compatibilidades): ?>
+                                        <?php foreach ($compatibilidades as $comp): ?>
+                                           <tr>
+                                               <td>
+                                                    <select name="marcas[]" class="marcas form-control" required="required">
 
-                                                    <option value="">Seleccione</option>
-                                                    <?php foreach ($marcas as $marca): ?>
-                                                        <?php  
-                                                            $selected = '';
-                                                            if ($comp->marca_id == $marca->id) {
-                                                                $selected = 'selected';
-                                                            }
-                                                        ?>
-                                                        <option value="<?php echo $marca->id; ?>" <?php echo $selected; ?>><?php echo $marca->nombre; ?></option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                           </td>
-                                           <td>
-                                                <?php  
-                                                    $modelos = get_records("modelos","marca_id=".$comp->marca_id);
-                                                ?>
-                                                <select name="modelos[]" class="modelos form-control" required="required">
-                                                    <?php foreach ($modelos as $modelo): ?>
-                                                        <?php  
-                                                            $selected = '';
-                                                            if ($modelo->id == $comp->modelo_id) {
-                                                                $selected = 'selected';
-                                                            }
-                                                        ?>
-                                                        <option value="<?php echo $modelo->id ?>" <?php echo $selected ?>><?php echo $modelo->nombre ?></option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                           </td>
-                                           <td>
-                                                <select name="range_year[]" class="range_year form-control">
-                                                    <option value="0" <?php echo $comp->range_year == "0" ? "selected":"";?>>Año</option>
-                                                    <option value="1" <?php echo $comp->range_year == "1" ? "selected":"";?>>Rango de Años</option>
+                                                        <option value="">Seleccione</option>
+                                                        <?php foreach ($marcas as $marca): ?>
+                                                            <?php  
+                                                                $selected = '';
+                                                                if ($comp->marca_id == $marca->id) {
+                                                                    $selected = 'selected';
+                                                                }
+                                                            ?>
+                                                            <option value="<?php echo $marca->id; ?>" <?php echo $selected; ?>><?php echo $marca->nombre; ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
+                                               </td>
+                                               <td>
+                                                    <?php  
+                                                        $modelos = get_records("modelos","marca_id=".$comp->marca_id);
+                                                    ?>
+                                                    <select name="modelos[]" class="modelos form-control" required="required">
+                                                        <?php foreach ($modelos as $modelo): ?>
+                                                            <?php  
+                                                                $selected = '';
+                                                                if ($modelo->id == $comp->modelo_id) {
+                                                                    $selected = 'selected';
+                                                                }
+                                                            ?>
+                                                            <option value="<?php echo $modelo->id ?>" <?php echo $selected ?>><?php echo $modelo->nombre ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
+                                               </td>
+                                               <td>
+                                                    <select name="range_year[]" class="range_year form-control">
+                                                        <option value="0" <?php echo $comp->range_year == "0" ? "selected":"";?>>Año</option>
+                                                        <option value="1" <?php echo $comp->range_year == "1" ? "selected":"";?>>Rango de Años</option>
+                                                        
+                                                    </select>
+                                               </td>
+                                               <td>
+                                                    <select name="year_from[]" class="form-control year_from">
+                                                    <?php 
+                                                        $year_from = 1975; 
+                                                        $year_until = date("Y") + 5;
+                                                    ?>
+
+                                                    <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
+                                                        $selected = '';
+                                                        if ($comp->year_from == $i) {
+                                                            $selected = 'selected';
+                                                        }
+                                                    ?>
+                                                        <option value="<?php echo $i ?>" <?php echo $selected; ?>><?php echo $i ?></option>
+                                                    <?php } ?>
                                                     
                                                 </select>
-                                           </td>
-                                           <td>
-                                                <select name="year_from[]" class="form-control year_from">
-                                                <?php 
-                                                    $year_from = 1975; 
-                                                    $year_until = date("Y") + 5;
-                                                ?>
-
-                                                <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
-                                                    $selected = '';
-                                                    if ($comp->year_from == $i) {
-                                                        $selected = 'selected';
-                                                    }
-                                                ?>
-                                                    <option value="<?php echo $i ?>" <?php echo $selected; ?>><?php echo $i ?></option>
-                                                <?php } ?>
-                                                
-                                            </select>
-                                            <span style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?>">-</span>
-                                            <select name="year_until[]" class="form-control year_until" style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?> ">
-                                                <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
-                                                    $selected = '';
-                                                    if ($comp->year_until == $i) {
-                                                        $selected = 'selected';
-                                                    }
-                                                ?>
-                                                    <option value="<?php echo $i ?>" <?php echo $selected ?>><?php echo $i ?></option>
-                                                <?php } ?>
-                                                
-                                            </select>
-                                           </td>
-                                           <td>
-                                                <button type="button" class="btn btn-danger btn-remove-compatibilidad">
-                                                    <span class="fa fa-times"></span>
-                                                </button>
-                                           </td>
-                                       </tr>
-                                   <?php endforeach ?>
+                                                <span style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?>">-</span>
+                                                <select name="year_until[]" class="form-control year_until" style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?> ">
+                                                    <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
+                                                        $selected = '';
+                                                        if ($comp->year_until == $i) {
+                                                            $selected = 'selected';
+                                                        }
+                                                    ?>
+                                                        <option value="<?php echo $i ?>" <?php echo $selected ?>><?php echo $i ?></option>
+                                                    <?php } ?>
+                                                    
+                                                </select>
+                                               </td>
+                                               <td>
+                                                    <button type="button" class="btn btn-danger btn-remove-compatibilidad">
+                                                        <span class="fa fa-times"></span>
+                                                    </button>
+                                               </td>
+                                           </tr>
+                                       <?php endforeach ?>
+                                    <?php endif ?>
+                                   
                                 </tbody>
                             </table>
                             </div>

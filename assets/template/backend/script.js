@@ -16,6 +16,27 @@ $(document).ready(function () {
                 "previous": "Anterior"
             },
         };
+
+    $("#btn-guardar-traslado").on("click", function(){
+        if ($("#tbTraslado tbody tr").length == 0) {
+            swal("Error", "Debe indicar al menos un producto en el detalle del traslado","error");
+            return false;
+        }
+    });
+
+    $("input[name=compatibilidad]").on("change", function(){
+        if ($(this).val() == "1"){
+            $("#content-compatibilidad").show();
+            $(".marcas").attr("required","required");
+            $(".modelo").attr("required","required");
+            $(".range_year").attr("required","required");
+        } else{
+            $("#content-compatibilidad").hide();
+            $(".marcas").removeAttr("required");
+            $(".modelos").removeAttr("required");
+            $(".range_year").removeAttr("required");
+        }
+    });
     $(document).on("click", ".btn-remove-compatibilidad", function(){
         $(this).closest("tr").remove();
     });
@@ -349,7 +370,7 @@ $(document).ready(function () {
         html = "<tr>";
         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
         html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+data.nombre+"*"+data.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
-        html +="<td>"+data.nombre+"</td>";
+        html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+data.producto_id+"' class='btn-info-producto'>"+data.nombre+"</a></td>";
         html +="<td>"+data.localizacion+"</td>";
 
         precios = "<option value=''>Seleccione</option>";
@@ -718,7 +739,7 @@ $(document).ready(function () {
                         html = "<tr>";
                         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
                         html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+data.nombre+"*"+data.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
-                        html +="<td>"+data.nombre+"</td>";
+                        html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+data.producto_id+"' class='btn-info-producto'>"+data.nombre+"</a></td>";                        
                         html +="<td>"+data.localizacion+"</td>";
                         precios = "<option value=''>Seleccione</option>";
                         $.each(data.precios, function(key, value){
@@ -773,7 +794,7 @@ $(document).ready(function () {
                     }else{
                         html = "<tr>";
                         html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
-                        html +="<td>"+data.nombre+"</td>";
+                        html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+data.producto_id+"' class='btn-info-producto'>"+data.nombre+"</a></td>";
                         precios = "<option value=''>Seleccione</option>";
                         $.each(data.precios, function(key, value){
                             precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
@@ -1281,12 +1302,19 @@ $(document).ready(function () {
             data: data,
             dataType: "json",
             success:function(resp){
+                console.log(resp.status);
+                if (resp.status =="1") {
+                    //alertify.success("El cliente se registro correctamente");
+                    $('#modal-default').modal('hide');
+                  
+                    $("#cliente").val(resp.cliente.nombres);
+                    $("#idcliente").val(resp.cliente.id);
+                } else{
+                    $("#alert-error-cliente").show();
+                    $("#alert-error-cliente").html(resp.error);
+                }
                 
-                alertify.success("El cliente se registro correctamente");
-                $('#modal-default').modal('hide');
-              
-                $("#cliente").val(resp.nombres);
-                $("#idcliente").val(resp.id);
+                
                 
             }
         });
@@ -1351,14 +1379,15 @@ $(document).ready(function () {
        
     });
 
-     $(".btn-view-producto").on("click", function(){
-        var id = $(this).val();
+     $(document).on("click",".btn-info-producto", function(e){
+        e.preventDefault();
+        var id = $(this).attr("data-href");
+        var modulo = $("#modulo").val();
         $.ajax({
-            url: base_url + "mantenimiento/productos/view/" + id,
+            url: base_url + modulo+"/infoProducto/" + id,
             type:"POST",
             success:function(resp){
-                $(".modal-title").text("Informacion del Producto");
-                $("#modal-default .modal-body").html(resp);
+                $("#modal-info-producto .modal-body").html(resp);
                 //alert(resp);
             }
 
@@ -1559,7 +1588,7 @@ $(document).ready(function () {
 
                 $('#tbProductos').dataTable( {
                    
-                     destroy: true,
+                    destroy: true,
                     data : resp,
                     columns: [
                         {"data" : "codigo_barras"},
@@ -1585,6 +1614,7 @@ $(document).ready(function () {
                         }
 
                     ],
+                    order: [[ 2, "asc" ]]
                 });
             }
         });
@@ -1705,7 +1735,7 @@ $(document).ready(function () {
             
             html = "<tr>";
             html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
-            html +="<td>"+ui.item.nombre+"</td>";
+            html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+ui.item.producto_id+"' class='btn-info-producto'>"+ui.item.nombre+"</a></td>";
             precios = "<option value=''>Seleccione</option>";
             $.each(ui.item.precios, function(key, value){
                 precios += "<option value='"+value.precio_compra+"'>"+value.nombre+"</option>";
@@ -1745,7 +1775,7 @@ $(document).ready(function () {
             html = "<tr>";
             html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
             html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+ui.item.nombre+"*"+ui.item.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+ui.item.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
-            html +="<td>"+ui.item.nombre+"</td>";
+            html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+ui.item.producto_id+"' class='btn-info-producto'>"+ui.item.nombre+"</a></td>";
             html +="<td>"+ui.item.localizacion+"</td>";
             precios = "<option value=''>Seleccione</option>";
             $.each(ui.item.precios, function(key, value){

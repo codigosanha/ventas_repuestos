@@ -93,6 +93,7 @@ class Productos extends CI_Controller {
 			"marcas" => $this->Comun_model->get_records("marcas","estado='1' ORDER BY nombre"), 
 			"calidades" => $this->Comun_model->get_records("calidades","estado='1' ORDER BY nombre"), 
 			"tipo_precios" => $this->Comun_model->get_records("precios","estado='1' ORDER BY nombre"), 
+			"last_id" => $this->Productos_model->last_id()
 
 		);
 		$contenido_externo = array(
@@ -120,6 +121,7 @@ class Productos extends CI_Controller {
 		$idPrecios = $this->input->post("idPrecios");
 		$preciosC = $this->input->post("preciosC");
 		$preciosV = $this->input->post("preciosV");
+		$compatibilidad = $this->input->post("compatibilidad");
 
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[productos.nombre]");
 
@@ -130,7 +132,8 @@ class Productos extends CI_Controller {
 				"calidad_id" => $calidad_id,
 				"stock_minimo" => $stock_minimo,
 				"codigo_barras" => $codigo_barras,
-				"estado" => "1"
+				"estado" => "1",
+				"compatibilidades" => $compatibilidad
 			);
 			$producto = $this->Comun_model->insert("productos", $data);
 			if ($producto) {
@@ -149,8 +152,13 @@ class Productos extends CI_Controller {
 				$data  = array('imagen' => $imagen);
 				$this->Comun_model->update("productos","id=".$producto->id,$data);
 				$this->generateBarCode($codigo_barras);
-				if (!empty($modelos)) {
+				if ($compatibilidad && !empty($modelos)) {
 					$this->saveCompatibilidades($producto->id,$modelos,$marcas,$range_year,$year_from,$year_until);
+				}else{
+					$data = array(
+						'producto_id' => $producto->id,
+					);
+					$this->Comun_model->insert("compatibilidades",$data);
 				}
 				if (!empty($idProductosA)) {
 					$this->saveAsociados($producto->id,$idProductosA,$cantidadesA);
@@ -245,7 +253,7 @@ class Productos extends CI_Controller {
 		$nombre = $this->input->post("nombre");
 		$descripcion = $this->input->post("descripcion");
 		$stock_minimo = $this->input->post("stock_minimo");
-
+		$compatibilidad = $this->input->post("compatibilidad");
 		$marcas = $this->input->post("marcas");
 		$modelos = $this->input->post("modelos");
 		$range_year = $this->input->post("range_year");
@@ -276,6 +284,7 @@ class Productos extends CI_Controller {
 				"calidad_id" => $calidad_id,
 				"stock_minimo" => $stock_minimo,
 				"codigo_barras" => $codigo_barras,
+				"compatibilidades" => $compatibilidad
 			);
 
 			if ($this->Comun_model->update("productos","id=$idProducto",$data)) {
@@ -305,8 +314,13 @@ class Productos extends CI_Controller {
 
 				$this->Comun_model->delete("producto_precio","producto_id='$idProducto'");
 
-				if (!empty($modelos)) {
+				if ($compatibilidades && !empty($modelos)) {
 					$this->saveCompatibilidades($producto->id,$modelos,$marcas,$range_year,$year_from,$year_until);
+				} else{
+					$data = array(
+						'producto_id' => $producto->id,
+					);
+					$this->Comun_model->insert("compatibilidades",$data);
 				}
 				if (!empty($idProductosA)) {
 					$this->saveAsociados($idProducto,$idProductosA,$cantidadesA);
