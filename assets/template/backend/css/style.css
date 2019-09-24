@@ -2,6 +2,10 @@
     width: 300px;
    
 }
+#modal-cotizador .modal-dialog {
+    width: 300px;
+   
+}
 #modal-ajuste .modal-dialog {
     width: 400px;
    
@@ -30,7 +34,7 @@
     white-space: normal;
 }
 
-.contenido-venta{
+.contenido-venta, .contenido-cotizador{
     width: 275px;
 }
 

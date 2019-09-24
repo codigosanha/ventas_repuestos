@@ -436,6 +436,7 @@ class Ventas extends CI_Controller {
 		}
 
 		$cliente = "";
+		$error = "";
 
 		if ($this->form_validation->run()==TRUE) {
 
@@ -449,7 +450,7 @@ class Ventas extends CI_Controller {
 				"estado" => "1"
 			);
 			$cliente = $this->Comun_model->insert("clientes", $data);
-			if ($cliente) {
+			if ($cliente != "") {
 				$status = "1";
 				
 			}

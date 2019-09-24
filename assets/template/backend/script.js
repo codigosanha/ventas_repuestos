@@ -16,6 +16,36 @@ $(document).ready(function () {
                 "previous": "Anterior"
             },
         };
+    var config_print = {
+            globalStyles: true,
+            mediaPrint: false,
+            stylesheet: null,
+            noPrintSelector: ".no-print",
+            append: null,
+            prepend: null,
+            manuallyCopyFormValues: true,
+            deferred: $.Deferred(),
+            timeout: 750,
+            title: "  ",
+            doctype: '<!doctype html>'
+        };
+
+    $(".btn-cotizador").on("click", function(){
+        $("#tbCotizador tbody").html(null);
+        $("#tbventas tbody tr").each(function(){
+           
+            html = "<tr>";
+            html += "<td>"+$(this).children("td:eq(7)").find("input").val()+"</td>";
+            html += "<td>"+$(this).children("td:eq(2)").text()+"</td>";
+            html += '<td class="text-right">'+$(this).children("td:eq(8)").text()+'</td>';
+            html += "</tr>";
+            $("#tbCotizador tbody").append(html);
+        });
+
+        var total = $("input[name=total]").val();
+        $("#celdaTotal").text(total);
+
+    });
 
     $("#btn-guardar-traslado").on("click", function(){
         if ($("#tbTraslado tbody tr").length == 0) {
@@ -1292,7 +1322,7 @@ $(document).ready(function () {
         }
         
     });
-    $("#form-cliente").submit(function(e){
+    $(document).on("submit", "#form-cliente", function(e){
         e.preventDefault();
         data = $(this).serialize();
         ruta = $(this).attr("action");
@@ -1302,8 +1332,8 @@ $(document).ready(function () {
             data: data,
             dataType: "json",
             success:function(resp){
-                console.log(resp.status);
-                if (resp.status =="1") {
+                console.log(resp);
+                if (resp.status=="1") {
                     //alertify.success("El cliente se registro correctamente");
                     $('#modal-default').modal('hide');
                   
@@ -1650,6 +1680,7 @@ $(document).ready(function () {
                 "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
             },
             "columns": [
+                { "data": "id" },
                 {
                     mRender: function (data, type, row) {
                         var barcode = '<img src="'+base_url +'assets/barcode/'+ row.codigo_barras+ '.png" alt="'+row.codigo_barras+'">';
@@ -1680,8 +1711,7 @@ $(document).ready(function () {
                 } 
             ],
             "language": datatable_spanish,
-            "order": [[ 2, "asc" ]]
-
+     
         });
     });
 
@@ -1937,95 +1967,30 @@ $(document).ready(function () {
     });
     $(document).on("click",".btn-print-pedido",function(){
         $(".contenido-pedido").addClass("impresion");
-        $(".contenido-pedido").print({
-            globalStyles: true,
-            mediaPrint: false,
-            stylesheet: null,
-            noPrintSelector: ".no-print",
-            append: null,
-            prepend: null,
-            manuallyCopyFormValues: true,
-            deferred: $.Deferred(),
-            timeout: 750,
-            title: "  ",
-            doctype: '<!doctype html>'
-        });
+        $(".contenido-pedido").print(config_print);
 
 
     });
 
     $(document).on("click",".btn-print",function(){
         
-        $(".modal-body").print({
-            globalStyles: true,
-            mediaPrint: false,
-            stylesheet: null,
-            noPrintSelector: ".no-print",
-            append: null,
-            prepend: null,
-            manuallyCopyFormValues: true,
-            deferred: $.Deferred(),
-            timeout: 750,
-            title: "  ",
-            doctype: '<!doctype html>'
-        });
+        $(".modal-body").print(config_print);
 
 
     });
     $(document).on("click",".btn-print-venta",function(){
-        
-        $("#modal-venta .modal-body").print({
-            globalStyles: true,
-            mediaPrint: false,
-            stylesheet: null,
-            noPrintSelector: ".no-print",
-            append: null,
-            prepend: null,
-            manuallyCopyFormValues: true,
-            deferred: $.Deferred(),
-            timeout: 750,
-            title: "  ",
-            doctype: '<!doctype html>'
-        });
-
-
+        $("#modal-venta .modal-body").print(config_print);
+    });
+    $(document).on("click",".btn-print-cotizador",function(){
+        $("#modal-cotizador .modal-body").print(config_print);
     });
     $(document).on("click",".btn-print-cierre",function(){
         $(".contenido-cierre").addClass("impresion");
-        $(".contenido-cierre").print({
-            globalStyles: true,
-            mediaPrint: false,
-            stylesheet: null,
-            noPrintSelector: ".no-print",
-            append: null,
-            prepend: null,
-            manuallyCopyFormValues: true,
-            deferred: $.Deferred(),
-            timeout: 750,
-            title: "  ",
-            doctype: '<!doctype html>'
-        });
-
-
+        $(".contenido-cierre").print(config_print);
     });
 
     $(document).on("click",".btn-print-barcode",function(){
-        
-        $("#modal-barcode .modal-body").print({
-            globalStyles: true,
-            mediaPrint: false,
-            stylesheet: null,
-            noPrintSelector: ".no-print",
-            append: null,
-            prepend: null,
-            manuallyCopyFormValues: true,
-            deferred: $.Deferred(),
-            timeout: 750,
-            title: "  ",
-            doctype: '<!doctype html>'
-        });
-
-
+        $("#modal-barcode .modal-body").print(config_print);
     });
 })
 

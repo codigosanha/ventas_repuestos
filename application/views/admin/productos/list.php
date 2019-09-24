@@ -28,6 +28,7 @@
                         <table id="tableProductos" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Cod. Barras</th>
                                     <th>Imagen</th>
                                     <th>Nombre</th>

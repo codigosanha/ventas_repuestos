@@ -30,11 +30,12 @@ class Productos extends CI_Controller {
 	public function getProducts()
 	{
 		$columns = array( 
-                            0 =>'p.codigo_barras', 
-                            1 =>'p.imagen',
-                            2=> 'p.nombre',
-                            3=> 'c.nombre',
-                            4=> 'p.stock_minimo',
+							0 => 'p.id', 
+                            1 => 'p.codigo_barras', 
+                            2 => 'p.imagen',
+                            3 => 'p.nombre',
+                            4 => 'c.nombre',
+                            5 => 'p.stock_minimo',
                         );
 
 		$limit = $this->input->post('length');

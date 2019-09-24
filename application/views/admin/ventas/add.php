@@ -96,6 +96,9 @@
                                     Guardar
                                 </button>
                                 <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat"><i class="fa fa-times"></i> Cancelar</a>
+                                <button type="button" data-target="#modal-cotizador" data-toggle="modal" class="btn btn-primary btn-cotizador">
+                                    <span class="fa fa-print"></span> Ver Cotización
+                                </button>
                             </div>
                       
                         </div>
@@ -398,6 +401,62 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal-cotizador">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Cotización</h4>
+      </div>
+      <div class="modal-body">
+        <div class="contenido-cotizador">
+            <div class="form-group text-center">
+                <label for="">Tienda Repuestos</label><br>
+                <p>
+                <img src="<?php echo base_url();?>img/cloud.png" height="64" width="64"> 
+                </p>
+                3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
+                Santa Cruz del Quiche
+            </div>
+            <div class="form-group text-center">
+                <label for="">COTIZACIÓN</label>
+            </div>
+            <div class="form-group">
+
+                <b>Fecha y Hora: </b><?php echo date("d-m-Y H:i:s");?></p>
+            </div>
+            <div class="form-group">
+                <table width="100%" class="table" id="tbCotizador">
+                    <thead>
+                        <tr>
+                            <th>CANT</th>
+                            <th>DESCRIPCION</th>
+                            <th class="text-right">IMPORTE</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-right"><strong>IMPORTE:</strong></td>
+                            <td class="text-right" id="celdaTotal"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-print-cotizador">
+            <span class="fa fa-print"></span> Imprimir
+        </button>
       </div>
     </div>
     <!-- /.modal-content -->
