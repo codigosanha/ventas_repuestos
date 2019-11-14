@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/sweetalert/sweetalert.css">
     
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/jquery/jquery-confirm.min.css">
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/template/bootstrap-datepicker/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/backend/css/style.css">
     <!-- jQuery 3 -->
     <script src="<?php echo base_url();?>assets/template/jquery/jquery.min.js"></script>

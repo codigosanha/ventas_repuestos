@@ -1,4 +1,13 @@
 $(document).ready(function () {
+    $(document).ready(function(){
+        $(".year_from").datepicker({
+                format: "yyyy",
+                viewMode: "years", 
+                minViewMode: "years",
+                autoclose: true
+            });
+    });
+    
     $('.select2').select2();
     //new code - Compra
     var datatable_spanish  = {
@@ -137,6 +146,14 @@ $(document).ready(function () {
         html += "</tr>"
 
         $("#tbCompatibilidades tbody").append(html);
+        $(document).ready(function(){
+        $(".year_from").datepicker({
+                format: "yyyy",
+                viewMode: "years", 
+                minViewMode: "years",
+                autoclose: true
+            });
+    });
     });
     $(document).on("click", ".btn-check-all-products", function(){
         productos = $(this).val();
@@ -326,11 +343,9 @@ $(document).ready(function () {
             stocks_bd: JSON.stringify(stocks_bd),
             stocks_fisico: JSON.stringify(stocks_fisico),
             stocks_diferencia: JSON.stringify(stocks_diferencia),
-            bodega_id: sucursal_id,
-            sucursal_id: bodega_id,
-
+            bodega_id: bodega_id,
+            sucursal_id: sucursal_id,
         };
-
 
         $.ajax({
             url: url,
@@ -1677,7 +1692,6 @@ $(document).ready(function () {
                 "url": base_url + "almacen/productos/getProducts",
                 "dataType": "json",
                 "type": "POST",
-                "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
             },
             "columns": [
                 { "data": "id" },

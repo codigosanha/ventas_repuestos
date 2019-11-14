@@ -315,7 +315,7 @@ class Productos extends CI_Controller {
 
 				$this->Comun_model->delete("producto_precio","producto_id='$idProducto'");
 
-				if ($compatibilidades && !empty($modelos)) {
+				if ($compatibilidad && !empty($modelos)) {
 					$this->saveCompatibilidades($producto->id,$modelos,$marcas,$range_year,$year_from,$year_until);
 				} else{
 					$data = array(
