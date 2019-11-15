@@ -36,25 +36,10 @@
                 </div>
                 <div id="html-years" style="display: none;">
                     
-                      
-                        <select name="year_from[]" class="form-control year_from">
-                            <?php 
-                                $year_from = 1975; 
-                                $year_until = date("Y") + 5;
-                            ?>
-
-                            <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
-                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                            <?php } ?>
-                            
-                        </select>
+                        <input type="text" name="year_from[]" class="form-control year_from" value="1975">
                         <span style="display: none">-</span>
-                        <select name="year_until[]" class="form-control year_until" style="display: none; ">
-                            <?php for ($i=$year_from; $i <= $year_until ; $i++) { ?>
-                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                            <?php } ?>
-                            
-                        </select>
+
+                        <input name="year_until[]" class="form-control year_until" style="display: none; " value="<?php echo date("Y"); ?>">
                     
                 </div>
                 <div id="html-button" style="display: none;">
@@ -197,34 +182,11 @@
                                                     </select>
                                                </td>
                                                <td>
-                                                    <select name="year_from[]" class="form-control year_from">
-                                                    <?php 
-                                                        $year_from = 1975; 
-                                                        $year_until = date("Y") + 5;
-                                                    ?>
-
-                                                    <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
-                                                        $selected = '';
-                                                        if ($comp->year_from == $i) {
-                                                            $selected = 'selected';
-                                                        }
-                                                    ?>
-                                                        <option value="<?php echo $i ?>" <?php echo $selected; ?>><?php echo $i ?></option>
-                                                    <?php } ?>
+                                                    <input type="text" name="year_from[]" class="form-control year_from" value="<?php echo $comp->year_from ?>">
                                                     
-                                                </select>
                                                 <span style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?>">-</span>
-                                                <select name="year_until[]" class="form-control year_until" style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?> ">
-                                                    <?php for ($i=$year_from; $i <= $year_until ; $i++) { 
-                                                        $selected = '';
-                                                        if ($comp->year_until == $i) {
-                                                            $selected = 'selected';
-                                                        }
-                                                    ?>
-                                                        <option value="<?php echo $i ?>" <?php echo $selected ?>><?php echo $i ?></option>
-                                                    <?php } ?>
-                                                    
-                                                </select>
+                                                <input type="text" name="year_until[]" class="form-control year_until" style="display: <?php echo $comp->range_year ? 'inline-block':'none'; ?> " value="<?php echo $comp->year_until ?>">
+                                                
                                                </td>
                                                <td>
                                                     <button type="button" class="btn btn-danger btn-remove-compatibilidad">

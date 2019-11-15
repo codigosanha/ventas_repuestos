@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $(document).ready(function(){
-        $(".year_from").datepicker({
+        $(".year_from,.year_until").datepicker({
                 format: "yyyy",
                 viewMode: "years", 
                 minViewMode: "years",
@@ -147,7 +147,7 @@ $(document).ready(function () {
 
         $("#tbCompatibilidades tbody").append(html);
         $(document).ready(function(){
-        $(".year_from").datepicker({
+        $(".year_from,.year_until").datepicker({
                 format: "yyyy",
                 viewMode: "years", 
                 minViewMode: "years",
