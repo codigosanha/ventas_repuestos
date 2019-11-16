@@ -1645,6 +1645,8 @@ $(document).ready(function () {
                             }
                         },
                         {"data" : "nombre"},
+                        {"data" : "stock"},
+                        {"data" : "listPrecios"},
                         {"data" : "localizacion"},
                         
                         {"data" : "year"},

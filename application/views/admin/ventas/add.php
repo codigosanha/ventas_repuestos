@@ -513,6 +513,8 @@
                         <th>Codigo</th>
                         <th>Imagen</th>
                         <th>Producto</th>
+                        <th>Stock</th>
+                        <th>Precio</th>
                         <th>Localizacion</th>
                         <th>Año</th>
                         <th>Marca</th>

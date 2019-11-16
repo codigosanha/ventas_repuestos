@@ -312,6 +312,12 @@ class Ventas extends CI_Controller {
 			}else{
 				$year = $p->year_from;
 			}
+
+			$listPrecios = "";
+			$precios = $this->Ventas_model->getPrecios($p->id);
+			foreach ($precios as $precio) {
+				$listPrecios .="<b>".$precio->nombre."</b> - ". $precio->precio_venta."</br>";
+			}
 		
 			$data[] = array(
 				"producto_id" => $p->id,
@@ -319,6 +325,7 @@ class Ventas extends CI_Controller {
 				"codigo_barras" => $p->codigo_barras,
 				"stock" => $p->stock,
 				"precios" => $this->Ventas_model->getPrecios($p->id),
+				"listPrecios"=> $listPrecios,
 				"imagen" => $p->imagen,
 				"localizacion" => $p->localizacion,
 				"year" => $year != null ? $year:"Genérico",
