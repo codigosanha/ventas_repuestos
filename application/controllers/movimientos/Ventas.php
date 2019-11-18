@@ -325,7 +325,7 @@ class Ventas extends CI_Controller {
 				"codigo_barras" => $p->codigo_barras,
 				"stock" => $p->stock,
 				"precios" => $this->Ventas_model->getPrecios($p->id),
-				"listPrecios"=> $listPrecios,
+				"listPrecios" => $listPrecios,
 				"imagen" => $p->imagen,
 				"localizacion" => $p->localizacion,
 				"year" => $year != null ? $year:"Genérico",
@@ -334,6 +334,7 @@ class Ventas extends CI_Controller {
 			);
 		}
 		echo json_encode($data);
+
 	}
 
 	public function getProductoByCode(){

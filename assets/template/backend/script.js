@@ -1630,7 +1630,7 @@ $(document).ready(function () {
                 modelo:modelo, 
             },
             success: function(resp){
-
+                console.log(resp);
                 $('#tbProductos').dataTable( {
                    
                     destroy: true,
@@ -1644,7 +1644,13 @@ $(document).ready(function () {
                                 return image;
                             }
                         },
-                        {"data" : "nombre"},
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var producto = '<a href="#modal-info-producto" data-toggle="modal" data-href="'+row.producto_id+'" class="btn-info-producto">'+row.nombre+'</a>';
+                                return producto;
+                            }
+                        },
                         {"data" : "stock"},
                         {"data" : "listPrecios"},
                         {"data" : "localizacion"},

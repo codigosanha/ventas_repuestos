@@ -409,7 +409,7 @@ class Productos extends CI_Controller {
 
 	public function get_modelos(){
 		$marca_id = $this->input->post("marca_id");
-		$modelos = $this->Comun_model->get_records("modelos", "marca_id='".$marca_id."' ORDER BY nombre");
+		$modelos = $this->Comun_model->get_records("modelos", "marca_id='".$marca_id."' && estado='1' ORDER BY nombre");
 		echo json_encode($modelos);
 	}
 }

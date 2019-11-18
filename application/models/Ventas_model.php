@@ -368,6 +368,7 @@ class Ventas_model extends CI_Model {
 		if (!empty($modelo)) {
 			$this->db->where("c.modelo_id",$modelo);
 		}
+		$this->db->group_by("c.producto_id");
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}
