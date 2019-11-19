@@ -15,10 +15,33 @@
             <div class="box-body">
                 <input type="hidden" id="modulo" value="almacen/tipo_precios">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                       
                         <a href="<?php echo base_url();?>almacen/tipo_precios/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tipo de Precio</a>
                       
+                    </div>
+
+                    <div class="col-md-6">
+                        <form action="<?php echo base_url();?>almacen/tipo_precios/set_precio_venta" method="POST">
+                            <div class="input-group">
+                                <span class="input-group-addon">Indique el precio para ventas</span>
+                                <select name="precio_venta" id="precio_venta" class="form-control" required="required">
+                                    <option value="">Seleccione..</option>
+                                    <?php foreach ($precios as $precio): ?>
+                                        <?php 
+                                            $selected = '';
+                                            if (isset($precio_venta) && $precio_venta->id == $precio->id){
+                                                $selected = 'selected';
+                                            }
+                                        ?>
+                                        <option value="<?php echo $precio->id;?>" <?php echo $selected;?>><?php echo $precio->nombre;?></option>
+                                    <?php endforeach ?>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success" type="submit">Guardar</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </form>
                     </div>
                 </div>
                 <hr>

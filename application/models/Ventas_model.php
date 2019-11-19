@@ -147,7 +147,7 @@ class Ventas_model extends CI_Model {
 		return $resultados->result();
 	}
 	public function getPrecios($producto){
-		$this->db->select("pp.*,p.nombre");
+		$this->db->select("pp.*,p.nombre,p.seleccion_venta");
 		$this->db->from("producto_precio pp");
 		$this->db->join("precios p", "pp.precio_id = p.id");
 		$this->db->where("pp.producto_id",$producto);

@@ -15,7 +15,8 @@ class Tipo_precios extends CI_Controller {
 	{
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"precios" => $this->Comun_model->get_records("precios"), 
+			"precios" => $this->Comun_model->get_records("precios"),
+			"precio_venta" => $this->Comun_model->get_record("precios","seleccion_venta='1'"), 
 		);
 
 		$contenido_externo = array(
@@ -132,5 +133,20 @@ class Tipo_precios extends CI_Controller {
 		$this->Comun_model->update("precios","id=$id",$data);
 		//echo "almacen/tipo_precios";
 		redirect(base_url()."almacen/tipo_precios");
+	}
+
+	public function set_precio_venta(){
+		$precio_venta = $this->input->post("precio_venta");
+		$dataUpdate = array('seleccion_venta' => 0, );
+		$dataSeleccion  = array(
+			'seleccion_venta' => 1, 
+		);
+		$this->Comun_model->update("precios","",$dataUpdate);
+		if ($this->Comun_model->update("precios","id=$precio_venta",$dataSeleccion)) {
+			redirect(base_url()."almacen/tipo_precios");
+		}else{
+			$this->session->set_flashdata("error","No se pudo actualizar la informacion");
+			redirect(base_url()."almacen/tipo_precios");
+		}
 	}
 }

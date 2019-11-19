@@ -419,14 +419,29 @@ $(document).ready(function () {
         html +="<td>"+data.localizacion+"</td>";
 
         precios = "<option value=''>Seleccione</option>";
+        precio = '';
+        cantidad = '';
+        var selected = '';
         $.each(data.precios, function(key, value){
-            precios += "<option value='"+value.precio_venta+"'>"+value.nombre+"</option>";
+            
+            if (value.seleccion_venta == "1") {
+                selected = 'selected';
+                precio = value.precio_venta;
+                cantidad = 1;
+            }else{
+                selected = '';
+            }
+            precios += "<option value='"+value.precio_venta+"' "+selected+">"+value.nombre+"</option>";
         });
         html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
-        html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
+        html +="<td><input type='text' name='precios[]'  style='width:60px;' value='"+precio+"'></td>";
         html +="<td>"+data.stock+"</td>";
-        html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;'></td>";
-        html +="<td><input type='hidden' name='importes[]'><p></p></td>";
+        html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;' value='"+cantidad+"'></td>";
+        importe = '';
+        if (precio != '') {
+            importe = Number(precio) * Number(cantidad);
+        }
+        html +="<td><input type='hidden' name='importes[]' value='"+importe.toFixed(2)+"'><p>"+importe.toFixed(2)+"</p></td>";
         html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
         html +="</tr>"
 
