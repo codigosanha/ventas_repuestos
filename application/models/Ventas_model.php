@@ -358,6 +358,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.sucursal_id",$sucursal_id);
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");
+		$this->db->where("bsp.estado","1");
 		$this->db->where("bsp.stock >=", 1);
 		if (!empty($year)) {
 			$this->db->like("c.concat_year",$year);

@@ -71,6 +71,7 @@ class Productos extends CI_Controller {
                 $nestedData['codigo_barras'] = $producto->codigo_barras;
                 $nestedData['calidad'] = $producto->calidad;
                 $nestedData['stock_minimo'] = $producto->stock_minimo;
+                $nestedData['estado'] = $producto->estado;
                
                 $data[] = $nestedData;
             }
@@ -354,7 +355,7 @@ class Productos extends CI_Controller {
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("productos","id=$id",$data);
-		echo "almacen/productos";
+		redirect(base_url()."almacen/productos");
 	}
 
 	public function deshabilitar($id){
@@ -362,7 +363,7 @@ class Productos extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("productos","id=$id",$data);
-		echo "almacen/productos";
+		redirect(base_url()."almacen/productos");
 	}
 
 	public function getSubcategorias(){

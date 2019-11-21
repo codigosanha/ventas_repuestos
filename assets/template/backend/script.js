@@ -1742,8 +1742,15 @@ $(document).ready(function () {
                         btnView += '<span class="fa fa-search"></span>';
                         btnView += '</button>';
                         var btnEditar = '<a href="'+base_url+'almacen/productos/edit/'+row.id+'" class="btn btn-warning btn-sm btn-flat"><i class="fa fa-pencil"></i></a>';
-                        var btnEliminar = '<a href="'+base_url+'almacen/productos/delete/'+row.id+'" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-times"></i></a>';
-                        return '<div class="btn-group">' +btnViewBarcode+ btnView+ btnEditar +' '+ btnEliminar+ "</div>";
+                        var btnHabilitar = '';
+                        var btnDeshabilitar ='';
+                        if (row.estado=="1") {
+                            btnDeshabilitar ='<a href="'+base_url+'almacen/productos/deshabilitar/'+row.id+'" class="btn btn-danger btn-sm btn-flat btn-remove"><i class="fa fa-times"></i></a>';
+
+                        }else{
+                            btnHabilitar ='<a href="'+base_url+'almacen/productos/habilitar/'+row.id+'" class="btn btn-success btn-sm btn-flat btn-habilitar"><i class="fa fa-pencil"></i></a>';
+                        }
+                        return '<div class="btn-group">' +btnViewBarcode+ btnView+ btnEditar +' '+ btnHabilitar+' '+btnDeshabilitar+ "</div>";
                     }
                 } 
             ],
