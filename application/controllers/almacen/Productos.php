@@ -403,7 +403,12 @@ class Productos extends CI_Controller {
 	protected function generateBarCode($codigo_barras){
 		$this->load->library('zend');
 	   	$this->zend->load('Zend/Barcode');
-	   	$file = Zend_Barcode::draw('code128', 'image', array('text' => $codigo_barras), array());
+	   	$barcodeOptions = array(
+		    'text' => $codigo_barras, 
+		    'height'=> 60, 
+		    'width'=>150,
+		);
+	   	$file = Zend_Barcode::draw('code128', 'image', $barcodeOptions, array());
 	   	//$code = time().$code;
 	   	$store_image = imagepng($file,"./assets/barcode/{$codigo_barras}.png");
 	}

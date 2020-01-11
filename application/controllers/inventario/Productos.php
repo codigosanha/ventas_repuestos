@@ -178,4 +178,22 @@ class Productos extends CI_Controller {
 		));
 
 	}
+
+
+	public function barcode($id){
+		$producto_inventario = $this->Comun_model->get_record("bodega_sucursal_producto","id='$id'");
+		$producto = $this->Comun_model->get_record("productos","id='$producto_inventario->producto_id'");
+
+		$data["localizacion"] = $producto_inventario->localizacion;
+		$data["nombre_producto"] = $producto->nombre;
+		$data["codigo_barras"] = $producto->codigo_barras;
+
+		$this->load->library('pdfgenerator');
+        
+        $html = $this->load->view('admin/inventario_productos/barcode',$data, true);
+        $filename = 'Codigo de Barras';
+        $customPaper = array(0, 0, 195, 90);
+        $this->pdfgenerator->generate($html, $filename, true, $customPaper, 'portrait');
+
+	}
 }
