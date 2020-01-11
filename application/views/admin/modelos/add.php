@@ -29,10 +29,6 @@
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group">
-                                <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:''?>">
-                            </div>
-                            <div class="form-group">
                                 <label for="marca_id">Marca:</label>
                                 <select name="marca_id" id="marca_id" class="form-control" required="required">
                                     <option value="">Seleccione</option>

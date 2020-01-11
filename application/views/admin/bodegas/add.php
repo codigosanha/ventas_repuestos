@@ -36,7 +36,7 @@
                                 <input type="hidden" name="sucursal_id" value="<?php echo $this->session->userdata("sucursal");?>">
                             <?php else: ?>
                                 <div class="form-group">
-                                    <label for="sucursal_id">Tipo de Bodega:</label>
+                                    <label for="sucursal_id">Sucursal:</label>
                                     <select name="sucursal_id" id="sucursal_id" class="form-control">
                                         <option value="">Seleccione...</option>
                                         <?php foreach ($sucursales as $sucursal): ?>

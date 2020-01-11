@@ -41,7 +41,7 @@ class Modelos extends CI_Controller {
 	public function store(){
 
 		$nombre = $this->input->post("nombre");
-		$descripcion = $this->input->post("descripcion");
+	
 		$marca_id = $this->input->post("marca_id");
 		$this->form_validation->set_rules("nombre","Nombre","required|is_unique[modelos.nombre]");
 
@@ -49,7 +49,7 @@ class Modelos extends CI_Controller {
 
 			$data  = array(
 				'nombre' => $nombre, 
-				'descripcion' => $descripcion,
+				
 				'estado' => "1",
 				'marca_id' => $marca_id,
 			);
@@ -84,7 +84,6 @@ class Modelos extends CI_Controller {
 	public function update(){
 		$idModulo = $this->input->post("idModulo");
 		$nombre = $this->input->post("nombre");
-		$descripcion = $this->input->post("descripcion");
 		$marca_id = $this->input->post("marca_id");
 		$modeloActual = $this->Comun_model->get_record('modelos',"id=$idModulo");
 
@@ -99,7 +98,6 @@ class Modelos extends CI_Controller {
 		if ($this->form_validation->run()==TRUE) {
 			$data = array(
 				'nombre' => $nombre,
-				'descripcion' => $descripcion,
 				'marca_id' => $marca_id,
 			);
 

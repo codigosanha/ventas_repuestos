@@ -25,12 +25,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                        <table id="exampleSimple" class="table table-bordered table-hover">
+                        <table id="tableSimple" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>Descripcion</th>
                                     <th>Marca</th>
                                     <th>Opciones</th>
                                 </tr>
@@ -41,7 +40,6 @@
                                         <tr>
                                             <td><?php echo $modelo->id;?></td>
                                             <td><?php echo $modelo->nombre;?></td>
-                                            <td><?php echo $modelo->descripcion;?></td>
                                             <td><?php echo get_record("marcas","id=".$modelo->marca_id)->nombre;?></td>
                                             <td>
                                                 <div class="btn-group">

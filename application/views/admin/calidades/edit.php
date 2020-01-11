@@ -23,15 +23,15 @@
                              </div>
                         <?php endif;?>
                         <form action="<?php echo base_url();?>almacen/calidades/update" method="POST">
-                            <input type="hidden" value="<?php echo $categoria->id;?>" name="idCalidad">
+                            <input type="hidden" value="<?php echo $calidad->id;?>" name="idCalidad">
                             <div class="form-group <?php echo form_error('nombre') == true ? 'has-error': '';?>">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$categoria->nombre?>">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo set_value('nombre')?:$calidad->nombre?>">
                                 <?php echo form_error("nombre","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripcion:</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$categoria->descripcion?>">
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$calidad->descripcion?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>
