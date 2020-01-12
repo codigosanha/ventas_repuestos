@@ -296,7 +296,91 @@ class Ventas extends CI_Controller {
 		));
 	}
 
-	public function searchProductos(){
+	public function searchProductos()
+	{
+
+		$columns = array( 
+                            0 =>'p.codigo', 
+                            1=> 'p.imagen',
+                            2=> 'p.nombre',
+                            3=> 'bsp.stock',
+                            4=> 'p.nombre',
+                            5=> 'p.nombre',
+							6=> 'p.nombre',
+							7=> 'p.nombre',
+                            8=> 'p.nombre',
+							9=> 'p.nombre',
+                        );
+		$year =$this->input->post("year");
+		$marca = $this->input->post("marca");
+		$modelo = $this->input->post("modelo");
+		$sucursal_id = $this->input->post("sucursal");
+		$bodega_id = $this->input->post("bodega");
+
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Ventas_model->allproducts_count($year,$marca,$modelo,$sucursal_id,$bodega_id);
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Ventas_model->allproducts($limit,$start,$order,$dir,$year,$marca,$modelo,$sucursal_id,$bodega_id);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Ventas_model->products_search($limit,$start,$search,$order,$dir,$year,$marca,$modelo,$sucursal_id,$bodega_id);
+
+            $totalFiltered = $this->Ventas_model->products_search_count($search,$year,$marca,$modelo,$sucursal_id,$bodega_id);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+        	foreach ($productos as $p) {
+				if ($p->range_year) {
+					$year = $p->year_from ."-".$p->year_until; 
+				}else{
+					$year = $p->year_from;
+				}
+
+				$listPrecios = "";
+				$precios = $this->Ventas_model->getPrecios($p->id);
+				foreach ($precios as $precio) {
+					$listPrecios .="<b>".$precio->nombre."</b> - ". $precio->precio_venta."</br>";
+				}
+			
+				$data[] = array(
+					"producto_id" => $p->id,
+					"nombre" => $p->nombre,
+					"codigo_barras" => $p->codigo_barras,
+					"stock" => $p->stock,
+					"precios" => $this->Ventas_model->getPrecios($p->id),
+					"listPrecios" => $listPrecios,
+					"imagen" => $p->imagen,
+					"localizacion" => $p->localizacion,
+					"year" => $year != null ? $year:"Genérico",
+					"marca" => $p->marca != null ? $p->marca :"Genérico",
+					"modelo" => $p->modelo != null ? $p->modelo:"Genérico",				
+				);
+			}
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
+	}
+
+	public function searchProductos2(){
 		$year =$this->input->post("year");
 		$marca = $this->input->post("marca");
 		$modelo = $this->input->post("modelo");

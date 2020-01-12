@@ -507,7 +507,7 @@
             </div>
         </form>
         <div class="table-responsive">
-            <table class="table table-bordered" id="tbProductos" width="100%">
+            <table class="table table-bordered" id="tbSearch" width="100%">
                 <thead>
                     <tr>
                         <th>Codigo</th>

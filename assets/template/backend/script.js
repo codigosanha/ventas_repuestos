@@ -1494,9 +1494,9 @@ $(document).ready(function () {
     $(".btn-view-usuario").on("click", function(){
         var id = $(this).val();
         $.ajax({
-            url: base_url + "administrador/usuarios/view",
+            url: base_url + "administrador/usuarios/view/"+id,
             type:"POST",
-            data:{idusuario:id},
+
             success:function(resp){
                 $("#modal-default .modal-body").html(resp);
                 //alert(resp);
@@ -1626,14 +1626,74 @@ $(document).ready(function () {
         "pageLength": 25,
         "language": datatable_spanish
     });
+
+
     function cargarProductos(){
         bodega = $("#bodega").val();
         sucursal = $("#sucursal-venta").val();
         marca = $("#marca").val();
         year = $("#year").val();
         modelo = $("#modelo").val();
+
+
+        $('#tbSearch').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "destroy": true,
+            "ajax":{
+                "url": base_url + "movimientos/ventas/searchProductos",
+                "dataType": "json",
+                "type": "POST",
+                "data": {
+                    bodega:bodega, 
+                    sucursal:sucursal, 
+                    marca:marca, 
+                    year:year, 
+                    modelo:modelo, 
+                }
+            },
+            columns: [
+                {"data" : "codigo_barras"},
+                {
+                    mRender: function (data, type, row) {
+                        
+                        var image = "<a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+row.nombre+"*"+row.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+row.imagen+"' class='img-responsive' style='width:50px;'></a>";
+                        return image;
+                    }
+                },
+                {
+                    mRender: function (data, type, row) {
+                        
+                        var producto = '<a href="#modal-info-producto" data-toggle="modal" data-href="'+row.producto_id+'" class="btn-info-producto">'+row.nombre+'</a>';
+                        return producto;
+                    }
+                },
+                {"data" : "stock"},
+                {"data" : "listPrecios"},
+                {"data" : "localizacion"},
+                
+                {"data" : "year"},
+                {"data" : "marca"},
+                {"data" : "modelo"},
+                {
+                    mRender: function (data, type, row) {
+                        
+                        var button = "<button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(row)+"'><span class='fa fa-check'></span></button>";
+                        return button;
+                    }
+                }
+
+            ],
+            "columnDefs": [ {
+                "targets": [4,5,6,7,8],
+                "orderable": false
+                } ],
+            "language": datatable_spanish,
+            "order": [[ 2, "asc" ]]
+
+        });
        
-        $.ajax({
+        /*$.ajax({
             url: base_url + "movimientos/ventas/searchProductos",
             type:"POST",
             dataType: 'json',
@@ -1685,7 +1745,7 @@ $(document).ready(function () {
                     order: [[ 2, "asc" ]]
                 });
             }
-        });
+        });*/
     }
 
     $(document).on('show.bs.modal', '.modal', function () {

@@ -54,7 +54,7 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="<?php echo base_url() ?>inventario/productos/barcode/<?php echo $p->id ?>" class="btn btn-default" target="_blank">
-                                                        <span class="fa fa-bars"></span>
+                                                        <span class="fa fa-barcode"></span>
                                                     </a>
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $p->id;?>">
                                                         <span class="fa fa-search"></span>
