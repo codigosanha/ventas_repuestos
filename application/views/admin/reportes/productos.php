@@ -45,6 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $total = 0; ?>
                                 <?php if (!empty($productos)): ?>
                                     <?php foreach($productos as $p):?>
                                         <tr>
@@ -53,14 +54,15 @@
                                             
                                            
                                             <td><?php echo $p->totalVendidos;?></td>
+                                            <?php $total += $p->totalVendidos; ?>
                                         </tr>
                                     <?php endforeach;?>
                                 <?php endif ?>
                             </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th colspan="4" style="text-align:right">Total:</th>
-                                    <th></th>
+                                    <th  style="text-align:right">Total:</th>
+                                    <th><?php echo $total ?></th>
                                 </tr>
                             </tfoot>
                         </table>
