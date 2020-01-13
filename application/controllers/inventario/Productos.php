@@ -184,6 +184,8 @@ class Productos extends CI_Controller {
 		$producto_inventario = $this->Comun_model->get_record("bodega_sucursal_producto","id='$id'");
 		$producto = $this->Comun_model->get_record("productos","id='$producto_inventario->producto_id'");
 
+		$this->generateBarCode($producto->codigo_barras);
+
 		$data["localizacion"] = $producto_inventario->localizacion;
 		$data["nombre_producto"] = $producto->nombre;
 		$data["codigo_barras"] = $producto->codigo_barras;
@@ -192,8 +194,23 @@ class Productos extends CI_Controller {
         
         $html = $this->load->view('admin/inventario_productos/barcode',$data, true);
         $filename = 'Codigo de Barras';
-        $customPaper = array(0, 0, 195, 90);
+        $customPaper = array(0, 0, 192, 96);
         $this->pdfgenerator->generate($html, $filename, true, $customPaper, 'portrait');
+	}
 
+
+	protected function generateBarCode($codigo_barras){
+		$this->load->library('zend');
+	   	$this->zend->load('Zend/Barcode');
+	   	$barcodeOptions = array(
+		    'text' => $codigo_barras, 
+		    'withQuietZones' => false,
+		    'barThickWidth'	=>4,
+			'barThinWidth'=>2
+		 
+		);
+	   	$file = Zend_Barcode::draw('code128', 'image', $barcodeOptions, array());
+	   	//$code = time().$code;
+	   	$store_image = imagepng($file,"./assets/barcode/{$codigo_barras}.png");
 	}
 }

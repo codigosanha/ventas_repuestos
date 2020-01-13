@@ -415,6 +415,7 @@ class Ventas_model extends CI_Model {
     function allproducts($limit,$start,$col,$dir,$year,$marca,$modelo,$sucursal_id,$bodega_id)
     {   
 
+
     	$this->db->select("p.*,bsp.stock,bsp.localizacion,mar.nombre as marca,mod.nombre as modelo, c.year_from,c.year_until, c.range_year");
 		$this->db->from("compatibilidades c");
 		$this->db->join("productos p","c.producto_id = p.id");
@@ -476,7 +477,7 @@ class Ventas_model extends CI_Model {
 			$this->db->where("c.modelo_id",$modelo);
 		}
 		$this->db->like('p.nombre',$search);
-		$this->db->or_like('p.codigo',$search);
+		$this->db->or_like('p.codigo_barras',$search);
 		$this->db->group_by("c.producto_id");
 		$this->db->limit($limit,$start);
 		$this->db->order_by($col,$dir);
@@ -519,7 +520,7 @@ class Ventas_model extends CI_Model {
 			$this->db->where("c.modelo_id",$modelo);
 		}
 		$this->db->like('p.nombre',$search);
-		$this->db->or_like('p.codigo',$search);
+		$this->db->or_like('p.codigo_barras',$search);
 		$this->db->group_by("c.producto_id");
 
 

@@ -1657,7 +1657,7 @@ $(document).ready(function () {
                 {
                     mRender: function (data, type, row) {
                         
-                        var image = "<a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+row.nombre+"*"+row.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+row.imagen+"' class='img-responsive' style='width:50px;'></a>";
+                        var image = "<a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+row.nombre+"*"+row.imagen+"'><span class='fa fa-picture-o fa-3x'></span></a>";
                         return image;
                     }
                 },
@@ -1693,59 +1693,6 @@ $(document).ready(function () {
 
         });
        
-        /*$.ajax({
-            url: base_url + "movimientos/ventas/searchProductos",
-            type:"POST",
-            dataType: 'json',
-            data: {
-                bodega:bodega, 
-                sucursal:sucursal, 
-                marca:marca, 
-                year:year, 
-                modelo:modelo, 
-            },
-            success: function(resp){
-                console.log(resp);
-                $('#tbProductos').dataTable( {
-                   
-                    destroy: true,
-                    data : resp,
-                    columns: [
-                        {"data" : "codigo_barras"},
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var image = "<a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+row.nombre+"*"+row.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+row.imagen+"' class='img-responsive' style='width:50px;'></a>";
-                                return image;
-                            }
-                        },
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var producto = '<a href="#modal-info-producto" data-toggle="modal" data-href="'+row.producto_id+'" class="btn-info-producto">'+row.nombre+'</a>';
-                                return producto;
-                            }
-                        },
-                        {"data" : "stock"},
-                        {"data" : "listPrecios"},
-                        {"data" : "localizacion"},
-                        
-                        {"data" : "year"},
-                        {"data" : "marca"},
-                        {"data" : "modelo"},
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var button = "<button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(row)+"'><span class='fa fa-check'></span></button>";
-                                return button;
-                            }
-                        }
-
-                    ],
-                    order: [[ 2, "asc" ]]
-                });
-            }
-        });*/
     }
 
     $(document).on('show.bs.modal', '.modal', function () {
@@ -1783,11 +1730,14 @@ $(document).ready(function () {
                         var barcode = '<img src="'+base_url +'assets/barcode/'+ row.codigo_barras+ '.png" alt="'+row.codigo_barras+'">';
                         return barcode;
                     }
+
+
                 },
                 {
                     mRender: function (data, type, row) {
-                        var imagen = '<img src="'+base_url + 'assets/imagenes_productos/'+ row.imagen+'" alt="'+row.nombre+'" style="width: 100px; " class="img-responsive">';
-                        return imagen;
+                       
+                        var image = "<a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+row.nombre+"*"+row.imagen+"'><span class='fa fa-picture-o fa-3x'></span></a>";
+                        return image;
                     }
                 },
                 { "data": "nombre" },

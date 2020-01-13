@@ -1,0 +1,6 @@
+select p.*,bsp.stock,bsp.localizacion,mar.nombre as marca,mod.nombre as modelo, c.year_from,c.year_until, c.range_year from compatibilidades c join productos p on c.producto_id = p.id join bodega_sucursal_producto bsp on bsp.producto_id = p.id join left marcas mar on c.marca_id =  mar.id join left modelos mod on c.modelo_id = mod.id where bsp.sucursal_id = '1' and bsp.bodega_id = '2' and p.estado ='1' and bsp.estado='1' and bsp.stock >= 1 group by c.producto_id
+
+SELECT * FROM `compatibilidades` where concat_year LIKE '%1975%' GROUP BY producto_id ORDER BY `compatibilidades`.`marca_id` ASC
+
+SELECT c.id,p.nombre,ma.nombre,mo.nombre, c.range_year, c.year_from,c.year_until,c.concat_year FROM compatibilidades c JOIN productos p ON c.producto_id= p.id JOIN marcas ma ON c.marca_id = ma.id JOIN modelos mo on c.modelo_id= mo.id WHERE c.marca_id !='' and c.concat_year LIKE '%1975%' GROUP BY c.producto_id ORDER BY c.marca_id ASC
+

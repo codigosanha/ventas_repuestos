@@ -5,15 +5,13 @@
 	<title>Codigo de Barras</title>
 	<style>
 		html, body{
-			padding: 0;
+			padding: 5px 0 0 0;
 			margin: 0;
 			text-align: center;
-			font-size: 14px;
+			font-size: 12px;
 			font-weight: bold;
 		}
-		img{
-			margin: 0px;
-		}
+	
 
 	</style>
 </head>

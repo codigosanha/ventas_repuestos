@@ -300,7 +300,7 @@ class Ventas extends CI_Controller {
 	{
 
 		$columns = array( 
-                            0 =>'p.codigo', 
+                            0 =>'p.codigo_barras', 
                             1=> 'p.imagen',
                             2=> 'p.nombre',
                             3=> 'bsp.stock',
