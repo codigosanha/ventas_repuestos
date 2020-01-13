@@ -8,10 +8,11 @@
 			padding: 0;
 			margin: 0;
 			text-align: center;
+			font-size: 14px;
+			font-weight: bold;
 		}
 		img{
-			width: 190px;
-			height: 62px;
+			margin: 0px;
 		}
 
 	</style>

@@ -405,8 +405,8 @@ class Productos extends CI_Controller {
 	   	$this->zend->load('Zend/Barcode');
 	   	$barcodeOptions = array(
 		    'text' => $codigo_barras, 
-		    'height'=> 60, 
-		    'width'=>150,
+		    'withQuietZones' => false
+		 
 		);
 	   	$file = Zend_Barcode::draw('code128', 'image', $barcodeOptions, array());
 	   	//$code = time().$code;
