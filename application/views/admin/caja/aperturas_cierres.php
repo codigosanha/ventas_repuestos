@@ -214,7 +214,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger btn-cerrar-modal-vd pull-left" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary btn-print"><span class="fa fa-print"> </span>Imprimir</button>
+        <button type="button" class="btn btn-primary btn-print-cierre"><span class="fa fa-print"> </span>Imprimir</button>
       </div>
       
     </div>

@@ -518,13 +518,17 @@ class Ventas extends CI_Controller {
 	public function savecliente(){
 		$nombres = $this->input->post("nombres");
 		$apellidos = $this->input->post("apellidos");
-		$cedula = $this->input->post("cedula");
+		$dpi = $this->input->post("dpi");
 		$telefono = $this->input->post("telefono");
 		$direccion = $this->input->post("direccion");
 		$nit = $this->input->post("nit");
-		$this->form_validation->set_rules("cedula","Cedula","required|is_unique[clientes.cedula]");
-		if ($nit) {
-			$this->form_validation->set_rules("nit","NIT","required|is_unique[clientes.nit]");
+		$this->form_validation->set_rules("nombres","Nombres","required");
+		if (!empty($dpi)) {
+			$this->form_validation->set_rules("dpi","DPI","is_unique[clientes.cedula]");
+		}
+		
+		if (!empty($nit)) {
+			$this->form_validation->set_rules("nit","NIT","is_unique[clientes.nit]");
 		}
 
 		$cliente = "";
@@ -538,11 +542,11 @@ class Ventas extends CI_Controller {
 				"telefono" => $telefono,
 				"direccion" => $direccion,
 				"nit" => $nit,
-				"cedula" => $cedula,
+				"cedula" => $dpi,
 				"estado" => "1"
 			);
 			$cliente = $this->Comun_model->insert("clientes", $data);
-			if ($cliente != "") {
+			if ($cliente) {
 				$status = "1";
 				
 			}
@@ -559,7 +563,8 @@ class Ventas extends CI_Controller {
 		echo json_encode(array(
 			'status' => $status,
 			'error' => $error,
-			'cliente' => $cliente 
+			'cliente' => $cliente,
+			'clientes' => $this->Comun_model->get_records('clientes', "estado='1'")
 		));
 	}
 }

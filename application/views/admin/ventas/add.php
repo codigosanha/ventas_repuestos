@@ -234,7 +234,7 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <table id="example1" class="table table-bordered table-striped table-hover">
+                            <table id="tbClientes" class="table table-bordered table-striped table-hover" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Cedula</th>
@@ -253,7 +253,7 @@
                                                 <td><?php echo $cliente->apellidos;?></td>
                                                 <?php $datacliente = $cliente->id."*".$cliente->nombres."*".$cliente->apellidos."*".$cliente->cedula."*".$cliente->telefono."*".$cliente->direccion."*".$cliente->nit;?>
                                                 <td>
-                                                    <button type="button" class="btn btn-success btn-check" value="<?php echo $datacliente;?>"><span class="fa fa-check"></span></button>
+                                                    <button type="button" class="btn btn-success btn-check" value='<?php echo json_encode($cliente);?>'><span class="fa fa-check"></span></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>
@@ -278,8 +278,8 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="cedula">cedula:</label>
-                                <input type="text" class="form-control" id="cedula" name="cedula" required>
+                                <label for="dpi">DPI:</label>
+                                <input type="text" class="form-control" id="dpi" name="dpi">
                             </div>
                             
                             <div class="form-group">
@@ -293,7 +293,7 @@
 
                             <div class="form-group">
                                 <label for="nit">NIT:</label>
-                                <input type="text" class="form-control" id="nit" name="nit" required>
+                                <input type="text" class="form-control" id="nit" name="nit">
                             </div>
                             
                             <div class="form-group">

@@ -1364,11 +1364,35 @@ $(document).ready(function () {
             success:function(resp){
                 console.log(resp);
                 if (resp.status=="1") {
+                    $('#tbClientes').dataTable( {
+                        "aaData": resp.clientes,
+                        "destroy": true,
+                        "columns": [
+                            { "data": "cedula" },
+                            { "data": "nombres" },
+                            { "data": "apellidos" },
+                            {
+                                mRender: function (data, type, row) {
+                                    
+                                    var btnCheck = '<button type="button" class="btn btn-success" value="'+JSON.stringify(row)+'"><span class="fa fa-check"></span></button>';
+                                   
+                                    
+                                    return btnCheck;
+                                }
+                            } 
+                        ],
+                        "language": datatable_spanish,
+                        "order": [[ 1, "asc" ]]
+                    });
                     //alertify.success("El cliente se registro correctamente");
                     $('#modal-default').modal('hide');
                   
                     $("#cliente").val(resp.cliente.nombres);
                     $("#idcliente").val(resp.cliente.id);
+                    $("#form-cliente")[0].reset();
+
+
+
                 } else{
                     $("#alert-error-cliente").show();
                     $("#alert-error-cliente").html(resp.error);
@@ -1626,6 +1650,10 @@ $(document).ready(function () {
         "pageLength": 25,
         "language": datatable_spanish
     });
+    $('#tbClientes').DataTable({
+        "language": datatable_spanish,
+        "order": [[ 1, "asc" ]]
+    });
 
 
     function cargarProductos(){
@@ -1773,10 +1801,10 @@ $(document).ready(function () {
 
 
     $(document).on("click",".btn-check",function(){
-        cliente = $(this).val();
-        infocliente = cliente.split("*");
-        $("#idcliente").val(infocliente[0]);
-        $("#cliente").val(infocliente[1]);
+        cliente = JSON.parse($(this).val());
+      
+        $("#idcliente").val(cliente.id);
+        $("#cliente").val(cliente.nombres);
         $("#modal-default").modal("hide");
     });
     $("#proveedor").autocomplete({
@@ -2039,8 +2067,8 @@ $(document).ready(function () {
         $("#modal-cotizador .modal-body").print(config_print);
     });
     $(document).on("click",".btn-print-cierre",function(){
-        $(".contenido-cierre").addClass("impresion");
-        $(".contenido-cierre").print(config_print);
+        $(".contenido").addClass("impresion");
+        $(".contenido").print(config_print);
     });
 
     $(document).on("click",".btn-print-barcode",function(){
