@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="almacen/bodegas">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>almacen/bodegas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Bodega</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>almacen/bodegas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Bodega</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>

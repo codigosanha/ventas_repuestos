@@ -87,6 +87,7 @@ class Roles extends CI_Controller {
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"rol" => $this->Comun_model->get_record("roles","id=$id"), 
+			"menus" => $this->Comun_model->get_records("menus")
 		);
 
 		$contenido_externo = array(

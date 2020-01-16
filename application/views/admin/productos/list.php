@@ -14,11 +14,12 @@
         <div class="box box-solid">
             <div class="box-body">
                 <input type="hidden" id="modulo" value="almacen/productos">
+                <input type="hidden" id="permisos" value='<?php echo json_encode($permisos) ?>'>
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>almacen/productos/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Producto</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>almacen/productos/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Producto</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>

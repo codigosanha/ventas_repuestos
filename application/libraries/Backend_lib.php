@@ -18,11 +18,17 @@ class Backend_lib{
 		$infomenu = $this->CI->Backend_model->getID($url);
 
 		$permisos = $this->CI->Backend_model->getPermisos($infomenu->id,$this->CI->session->userdata("rol"));
-		if ($permisos->read == 0 ) {
-			redirect(base_url()."dashboard");
+		if ($permisos) {
+			if ($permisos->read == 0 ) {
+				//redirect(base_url()."dashboard");
+				redirect($this->session->userdata('url_inicio'));
+			}else{
+				return $permisos;
+			}
 		}else{
-			return $permisos;
+			redirect($this->CI->session->userdata('url_inicio'));
 		}
+		
 
 	}
 
@@ -161,5 +167,10 @@ class Backend_lib{
 		);
 
 		$this->CI->Backend_model->savelogs($data);
+	}
+
+	public function getFirstUrl($rol){
+		$info = $this->CI->Backend_model->getFirstUrl($rol);
+		return $info;
 	}
 }

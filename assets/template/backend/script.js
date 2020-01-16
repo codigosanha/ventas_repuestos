@@ -1261,7 +1261,6 @@ $(document).ready(function () {
     });
     $("#form-comprobar-password").submit(function(e){
         e.preventDefault();
-        montoDescuento = $("#montoDescuento").val();
         data = $(this).serialize();
         $.ajax({
             url: base_url + "movimientos/ventas/comprobarPassword",
@@ -1269,7 +1268,8 @@ $(document).ready(function () {
             data: data,
             //dataType: "json",
             success:function(resp){
-                if (resp == "1") {
+                
+                if (resp == 1) {
                     $('#modal-default2').modal('hide');
                     $("#descuento").removeAttr("readonly");
                     
@@ -1742,6 +1742,7 @@ $(document).ready(function () {
         if (uri_segment != '') {
             url_complete = base_url + "filemanager/archivos/getArchivos/"+uri_segment;
         }*/
+        var permisos = JSON.parse($("#permisos").val());
         $('#tableProductos').DataTable({
             "pageLength": 25,
             "processing": true,
@@ -1773,22 +1774,26 @@ $(document).ready(function () {
                 { "data": "stock_minimo" },
                 {
                     mRender: function (data, type, row) {
-                        var btnViewBarcode = '<button type="button" class="btn btn-default btn-sm btn-view-barcode" data-toggle="modal" data-target="#modal-default" value="'+row.codigo_barras+'">';
-                        btnViewBarcode += '<span class="fa fa-barcode"></span>';
-                        btnViewBarcode += '</button>';
+                        
                         var btnView = '<button type="button" class="btn btn-info btn-sm btn-view" data-toggle="modal" data-target="#modal-default" value="'+row.id+'">';
                         btnView += '<span class="fa fa-search"></span>';
                         btnView += '</button>';
-                        var btnEditar = '<a href="'+base_url+'almacen/productos/edit/'+row.id+'" class="btn btn-warning btn-sm btn-flat"><i class="fa fa-pencil"></i></a>';
+                        var btnEditar = '';
+                        if (permisos.update) {
+                            btnEditar = '<a href="'+base_url+'almacen/productos/edit/'+row.id+'" class="btn btn-warning btn-sm btn-flat"><i class="fa fa-pencil"></i></a>';
+                        }
                         var btnHabilitar = '';
                         var btnDeshabilitar ='';
-                        if (row.estado=="1") {
-                            btnDeshabilitar ='<a href="'+base_url+'almacen/productos/deshabilitar/'+row.id+'" class="btn btn-danger btn-sm btn-flat btn-remove"><i class="fa fa-times"></i></a>';
+                        if (permisos.delete) {
+                            if (row.estado=="1") {
+                                btnDeshabilitar ='<a href="'+base_url+'almacen/productos/deshabilitar/'+row.id+'" class="btn btn-danger btn-sm btn-flat btn-remove"><i class="fa fa-times"></i></a>';
 
-                        }else{
-                            btnHabilitar ='<a href="'+base_url+'almacen/productos/habilitar/'+row.id+'" class="btn btn-success btn-sm btn-flat btn-habilitar"><i class="fa fa-pencil"></i></a>';
+                            }else{
+                                btnHabilitar ='<a href="'+base_url+'almacen/productos/habilitar/'+row.id+'" class="btn btn-success btn-sm btn-flat btn-habilitar"><i class="fa fa-pencil"></i></a>';
+                            }
                         }
-                        return '<div class="btn-group">' +btnViewBarcode+ btnView+ btnEditar +' '+ btnHabilitar+' '+btnDeshabilitar+ "</div>";
+                        
+                        return '<div class="btn-group">' + btnView+ btnEditar +' '+ btnHabilitar+' '+btnDeshabilitar+ "</div>";
                     }
                 } 
             ],

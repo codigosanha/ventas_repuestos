@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Backend_model extends CI_Model {
 	public function getID($link){
-		$this->db->like("link",$link);
+		$this->db->like("url",$link);
 		$resultado = $this->db->get("menus");
 		return $resultado->row();
 	}
@@ -12,7 +12,12 @@ class Backend_model extends CI_Model {
 		$this->db->where("menu_id",$menu);
 		$this->db->where("rol_id",$rol);
 		$resultado = $this->db->get("permisos");
-		return $resultado->row();
+		if ($resultado->num_rows() > 0) {
+			return $resultado->row();
+		}
+
+		return false;
+		
 	}
 
 	public function rowCount($tabla){
@@ -114,6 +119,23 @@ class Backend_model extends CI_Model {
 		$this->db->join("usuarios u", "l.usuario_id = u.id");
 		$resultados = $this->db->get();
 		return $resultados->result();
+	}
+
+	public function getFirstUrl($rol){
+		/*SELECT * FROM permisos p JOIN menus m on p.menu_id = m.id WHERE rol_id = '1' and m.url!='#' ORDER BY m.orden*/
+		$this->db->select("m.url");
+		$this->db->from("permisos p");
+
+		$this->db->join("menus m", "p.menu_id = m.id");
+		$this->db->where("p.rol_id",$rol);
+		$this->db->where("m.url !=",'#');
+		$this->db->order_by('m.orden');
+		$this->db->order_by('m.parent');
+		$resultados = $this->db->get();
+		if ($resultados->num_rows() > 0 ) {
+			return $resultados->row();
+		}
+		return false;
 	}
 
 	

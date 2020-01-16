@@ -30,17 +30,27 @@ class Auth extends CI_Controller {
 			echo "0";
 		}
 		else{
-			$data  = array(
-				'id' => $res->id, 
-				'username' => $res->username,
-				'rol' => $res->rol_id,
-				'sucursal' => $res->sucursal_id,
-				'total_access' => get_record("roles","id=".$res->rol_id)->total_access,
-				'login' => TRUE
-			);
-			$this->session->set_userdata($data);
+			
 			/*redirect(base_url()."backend/dashboard");*/
-			echo "1";
+			$firstPermission = $this->Backend_model->getFirstUrl($res->rol_id);
+
+			if ($firstPermission) {
+				$data  = array(
+					'id' => $res->id, 
+					'username' => $res->username,
+					'rol' => $res->rol_id,
+					'sucursal' => $res->sucursal_id,
+					'total_access' => get_record("roles","id=".$res->rol_id)->total_access,
+					'login' => TRUE,
+					'url_inicio' => $firstPermission->url
+				);
+				$this->session->set_userdata($data);
+				echo $firstPermission->url;
+			}else{
+				echo "2";
+			}
+
+			
 		}
 	}
 

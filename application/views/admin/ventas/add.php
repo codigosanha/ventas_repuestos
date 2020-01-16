@@ -181,12 +181,17 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Descuento:</span>
-                                    <input type="text" class="form-control" placeholder="descuento" name="descuento" id="descuento" value="0.00" readonly="readonly">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-danger" id="btn-descuento" type="button" data-toggle="modal" data-target="#modal-default2">
-                                            Aplicar
-                                        </button>
-                                    </span>
+                                    <?php if ($permisos->delete): ?>
+                                        <input type="text" class="form-control" placeholder="descuento" name="descuento" id="descuento" value="0.00">
+                                    <?php else: ?>
+                                        <input type="text" class="form-control" placeholder="descuento" name="descuento" id="descuento" value="0.00" readonly="readonly">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" id="btn-descuento" type="button" data-toggle="modal" data-target="#modal-default2">
+                                                Aplicar
+                                            </button>
+                                        </span>
+                                    <?php endif ?>
+                                    
                                 </div>
                             </div> 
                             <div class="form group">

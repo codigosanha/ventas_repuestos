@@ -3,10 +3,10 @@ defined("BASEPATH") OR exit("No direct script access allowed");
 
 class Ventas extends CI_Controller {
 
-	//private $permisos;
+	private $permisos;
 	public function __construct(){
 		parent::__construct();
-		//$this->permisos = $this->backend_lib->control();
+		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		$this->load->model("Ventas_model");
 	}
@@ -20,7 +20,7 @@ class Ventas extends CI_Controller {
 		}
 
 		$contenido_interno  = array(
-			//"permisos" => $this->permisos,
+			"permisos" => $this->permisos,
 			"ventas" => $ventas,
 			"cajas_abiertas" => count($this->Comun_model->get_records("caja","estado=1")), 
 		);
@@ -56,9 +56,11 @@ class Ventas extends CI_Controller {
 			"years" => $this->Comun_model->get_records("years","estado=1"),
 			"marcas" => $this->Comun_model->get_records("marcas","estado='1' ORDER BY nombre"),
 			"modelos" => $this->Comun_model->get_records("modelos","estado=1"),
+			"permisos" => $this->permisos,
 		);
 		$contenido_externo = array(
 			"title" => "ventas", 
+
 			"contenido" => $this->load->view("admin/ventas/add",$contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
@@ -566,5 +568,18 @@ class Ventas extends CI_Controller {
 			'cliente' => $cliente,
 			'clientes' => $this->Comun_model->get_records('clientes', "estado='1'")
 		));
+	}
+
+	public function comprobarPassword(){
+		$password = sha1($this->input->post("password"));
+		$sucursal = $this->session->userdata("sucursal");
+
+		$checkPassword = $this->Comun_model->get_record("usuarios","sucursal_id='$sucursal' && password='$password'");
+
+		if ($checkPassword) {
+			echo "1";
+		}else{
+			echo "0";
+		}
 	}
 }

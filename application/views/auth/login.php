@@ -58,34 +58,43 @@
 
 
     $.ajax({
-      url : url,
-      type: "POST",
-      data: data,
-      success:function(resp){
+        url : url,
+        type: "POST",
+        data: data,
+        success:function(resp){
+            //console.log(resp);
+            if (resp == 0) {
 
+                swal({
+                    title: "Error",
+                    text: "El usuario y/o contraseña no son válidos",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    type: 'error'
+                });
+                               
+            } else {
 
-        if (resp == 0) {
-
-            swal({
-                title: "Error",
-                text: "El usuario y/o contraseña no son válidos",
-                timer: 2000,
-                showConfirmButton: false,
-                type: 'error'
-            });
-                           
+                if (resp==2) {
+                    swal({
+                        title: "Aviso",
+                        text: "Los datos del usuario son correctos pero aún no se ha establecido permisos para el rol del usuario",
+                        timer: 2000,
+                        showConfirmButton: false,
+                        type: 'warning'
+                    });
+                }else{
+                    swal({
+                        title: "Autenticado",
+                        text: "Iniciando sesion...",
+                        timer: 3000,
+                        showConfirmButton: false,
+                        type: 'success'
+                    });
+                    window.location.href = base_url + resp;
+                }
+            }
         }
-        else{
-          swal({
-                title: "Autenticado",
-                text: "Iniciando sesion...",
-                timer: 3000,
-                showConfirmButton: false,
-                type: 'success'
-            });
-          window.location.href = base_url + "backend/dashboard";
-        }
-      }
     });
   });
   /* Simple VanillaJS to toggle class */

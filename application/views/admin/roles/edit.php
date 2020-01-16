@@ -33,6 +33,7 @@
                                 <label for="descripcion">Descripcion:</label>
                                 <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo set_value('descripcion')?:$rol->descripcion?>">
                             </div>
+                            
                             <div class="form-group">
                                 <label for="descripcion">Acceso Total:</label><br>
                                 <label class="checkbox-inline"><input type="checkbox" name="total_access" id="total_access" <?php echo $rol->total_access == 1 ? 'checked':'';?>>Acceso a todas las funciones de todas las sucursales</label>

@@ -63,8 +63,10 @@
       data: data,
       success:function(resp){
 
+        console.log(resp);
 
-        if (resp == "0") {
+
+        /*if (resp == "0") {
 
             swal({
                 title: "Error",
@@ -76,6 +78,10 @@
                            
         }
         else{
+
+
+
+
           swal({
                 title: "Autenticado",
                 text: "Iniciando sesion...",
@@ -83,8 +89,9 @@
                 showConfirmButton: false,
                 type: 'success'
             });
+
           window.location.href = base_url + "dashboard";
-        }
+        }*/
       }
     });
   });

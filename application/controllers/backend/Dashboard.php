@@ -2,10 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller {
-
+	private $permisos;
 	public function __construct(){
 		parent::__construct();
-		
+		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Ventas_model");
 		$this->load->model("Permisos_model");
 
