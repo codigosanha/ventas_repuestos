@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="almacen/calidades">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>almacen/calidades/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Calidad</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>almacen/calidades/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Calidad</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -46,15 +46,18 @@
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $calidad->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    
-                                                    <a href="<?php echo base_url()?>almacen/calidades/edit/<?php echo $calidad->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php if ($calidad->estado): ?>
-                                                        <a href="<?php echo base_url();?>almacen/calidades/deshabilitar/<?php echo $calidad->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php else: ?>
-                                                        <a href="<?php echo base_url();?>almacen/calidades/habilitar/<?php echo $calidad->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+
+                                                    <?php if ($permisos->update): ?>
+                                                        <a href="<?php echo base_url()?>almacen/calidades/edit/<?php echo $calidad->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
                                                     <?php endif ?>
                                                     
-                                                  
+                                                    <?php if ($permisos->delete): ?>
+                                                        <?php if ($calidad->estado): ?>
+                                                            <a href="<?php echo base_url();?>almacen/calidades/deshabilitar/<?php echo $calidad->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                        <?php else: ?>
+                                                            <a href="<?php echo base_url();?>almacen/calidades/habilitar/<?php echo $calidad->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                        <?php endif ?>
+                                                    <?php endif ?>
                                                 </div>
                                             </td>
                                         </tr>

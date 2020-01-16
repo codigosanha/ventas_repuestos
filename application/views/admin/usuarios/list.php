@@ -15,9 +15,9 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>administrador/usuarios/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Usuario</a>
-           
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>administrador/usuarios/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Usuario</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -34,7 +34,7 @@
                                     <th>Rol</th>
                                     <th>Sucursal</th>
                                     <th>Cambiar Contraseña</th>
-                                    <th>opciones</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,21 +54,22 @@
                                                     <?php echo "General"; ?>
                                                 <?php endif ?>
                                                 </td>
-                                            <td><button id="change-password" type="buttton" value="<?php echo $usuario->id;?>" class="btn btn-default" data-toggle="modal" data-target="#modal-password"><i class="fa fa-cogs"></i> Cambiar</button></td>
+                                            <td><button id="change-password" type="buttton" value="<?php echo $usuario->id;?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-password"><i class="fa fa-cogs" <?php $permisos->update ? '':'disabled' ?>></i> Cambiar</button></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view-usuario" data-toggle="modal" data-target="#modal-default" value="<?php echo $usuario->id;?>">
+                                                    <button type="button" class="btn btn-info btn-view-usuario btn-sm" data-toggle="modal" data-target="#modal-default" value="<?php echo $usuario->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                
-                                                    <a href="<?php echo base_url()?>administrador/usuarios/edit/<?php echo $usuario->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php if ($usuario->estado): ?>
-                                                        <a href="<?php echo base_url();?>administrador/usuarios/deshabilitar/<?php echo $usuario->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php else: ?>
-                                                        <a href="<?php echo base_url();?>administrador/usuarios/habilitar/<?php echo $usuario->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php if ($permisos->update): ?>
+                                                        <a href="<?php echo base_url()?>administrador/usuarios/edit/<?php echo $usuario->id;?>" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>
                                                     <?php endif ?>
-                                                    
-                                                    
+                                                    <?php if ($permisos->delete): ?>
+                                                        <?php if ($usuario->estado): ?>
+                                                            <a href="<?php echo base_url();?>administrador/usuarios/deshabilitar/<?php echo $usuario->id;?>" class="btn btn-danger btn-remove btn-sm"><span class="fa fa-remove"></span></a>
+                                                        <?php else: ?>
+                                                            <a href="<?php echo base_url();?>administrador/usuarios/habilitar/<?php echo $usuario->id;?>" class="btn btn-success btn-habilitar btn-sm"><span class="fa fa-check"></span></a>
+                                                        <?php endif ?>
+                                                    <?php endif ?>
                                                 </div>
                                             </td>
                                         </tr>

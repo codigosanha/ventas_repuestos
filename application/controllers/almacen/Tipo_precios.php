@@ -3,10 +3,10 @@ defined("BASEPATH") OR exit("No direct script access allowed");
 
 class Tipo_precios extends CI_Controller {
 
-	//private $permisos;
+	private $permisos;
 	public function __construct(){
 		parent::__construct();
-		//$this->permisos = $this->backend_lib->control();
+		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		
 	}
@@ -14,7 +14,7 @@ class Tipo_precios extends CI_Controller {
 	public function index()
 	{
 		$contenido_interno  = array(
-			//"permisos" => $this->permisos,
+			"permisos" => $this->permisos,
 			"precios" => $this->Comun_model->get_records("precios"),
 			"precio_venta" => $this->Comun_model->get_record("precios","seleccion_venta='1'"), 
 		);

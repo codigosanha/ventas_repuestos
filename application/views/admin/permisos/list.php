@@ -15,13 +15,9 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <!-- <?php if($permits->insert == 1):?>
-                        <a href="<?php echo base_url();?>administrador/permisos/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Permiso</a>
-                        <?php endif;?> -->
-
-                        
-                        <a href="<?php echo base_url();?>administrador/permisos/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Permiso</a>
-  
+                        <?php if($permits->insert == 1):?>
+                            <a href="<?php echo base_url();?>administrador/permisos/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Permiso</a>
+                        <?php endif;?>
                     </div>
                 </div>
                 <hr>
@@ -38,7 +34,7 @@
                                     <th>Insertar</th>
                                     <th>Actualizar</th>
                                     <th>Eliminar</th>
-                                    <th>opciones</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,10 +74,12 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    
-                                                    <a href="<?php echo base_url()?>administrador/permisos/edit/<?php echo $permiso->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    
-                                                    <a href="<?php echo base_url();?>administrador/permisos/delete/<?php echo $permiso->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                    <?php if($permits->update):?>
+                                                    <a href="<?php echo base_url()?>administrador/permisos/edit/<?php echo $permiso->id;?>" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>
+                                                    <?php endif ?>
+                                                    <?php if($permits->delete):?>
+                                                        <a href="<?php echo base_url();?>administrador/permisos/delete/<?php echo $permiso->id;?>" class="btn btn-danger btn-remove btn-sm"><span class="fa fa-remove"></span></a>
+                                                    <?php endif ?>
                                                 </div>
                                             </td>
                                         </tr>

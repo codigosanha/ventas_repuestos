@@ -3,10 +3,10 @@ defined("BASEPATH") OR exit("No direct script access allowed");
 
 class Apertura_cierre extends CI_Controller {
 
-	//private $permisos;
+	private $permisos;
 	public function __construct(){
 		parent::__construct();
-		//$this->permisos = $this->backend_lib->control();
+		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		
 	}
@@ -34,7 +34,7 @@ class Apertura_cierre extends CI_Controller {
 		}
 
 		$contenido_interno  = array(
-			//"permisos" => $this->permisos,
+			"permisos" => $this->permisos,
 			"cajas" => $cajas,
 			"numero_sucursales" => $numero_sucursales,
 			"cajas_abiertas" => $cajas_abiertas,

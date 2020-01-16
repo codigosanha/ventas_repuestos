@@ -53,11 +53,11 @@
                                                 <td><?php echo number_format($cuenta->monto - getTotalAbonos($cuenta->id), 2, '.', '');?></td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        
-                                                        <button type="button" class="btn btn-primary btn-abonar" data-toggle="modal" data-target="#modal-abonar" value="<?php  echo $cuenta->id;?>">
+                                                        <?php if ($permisos->update): ?>
+                                                            <button type="button" class="btn btn-primary btn-abonar" data-toggle="modal" data-target="#modal-abonar" value="<?php  echo $cuenta->id;?>">
                                                             Abonar
-                                                        </button>
-                                                        
+                                                            </button>
+                                                        <?php endif ?>
                                                     </div>
                                                 </td>
                                             </tr>

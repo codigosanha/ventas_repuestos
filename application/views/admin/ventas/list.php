@@ -16,8 +16,10 @@
                 <input type="hidden" id="ventas" value="ventas">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if ($cajas_abiertas): ?>
-                            <a href="<?php echo base_url();?>movimientos/ventas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Venta</a>
+                        <?php if ($permisos->insert): ?>
+                            <?php if ($cajas_abiertas): ?>
+                                <a href="<?php echo base_url();?>movimientos/ventas/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Venta</a>
+                            <?php endif ?>
                         <?php endif ?>
                     </div>
                 </div>
@@ -71,23 +73,15 @@
                                                 <td>
                                                     <button type="button" class="btn btn-info btn-info-venta" value="<?php echo $venta->id;?>" data-toggle="modal" data-target="#modal-venta"><span class="fa fa-search"></span></button>
                                                     
-                                                        
-                                                    <?php if ($venta->estado): ?>
-                                                        <?php if ($comprobante->permitir_anular): ?>
-                                                            <a href="<?php echo base_url();?>movimientos/ventas/anular/<?php echo $venta->id;?>" class="btn btn-danger btn-anular-venta"><span class="fa fa-remove"></span></a>
+                                                    <?php if ($permisos->delete): ?>
+                                                        <?php if ($venta->estado): ?>
+                                                            <?php if ($comprobante->permitir_anular): ?>
+                                                                <a href="<?php echo base_url();?>movimientos/ventas/anular/<?php echo $venta->id;?>" class="btn btn-danger btn-anular-venta"><span class="fa fa-remove"></span></a>
+                                                            <?php endif ?>
                                                         <?php endif ?>
                                                     <?php endif ?>
-                                                    
-                                                        
-                                                    
-                                                        
-                                                    
                                                 </td>
                                             </tr>
-                                                
-                                        
-                                        
-                                      
                                     <?php endforeach;?>
                                 <?php endif ?>
                             </tbody>

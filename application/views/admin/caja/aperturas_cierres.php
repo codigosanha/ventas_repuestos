@@ -34,17 +34,19 @@
                 <input type="hidden" id="modulo" value="caja/apertura_cierre">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if ($this->session->userdata("sucursal")): ?>
-                            <?php if (!$caja_abierta): ?>
-                                <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-abrir-caja">
-                                    <i class="fa fa-plus"></i> Abrir Caja
-                                </button>
-                            <?php endif ?>
-                        <?php else: ?>
-                            <?php if ($numero_sucursales != $cajas_abiertas): ?>
-                                <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-abrir-caja">
-                                    <i class="fa fa-plus"></i> Abrir Caja
-                                </button>
+                        <?php if ($permisos->insert): ?>
+                            <?php if ($this->session->userdata("sucursal")): ?>
+                                <?php if (!$caja_abierta): ?>
+                                    <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-abrir-caja">
+                                        <i class="fa fa-plus"></i> Abrir Caja
+                                    </button>
+                                <?php endif ?>
+                            <?php else: ?>
+                                <?php if ($numero_sucursales != $cajas_abiertas): ?>
+                                    <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-abrir-caja">
+                                        <i class="fa fa-plus"></i> Abrir Caja
+                                    </button>
+                                <?php endif ?>
                             <?php endif ?>
                         <?php endif ?>
                     </div>
@@ -102,7 +104,7 @@
                                                             <span class="fa fa-search"></span>
                                                         </button>
                                                     <?php endif ?>
-                                                    <?php if ($this->session->userdata("rol")==1 || $this->session->userdata("id") == $caja->usuario_id): ?>
+                                                    <?php if ($permisos->update || $this->session->userdata("id") == $caja->usuario_id): ?>
                                                         <?php if ($caja->estado == 1): ?>
                                                             <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" data-toggle="modal" data-target="#modal-cierre" value="<?php echo $caja->id;?>">
                                                                 <i class="fa fa-times"></i>

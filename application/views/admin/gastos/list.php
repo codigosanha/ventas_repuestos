@@ -15,17 +15,19 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if ($this->session->userdata("sucursal")): ?>
-                            <?php if ($caja_abierta): ?>
-                                <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-add-gasto">
-                                    <i class="fa fa-plus"></i> Agregar Gasto
-                                </button>
-                            <?php endif ?>
-                        <?php else: ?>
-                            <?php if ($cajas_abiertas): ?>
-                                <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-add-gasto">
-                                    <i class="fa fa-plus"></i> Agregar Gasto
-                                </button>
+                        <?php if ($permisos->insert): ?>
+                            <?php if ($this->session->userdata("sucursal")): ?>
+                                <?php if ($caja_abierta): ?>
+                                    <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-add-gasto">
+                                        <i class="fa fa-plus"></i> Agregar Gasto
+                                    </button>
+                                <?php endif ?>
+                            <?php else: ?>
+                                <?php if ($cajas_abiertas): ?>
+                                    <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#modal-add-gasto">
+                                        <i class="fa fa-plus"></i> Agregar Gasto
+                                    </button>
+                                <?php endif ?>
                             <?php endif ?>
                         <?php endif ?>
                     </div>
@@ -62,7 +64,9 @@
                                                 <td><?php echo $gasto->monto;?></td>
                                                 <td><?php echo $gasto->observaciones;?></td>
                                                 <td>
-                                                    <a href="<?php echo base_url();?>caja/gastos/delete/<?php echo $gasto->id;?>" class="btn btn-danger">Eliminar</a>
+                                                    <?php if ($permisos->delete): ?>
+                                                        <a href="<?php echo base_url();?>caja/gastos/delete/<?php echo $gasto->id;?>" class="btn btn-danger">Eliminar</a>
+                                                    <?php endif ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>

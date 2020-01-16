@@ -3,10 +3,10 @@ defined("BASEPATH") OR exit("No direct script access allowed");
 
 class Calidades extends CI_Controller {
 
-	//private $permisos;
+	private $permisos;
 	public function __construct(){
 		parent::__construct();
-		//$this->permisos = $this->backend_lib->control();
+		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		
 	}
@@ -16,6 +16,7 @@ class Calidades extends CI_Controller {
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"calidades" => $this->Comun_model->get_records("calidades"), 
+			"permisos" => $this->permisos,
 		);
 
 		$contenido_externo = array(

@@ -16,32 +16,34 @@
                 <input type="hidden" id="modulo" value="almacen/tipo_precios">
                 <div class="row">
                     <div class="col-md-6">
-                      
-                        <a href="<?php echo base_url();?>almacen/tipo_precios/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tipo de Precio</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>almacen/tipo_precios/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Tipo de Precio</a>
+                        <?php endif ?>
                     </div>
 
                     <div class="col-md-6">
-                        <form action="<?php echo base_url();?>almacen/tipo_precios/set_precio_venta" method="POST">
-                            <div class="input-group">
-                                <span class="input-group-addon">Indique el precio para ventas</span>
-                                <select name="precio_venta" id="precio_venta" class="form-control" required="required">
-                                    <option value="">Seleccione..</option>
-                                    <?php foreach ($precios as $precio): ?>
-                                        <?php 
-                                            $selected = '';
-                                            if (isset($precio_venta) && $precio_venta->id == $precio->id){
-                                                $selected = 'selected';
-                                            }
-                                        ?>
-                                        <option value="<?php echo $precio->id;?>" <?php echo $selected;?>><?php echo $precio->nombre;?></option>
-                                    <?php endforeach ?>
-                                </select>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success" type="submit">Guardar</button>
-                                </span>
-                            </div><!-- /input-group -->
-                        </form>
+                        <?php if ($permisos->update): ?>
+                            <form action="<?php echo base_url();?>almacen/tipo_precios/set_precio_venta" method="POST">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Indique el precio para ventas</span>
+                                    <select name="precio_venta" id="precio_venta" class="form-control" required="required">
+                                        <option value="">Seleccione..</option>
+                                        <?php foreach ($precios as $precio): ?>
+                                            <?php 
+                                                $selected = '';
+                                                if (isset($precio_venta) && $precio_venta->id == $precio->id){
+                                                    $selected = 'selected';
+                                                }
+                                            ?>
+                                            <option value="<?php echo $precio->id;?>" <?php echo $selected;?>><?php echo $precio->nombre;?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success" type="submit">Guardar</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </form>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -69,14 +71,16 @@
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $precio->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    
-                                                    <a href="<?php echo base_url()?>almacen/tipo_precios/edit/<?php echo $precio->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php if ($precio->estado): ?>
-                                                        <a href="<?php echo base_url();?>almacen/tipo_precios/deshabilitar/<?php echo $precio->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                    <?php else: ?>
-                                                        <a href="<?php echo base_url();?>almacen/tipo_precios/habilitar/<?php echo $precio->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                    <?php if ($permisos->update): ?>
+                                                        <a href="<?php echo base_url()?>almacen/tipo_precios/edit/<?php echo $precio->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
                                                     <?php endif ?>
-                                                    
+                                                    <?php if ($permisos->delete): ?>
+                                                        <?php if ($precio->estado): ?>
+                                                            <a href="<?php echo base_url();?>almacen/tipo_precios/deshabilitar/<?php echo $precio->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
+                                                        <?php else: ?>
+                                                            <a href="<?php echo base_url();?>almacen/tipo_precios/habilitar/<?php echo $precio->id;?>" class="btn btn-success btn-habilitar"><span class="fa fa-check"></span></a>
+                                                        <?php endif ?>
+                                                    <?php endif ?>
                                                   
                                                 </div>
                                             </td>
