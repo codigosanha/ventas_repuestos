@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="inventario/devoluciones">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>inventario/devoluciones/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Devolución</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>inventario/devoluciones/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Devolución</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>

@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="administrador/menus">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>administrador/menus/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Menú</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>administrador/menus/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Menú</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -49,12 +49,16 @@
                                             <td><?php echo $menu->orden;?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $menu->id;?>">
+                                                    <button type="button" class="btn btn-info btn-view btn-sm" data-toggle="modal" data-target="#modal-default" value="<?php echo $menu->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
+                                                    <?php if ($permisos->update): ?>
+                                                        <a href="<?php echo base_url()?>administrador/menus/edit/<?php echo $menu->id;?>" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>
+                                                    <?php endif ?>
+                                                    <?php if ($permisos->delete): ?>
+                                                        <a href="<?php echo base_url();?>administrador/menus/delete/<?php echo $menu->id;?>" class="btn btn-danger btn-remove btn-sm"><span class="fa fa-remove"></span></a>
+                                                    <?php endif ?>
                                                     
-                                                    <a href="<?php echo base_url()?>administrador/menus/edit/<?php echo $menu->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>administrador/menus/delete/<?php echo $menu->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
                                                   
                                                 </div>
                                             </td>

@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="administrador/roles">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>administrador/roles/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Rol</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>administrador/roles/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Rol</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -51,13 +51,15 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $rol->id;?>">
+                                                    <button type="button" class="btn btn-info btn-view btn-sm" data-toggle="modal" data-target="#modal-default" value="<?php echo $rol->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    
-                                                    <a href="<?php echo base_url()?>administrador/roles/edit/<?php echo $rol->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <a href="<?php echo base_url();?>administrador/roles/delete/<?php echo $rol->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-remove"></span></a>
-                                                  
+                                                    <?php if ($permisos->update): ?>
+                                                        <a href="<?php echo base_url()?>administrador/roles/edit/<?php echo $rol->id;?>" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>
+                                                    <?php endif ?>
+                                                    <?php if ($permisos->delete): ?>
+                                                        <a href="<?php echo base_url();?>administrador/roles/delete/<?php echo $rol->id;?>" class="btn btn-danger btn-remove btn-sm"><span class="fa fa-remove"></span></a>
+                                                    <?php endif ?>
                                                 </div>
                                             </td>
                                         </tr>

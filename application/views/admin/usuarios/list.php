@@ -127,7 +127,7 @@
         </div>
         <div class="form-group">
             <label for="">Repetir Nueva Contraseña:</label>
-            <input type="password" class="form-control" name="repeatpassword" id="newpassword" placeholder="Repetir Nueva Contraseña" required>
+            <input type="password" class="form-control" name="repeatpassword" id="repeatpassword" placeholder="Repetir Nueva Contraseña" required>
         </div>
       </div>
       <div class="modal-footer">

@@ -14,9 +14,11 @@
             <div class="box-body">
             	<div class="row">
             		<div class="col-md-12">
-            			<a href="<?php echo base_url();?>administrador/sucursales/add" class="btn btn-primary btn-flat">
-            				<span class="fa fa-plus"></span> Agregar Sucursal
-            			</a>
+            			<?php if ($permisos->insert): ?>
+            				<a href="<?php echo base_url();?>administrador/sucursales/add" class="btn btn-primary btn-flat">
+	            				<span class="fa fa-plus"></span> Agregar Sucursal
+	            			</a>
+            			<?php endif ?>
             		</div>
             	</div>
             	<br>
@@ -49,9 +51,11 @@
 	                                            		<button type="button" data-target="#modal-default" data-toggle="modal" class="btn btn-primary btn-sm btn-flat btn-view" value="<?php echo $sucursal->id;?>">
 	                                            			<span class="fa fa-eye"></span>
 	                                            		</button>
-	                                            		<a href="<?php echo base_url();?>administrador/sucursales/edit/<?php echo $sucursal->id;?>" class="btn btn-warning btn-flat btn-sm">
-	                                            			<span class="fa fa-pencil"></span>
-	                                            		</a>
+	                                            		<?php if ($permisos->update): ?>
+	                                            			<a href="<?php echo base_url();?>administrador/sucursales/edit/<?php echo $sucursal->id;?>" class="btn btn-warning btn-flat btn-sm">
+		                                            			<span class="fa fa-pencil"></span>
+		                                            		</a>
+	                                            		<?php endif ?>
 	                                            	</div>
 	                                            </td>
 	                                        </tr>

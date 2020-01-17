@@ -1098,6 +1098,13 @@ $(document).ready(function () {
                 type: "POST",
                 data: info,
                 success: function(resp){
+                    swal({
+                            position: 'center',
+                            type: 'success',
+                            title: 'La contraseña se ha modificado correctamente',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     window.location.href = base_url + resp;
                 }
             });
@@ -1655,7 +1662,6 @@ $(document).ready(function () {
         "order": [[ 1, "asc" ]]
     });
 
-
     function cargarProductos(){
         bodega = $("#bodega").val();
         sucursal = $("#sucursal-venta").val();
@@ -1742,7 +1748,8 @@ $(document).ready(function () {
         if (uri_segment != '') {
             url_complete = base_url + "filemanager/archivos/getArchivos/"+uri_segment;
         }*/
-        var permisos = JSON.parse($("#permisos").val());
+        if ($("#tableProductos").length) {
+            var permisos = JSON.parse($("#permisos").val());
         $('#tableProductos').DataTable({
             "pageLength": 25,
             "processing": true,
@@ -1800,6 +1807,8 @@ $(document).ready(function () {
             "language": datatable_spanish,
      
         });
+        }
+        
     });
 
     $('.sidebar-menu').tree();

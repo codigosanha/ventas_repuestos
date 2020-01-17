@@ -30,9 +30,9 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        
-                        <a href="<?php echo base_url();?>inventario/ajuste/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Ajuste</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>inventario/ajuste/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Ajuste</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -64,18 +64,13 @@
                                             <td><?php echo $ajuste->fecha;?></td>
                                             <td><?php echo get_record("usuarios","id=".$ajuste->usuario_id)->nombres;?></td>
                                             <td>
-
-                                                
-                                                    <button type="button" class="btn btn-info btn-view-ajuste" value="<?php echo $ajuste->id;?>">
-                                                        <span class="fa fa-eye"></span>
-                                                    </button>
-                                                    <a href="<?php echo base_url();?>inventario/ajuste/edit/<?php echo $ajuste->id;?>" class="btn btn-warning btn-flat"><span class="fa fa-pencil"></span></a>
-                                                    
-
-                                                
-
+                                                <button type="button" class="btn btn-info btn-view-ajuste btn-sm" value="<?php echo $ajuste->id;?>">
+                                                    <span class="fa fa-eye"></span>
+                                                </button>
+                                                <?php if ($permisos->update): ?>
+                                                    <a href="<?php echo base_url();?>inventario/ajuste/edit/<?php echo $ajuste->id;?>" class="btn btn-warning btn-flat btn-sm"><span class="fa fa-pencil"></span></a>
+                                                <?php endif ?>
                                             </td>
-
                                         </tr>
 
                                     <?php endforeach ?>

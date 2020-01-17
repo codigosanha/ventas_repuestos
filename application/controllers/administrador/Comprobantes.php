@@ -3,10 +3,10 @@ defined("BASEPATH") OR exit("No direct script access allowed");
 
 class Comprobantes extends CI_Controller {
 
-	//private $permisos;
+	private $permisos;
 	public function __construct(){
 		parent::__construct();
-		//$this->permisos = $this->backend_lib->control();
+		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		
 	}
@@ -20,7 +20,7 @@ class Comprobantes extends CI_Controller {
 		}
 
 		$contenido_interno  = array(
-			//"permisos" => $this->permisos,
+			"permisos" => $this->permisos,
 			"comprobantes" => $comprobantes, 
 		);
 

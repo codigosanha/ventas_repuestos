@@ -171,4 +171,14 @@ class Usuarios extends CI_Controller {
 		//echo "administrador/usuarios";
 		redirect(base_url()."administrador/usuarios");
 	}
+
+	public function changepassword(){
+		$newpassword = $this->input->post("newpassword");
+		$idusuario = $this->input->post("idusuario");
+
+		$data['password'] = sha1($newpassword);
+
+		$this->Comun_model->update("usuarios","id='$idusuario'", $data);
+		echo "administrador/usuarios";
+	}
 }

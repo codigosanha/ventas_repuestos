@@ -16,9 +16,9 @@
                 <input type="hidden" id="modulo" value="inventario/traslados">
                 <div class="row">
                     <div class="col-md-12">
-                      
-                        <a href="<?php echo base_url();?>inventario/traslados/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Traslado</a>
-                      
+                        <?php if ($permisos->insert): ?>
+                            <a href="<?php echo base_url();?>inventario/traslados/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Traslado</a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <hr>
@@ -60,15 +60,14 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $traslado->id;?>">
+                                                    <button type="button" class="btn btn-info btn-view btn-sm" data-toggle="modal" data-target="#modal-default" value="<?php echo $traslado->id;?>">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-
-                                                    <?php if ($traslado->estado): ?>
-                                                        <a href="<?php echo base_url()?>inventario/traslados/deshabilitar/<?php echo $traslado->id;?>" class="btn btn-danger btn-remove"><span class="fa fa-times"></span></a>
-                                                    <?php endif ?>
-                                                    
-                                                    
+                                                    <?php if ($permisos->delete): ?>
+                                                        <?php if ($traslado->estado): ?>
+                                                            <a href="<?php echo base_url()?>inventario/traslados/deshabilitar/<?php echo $traslado->id;?>" class="btn btn-danger btn-remove btn-sm"><span class="fa fa-times"></span></a>
+                                                        <?php endif ?>
+                                                    <?php endif ?> 
                                                 </div>
                                             </td>
                                         </tr>

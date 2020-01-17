@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         <?php else: ?>
-                            <input type="hidden" name="sucursal_envio" value="<?php echo $this->session->userdata("sucursal");?>">
+                            <input type="hidden" name="sucursal_envio" id="sucursal_envio"> value="<?php echo $this->session->userdata("sucursal");?>">
                         <?php endif ?>
                         
                         <div class="col-md-6">
