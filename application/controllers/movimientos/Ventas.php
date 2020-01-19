@@ -254,18 +254,13 @@ class Ventas extends CI_Controller {
 		$productos = $this->Ventas_model->getProductos($sucursal_id,$bodega_id, $valor);
 		$data = array();
 		foreach ($productos as $p) {
-			$listPrecios = "";
-			$precios = $this->Ventas_model->getPrecios($p->producto_id);
-			foreach ($precios as $precio) {
-				$listPrecios .="<b>".$precio->nombre."</b> - ". $precio->precio_venta."</br>";
-			}
+			
 			$producto = get_record("productos", "id=".$p->producto_id);
 			$data[] = array(
 				"producto_id" => $p->producto_id,
 				"label" => $producto->codigo_barras ." - ".$producto->nombre,
 				"nombre" => $producto->nombre,
 				"codigo_barras" => $producto->codigo_barras,
-				"listPrecios" => $listPrecios,
 				"stock" => $p->stock,
 				"precios" => $this->Ventas_model->getPrecios($p->producto_id),
 				"imagen" => $producto->imagen,
