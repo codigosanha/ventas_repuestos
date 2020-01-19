@@ -801,12 +801,25 @@ $(document).ready(function () {
                         html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+data.nombre+"*"+data.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
                         html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+data.producto_id+"' class='btn-info-producto'>"+data.nombre+"</a></td>";                        
                         html +="<td>"+data.localizacion+"</td>";
+                    
                         precios = "<option value=''>Seleccione</option>";
+                        precio = '';
+                        cantidad = '';
+                        var selected = '';
                         $.each(data.precios, function(key, value){
-                            precios += "<option value='"+value.precio_venta+"'>"+value.nombre+"</option>";
+                            
+                            if (value.seleccion_venta == "1") {
+                                selected = 'selected';
+                                precio = value.precio_venta;
+                                cantidad = 1;
+                            }else{
+                                selected = '';
+                            }
+                            precios += "<option value='"+value.precio_venta+"' "+selected+">"+value.nombre+"</option>";
                         });
                         html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
-                        html +="<td><input type='text' name='precios[]'  style='width:60px;'></td>";
+                        html +="<td><input type='text' name='precios[]'  style='width:60px;' value='"+precio+"'></td>";
+
                         html +="<td>"+data.stock+"</td>";
                         html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;'></td>";
                         html +="<td><input type='hidden' name='importes[]'><p></p></td>";
@@ -1662,7 +1675,10 @@ $(document).ready(function () {
         "order": [[ 1, "asc" ]]
     });
 
+    
+
     function cargarProductos(){
+      $.fn.DataTable.ext.pager.numbers_length = 10;
         bodega = $("#bodega").val();
         sucursal = $("#sucursal-venta").val();
         marca = $("#marca").val();
@@ -1723,7 +1739,9 @@ $(document).ready(function () {
                 "orderable": false
                 } ],
             "language": datatable_spanish,
-            "order": [[ 2, "asc" ]]
+            "order": [[ 2, "asc" ]],
+            "pageLength": 50,
+            
 
         });
        

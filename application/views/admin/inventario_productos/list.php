@@ -33,6 +33,7 @@
                                         <th>Sucursal</th>
                                     <?php endif ?>
                                     <th>Bodega</th>
+                                    <th>Codigo Barras</th>
                                     <th>Producto</th>
                                     <th>Stock</th>
                                     <th>Localizacion</th>
@@ -48,7 +49,10 @@
                                                 <td><?php echo get_record("sucursales","id=".$p->sucursal_id)->nombre;?></td>
                                             <?php endif ?>
                                             <td><?php echo get_record("bodegas","id=".$p->bodega_id)->nombre;?></td>
-                                            <td><?php echo get_record("productos","id=".$p->producto_id)->nombre;?></td>
+                                            <?php $producto = get_record("productos","id=".$p->producto_id);?>
+                                            <td><?php echo $producto->codigo_barras;?></td>
+                                            <td><?php echo $producto->nombre;?></td>
+
                                             <td><?php echo $p->stock;?></td>
                                             <td><?php echo $p->localizacion;?></td>
                                             <td>
