@@ -84,4 +84,108 @@ class Inventario_model extends CI_Model {
 		$resultados = $this->db->get("inventarios");
 		return $resultados->result();
 	}
+
+
+	function allproductos_count()
+    {   
+
+        $this->db->select("bsp.*");
+    	$this->db->from("bodega_sucursal_producto bsp");
+    	if ($this->session->userdata("sucursal")) {
+    		$this->db->where("bsp.sucursal_id", $this->session->userdata("sucursal"));
+    	}
+    	$query = $this->db->get();
+    
+        return $query->num_rows();  
+
+    }
+    
+    function allproductos($limit,$start,$col,$dir)
+    {   
+    	$this->db->select("bsp.*");
+    	$this->db->from("bodega_sucursal_producto bsp");
+    	if ($this->session->userdata("sucursal")) {
+    		$this->db->where("bsp.sucursal_id", $this->session->userdata("sucursal"));
+    	}
+    	$this->db->join("bodegas b", "bsp.bodega_id = b.id");
+    	$this->db->join("sucursales s", "bsp.sucursal_id = s.id");
+    	$this->db->join("productos p", "bsp.producto_id = p.id");
+        	
+    	$this->db->limit($limit,$start);
+    	$this->db->order_by($col,$dir);
+    	$query = $this->db->get();
+      
+        if($query->num_rows()>0)
+        {
+            return $query->result(); 
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+   
+    function productos_search($limit,$start,$search,$col,$dir)
+    {
+    	$this->db->select("bsp.*");
+    	$this->db->from("bodega_sucursal_producto bsp");
+    	if ($this->session->userdata("sucursal")) {
+    		$this->db->where("bsp.sucursal_id", $this->session->userdata("sucursal"));
+    	}
+    	$this->db->join("bodegas b", "bsp.bodega_id = b.id");
+    	$this->db->join("sucursales s", "bsp.sucursal_id = s.id");
+    	$this->db->join("productos p", "bsp.producto_id = p.id");
+
+    	$this->db->like("p.nombre", $search);
+    	$this->db->or_like("p.codigo_barras", $search);
+    	$this->db->or_like("b.nombre", $search);
+    	$this->db->or_like("s.nombre", $search);
+    	$this->db->or_like("bsp.stock", $search);
+    	$this->db->or_like("bsp.localizacion", $search);
+    	$this->db->or_like("bsp.id", $search);
+
+    	$this->db->limit($limit,$start);
+    	$this->db->order_by($col,$dir);
+    	$query = $this->db->get();
+        
+        if($query->num_rows()>0)
+        {
+            return $query->result();  
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    function productos_search_count($search)
+    {
+    	$this->db->select("bsp.*");
+    	$this->db->from("bodega_sucursal_producto bsp");
+    	if ($this->session->userdata("sucursal")) {
+    		$this->db->where("bsp.sucursal_id", $this->session->userdata("sucursal"));
+    	}
+    	$this->db->join("bodegas b", "bsp.bodega_id = b.id");
+    	$this->db->join("sucursales s", "bsp.sucursal_id = s.id");
+    	$this->db->join("productos p", "bsp.producto_id = p.id");
+
+    	$this->db->like("p.nombre", $search);
+    	$this->db->or_like("p.codigo_barras", $search);
+    	$this->db->or_like("b.nombre", $search);
+    	$this->db->or_like("s.nombre", $search);
+    	$this->db->or_like("bsp.stock", $search);
+    	$this->db->or_like("bsp.localizacion", $search);
+    	$this->db->or_like("bsp.id", $search);
+    	
+    	$query = $this->db->get();
+        return $query->num_rows();
+    } 
+
+    public function last_id(){
+       $last_row=$this->db->select('id')->order_by('id',"desc")->limit(1)->get('productos')->row();
+       
+       return $last_row->id;
+    }
+
 }

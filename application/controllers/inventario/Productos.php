@@ -8,7 +8,7 @@ class Productos extends CI_Controller {
 		parent::__construct();
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
-		
+		$this->load->model("Inventario_model");
 	}
 
 	public function index()
@@ -36,7 +36,70 @@ class Productos extends CI_Controller {
 			"contenido" => $this->load->view("admin/inventario_productos/list", $contenido_interno, TRUE)
 		);
 		$this->load->view("admin/template",$contenido_externo);
+	}
 
+	public function getInventario()
+	{
+		$columns = array( 
+							0 => 'bsp.id', 
+                            1 => 's.nombre', 
+                            2 => 'b.nombre',
+                            3 => 'p.codigo_barras',
+                            4 => 'p.nombre',
+                            5 => 'bsp.stock',
+                            6 => 'bsp.localizacion',
+                        );
+
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Inventario_model->allproductos_count();
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Inventario_model->allproductos($limit,$start,$order,$dir);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Inventario_model->productos_search($limit,$start,$search,$order,$dir);
+
+            $totalFiltered = $this->Inventario_model->productos_search_count($search);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+            foreach ($productos as $key=>$p)
+            {
+            	$nestedData['index'] = $key+1;
+                $nestedData['id'] = $p->id;
+                $nestedData['sucursal'] = get_record("sucursales","id=".$p->sucursal_id)->nombre;
+                $nestedData['bodega'] = get_record("bodegas","id=".$p->bodega_id)->nombre;
+
+                $producto = get_record("productos","id=".$p->producto_id);
+
+                $nestedData['nombre'] = $producto->nombre;
+                $nestedData['codigo_barras'] = $producto->codigo_barras;
+                $nestedData['stock'] = $p->stock;
+                $nestedData['localizacion'] = $p->localizacion;
+               	$nestedData['estado'] = $p->estado;
+                $data[] = $nestedData;
+            }
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
 	}
 
 	public function add(){

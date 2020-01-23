@@ -1674,8 +1674,55 @@ $(document).ready(function () {
         "language": datatable_spanish,
         "order": [[ 1, "asc" ]]
     });
+    if ($("#tbInventario").length) {
+        var permisos = JSON.parse($("#permisos").val());
+        $('#tbInventario').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "destroy": true,
+                "ajax":{
+                    "url": base_url + "inventario/productos/getInventario",
+                    "dataType": "json",
+                    "type": "POST",
+                },
+                columns: [
+                    {"data" : "index"},
+                    {"data" : "sucursal"},
+                    {"data" : "bodega"},
+                    {"data" : "codigo_barras"},
+                    {"data" : "nombre"},
+                    {"data" : "stock"},
+                    {"data" : "localizacion"},
+                  
+                    {
+                        mRender: function (data, type, row) {
+                            var btnBarcode = '<a href="'+base_url+'inventario/productos/barcode/'+row.id+'" class="btn btn-default btn-sm" target="_blank"><span class="fa fa-barcode"></span></a>';
+                            var btnView = '<button type="button" class="btn btn-info btn-view btn-sm" data-toggle="modal" data-target="#modal-default" value="'+row.id+'"><span class="fa fa-search"></span></button>';
 
-    
+                            var btnEdit = '';
+                            if (permisos.update) {
+                                btnEdit = '<a href="'+base_url+'inventario/productos/edit/'+row.id+'" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>';
+                            }
+                            var btnDelete = '';
+                            if (permisos.delete) {
+                                if (row.estado) {
+                                    btnDelete = '<a href="'+base_url+'inventario/productos/deshabilitar/'+row.id+'" class="btn btn-danger btn-remove btn-sm"><span class="fa fa-remove"></span></a>';
+                                }else{
+                                    btnDelete='<a href="'+base_url+'inventario/productos/habilitar/'+row.id+'" class="btn btn-success btn-habilitar btn-sm"><span class="fa fa-check"></span></a>';
+                                }
+                            }
+                            return '<div class="btn-group" >'+ btnBarcode+ btnView+btnEdit+btnDelete+'</div>';
+                        }
+                    }
+
+                ],
+                "language": datatable_spanish,
+                "order": [[ 4, "asc" ]],
+                "pageLength": 50,
+                
+
+            });
+    }
 
     function cargarProductos(){
       $.fn.DataTable.ext.pager.numbers_length = 10;
