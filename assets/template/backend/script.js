@@ -1,4 +1,70 @@
 $(document).ready(function () {
+    function searchAndHighlight(searchTerm, selector) {
+            if (searchTerm) {               
+                var selector = selector || "#realTimeContents"; //use body as selector if none provided
+                var searchTermRegEx = new RegExp(searchTerm, "ig");
+                var matches = $(selector).text().match(searchTermRegEx);
+                if (matches != null && matches.length > 0) {
+                    $('.highlighted').removeClass('highlighted'); //Remove old search highlights 
+ 
+                    //Remove the previous matches
+                    $span = $('#realTimeContents span');
+                    $span.replaceWith($span.html());
+ 
+                    if (searchTerm === "&") {
+                        searchTerm = "&amp;";
+                        searchTermRegEx = new RegExp(searchTerm, "ig");
+                    }
+                    $(selector).html($(selector).html().replace(searchTermRegEx, "<span class='match'>" + searchTerm + "</span>"));
+                    $('.match:first').addClass('highlighted');
+ 
+                    var i = 0;
+ 
+                    $('.next_h').off('click').on('click', function () {
+                        i++;
+ 
+                        if (i >= $('.match').length) i = 0;
+ 
+                        $('.match').removeClass('highlighted');
+                        $('.match').eq(i).addClass('highlighted');
+                        $('.ui-mobile-viewport').animate({
+                            scrollTop: $('.match').eq(i).offset().top
+                        }, 300);
+                    });
+                    $('.previous_h').off('click').on('click', function () {
+ 
+                        i--;
+ 
+                        if (i < 0) i = $('.match').length - 1;
+ 
+                        $('.match').removeClass('highlighted');
+                        $('.match').eq(i).addClass('highlighted');
+                        $('.ui-mobile-viewport').animate({
+                            scrollTop: $('.match').eq(i).offset().top
+                        }, 300);
+                    });
+ 
+ 
+ 
+ 
+                    if ($('.highlighted:first').length) { //if match found, scroll to where the first one appears
+                        $(window).scrollTop($('.highlighted:first').position().top);
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+ 
+        $(document).on('click', '.searchButtonClickText_h', function (event) {
+ 
+            $(".highlighted").removeClass("highlighted").removeClass("match");
+            if (!searchAndHighlight($('.textSearchvalue_h').val())) {
+                alert("No results found");
+            }
+ 
+ 
+        });
     $(document).ready(function(){
         $(".year_from,.year_until").datepicker({
                 format: "yyyy",
@@ -366,9 +432,9 @@ $(document).ready(function () {
     
     $(document).on("keyup mouseup", ".stocks_fisico", function(){
         stocks_fisico = Number($(this).val());
-        stocks_bd = Number($(this).closest("tr").find("td:eq(1)").text());
+        stocks_bd = Number($(this).closest("tr").find("td:eq(2)").text());
         diferencia_stock = stocks_fisico-stocks_bd;
-        $(this).closest("tr").find("td:eq(3)").children('input').val(diferencia_stock);
+        $(this).closest("tr").find("td:eq(4)").children('input').val(diferencia_stock);
     });
     $("#btn-ver-productos").on("click", function(){
         var bodega_id = $("#bodega").val();
@@ -387,6 +453,9 @@ $(document).ready(function () {
                 html = "";
                 $.each(data, function(key, value){
                         html +='<tr><td>';
+                        html += value.codigo_barras;
+                        html +='</td>';
+                        html +='<td>';
                         html +='<input type="hidden" name="productos[]" value="'+value.producto_id+'">';
                         html += value.nombre;
                         html +='</td>';
@@ -395,7 +464,7 @@ $(document).ready(function () {
                         html += value.stock;
                         html +='</td>';
                         html +='<td>';
-                        html +='<input type="text" name="stocks_fisico[]" class="form-control stocks_fisico" value="'+value.stock+'"';
+                        html +='<input type="text" name="stocks_fisico[]" class="form-control stocks_fisico" value="'+value.stock+'">';
                         html +='</td>';
                         html +='<td>';
                         html +='<input type="text" name="stocks_diferencia[]" class="form-control" value="0" readonly="readonly">';
@@ -406,7 +475,7 @@ $(document).ready(function () {
                 } else{
                     $("#btn-inventario").removeAttr("disabled");
                 }
-                $("#tbInventario tbody").html(html);
+                $("#tbInventarioSB tbody").html(html);
             }
         });
     });
@@ -1665,8 +1734,8 @@ $(document).ready(function () {
         ],
         language: datatable_spanish
     });
- 
-    $('#tableSimple').DataTable({
+    
+    $('#tableSimple, .tableSimple').DataTable({
         "pageLength": 25,
         "language": datatable_spanish
     });

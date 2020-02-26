@@ -8,7 +8,7 @@ class Ajuste extends CI_Controller {
 		parent::__construct();
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
-		
+		$this->load->model("Productos_model");
 	}
 
 	public function index()
@@ -17,7 +17,6 @@ class Ajuste extends CI_Controller {
 			"permisos" => $this->permisos,
 			"ajustes" => $this->Comun_model->get_records("ajustes"), 
 		);
-
 		$contenido_externo = array(
 			"title" => "ajustes", 
 			"contenido" => $this->load->view("admin/ajustes/list", $contenido_interno, TRUE)
@@ -45,7 +44,6 @@ class Ajuste extends CI_Controller {
 	}
 
 	public function store(){
-
 		$usuario_id = $this->session->userdata("id");
 		$fecha = date("Y-m-d H:i:s");
 		$productos = json_decode($this->input->post("productos"));
@@ -69,41 +67,10 @@ class Ajuste extends CI_Controller {
 			ini_set('memory_limit','2048M');
 			$this->saveAjusteProductos($ajuste->id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id);
 			echo $ajuste->id;
-			// $this->session->set_flashdata("success",$ajuste->id);
-			// redirect(base_url()."inventario/ajuste");
 		}
 		else{
 			echo "0";
-			// $this->session->set_flashdata("error","No se pudo guardar la informacion");
-			// redirect(base_url()."inventario/ajuste/add");
 		}
-
-		/*$existe_ajuste = $this->Comun_model->get_record("ajustes","bodega_id='$bodega_id' and sucursal_id='$sucursal_id' and DATE(fecha)='".date("Y-m-d")."'");
-		if ($existe_ajuste) {
-			$this->session->set_flashdata("error","Ya se ha realizado un ajuste con la sucursal y bodega seleccionada");
-			redirect(base_url()."inventario/ajuste");
-		}else{
-			$data  = array(
-				'fecha' => $fecha, 
-				'usuario_id' => $usuario_id,
-				"bodega_id" => $bodega_id,
-				"sucursal_id" => $sucursal_id,
-			);
-
-			$ajuste = $this->Comun_model->insert("ajustes", $data);
-
-			if ($ajuste) {
-				$this->saveAjusteProductos($ajuste->id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id);
-				$this->session->set_flashdata("success",$ajuste->id);
-				redirect(base_url()."inventario/ajuste");
-			}
-			else{
-				$this->session->set_flashdata("error","No se pudo guardar la informacion");
-				redirect(base_url()."inventario/ajuste/add");
-			}
-		}*/
-
-		
 	}
 
 	protected function saveAjusteProductos($ajuste_id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id){
@@ -166,29 +133,16 @@ class Ajuste extends CI_Controller {
 
 			$this->Comun_model->update("bodega_sucursal_producto","producto_id='".$productos[$i]."' and bodega_id='$bodega_id' and sucursal_id='$sucursal_id'", $dataProducto);
 			$this->Comun_model->update("ajustes_productos","id=".$ajustes[$i],$data);
-
 		}
-
-
-
-		
-
 		$this->session->set_flashdata("success",$idAjuste);
-
 		redirect(base_url()."inventario/ajuste");
-
-		
-
 	}
-
-
 
 	public function habilitar($id){
 		$data  = array(
 			"estado" => "1", 
 		);
 		$this->Comun_model->update("ajustes","id=$id",$data);
-		//echo "inventario/ajuste";
 		redirect(base_url()."inventario/ajuste");
 	}
 
@@ -197,22 +151,13 @@ class Ajuste extends CI_Controller {
 			"estado" => "0", 
 		);
 		$this->Comun_model->update("ajustes","id=$id",$data);
-		//echo "inventario/ajuste";
 		redirect(base_url()."inventario/ajuste");
 	}
 	public function searchProductos(){
 		$sucursal_id = $this->input->post("sucursal_id");
 		$bodega_id = $this->input->post("bodega_id");
-		$productos = $this->Comun_model->get_records("bodega_sucursal_producto","sucursal_id='$sucursal_id' and bodega_id='$bodega_id'");
-		$data = array();
-		foreach ($productos as $p) {
-			$data[] = array(
-				"producto_id" => $p->producto_id,
-				"nombre" => get_record("productos", "id=".$p->producto_id)->nombre,
-				"stock" => $p->stock,
-			);
-		}
-		echo json_encode($data);
-
+		$productos = $this->Productos_model->getProductosBySucursalAndBodega($sucursal_id, $bodega_id);
+		
+		echo json_encode($productos);
 	}
 }

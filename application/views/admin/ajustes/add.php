@@ -71,15 +71,17 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <button type="button" class="btn btn-primary btn-flat" id="btn-ver-productos"><span class="fa fa-eye"></span> Ver Productos</button>
+                            <button type="button" class="btn btn-danger" id="buscador">Buscar</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <table  class="table table-bordered table-hover" id="tbInventario">
+                        <table  class="table table-bordered table-hover" id="tbInventarioSB">
                             <thead>
                                 <tr>
+                                    <th>Codigo de Barras</th>
                                     <th>Producto</th>
                                     <th>Stock BD</th>
                                     <th>Stock Fisico</th>
@@ -88,9 +90,8 @@
                             </thead>
                             <tbody>
                             </tbody>
-
                         </table>
-
+                     
                         <button type="submit" class="btn btn-success btn-flat" id="btn-inventario" disabled="disabled">
 
                             <span class="fa fa-save"></span>

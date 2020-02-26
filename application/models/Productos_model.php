@@ -83,6 +83,19 @@ class Productos_model extends CI_Model {
        return $last_row->id;
     }
 
+
+    public function getProductosBySucursalAndBodega($sucursal_id, $bodega_id){
+        $this->db->select("bsp.producto_id, bsp.stock, p.nombre, p.codigo_barras");
+        $this->db->from("bodega_sucursal_producto bsp");
+        $this->db->join("productos p", "bsp.producto_id = p.id");
+        $this->db->where("bsp.sucursal_id", $sucursal_id);
+        $this->db->where("bsp.bodega_id", $bodega_id);
+
+        $this->db->order_by("p.nombre", "ASC");
+        $resultados = $this->db->get();
+        return $resultados->result();
+    }
+
    
 
 }
