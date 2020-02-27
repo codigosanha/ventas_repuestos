@@ -7,7 +7,7 @@
    
 }
 #modal-ajuste .modal-dialog {
-    width: 400px;
+    width: 470px;
    
 }
 
@@ -36,6 +36,10 @@
 
 .contenido-venta, .contenido-cotizador{
     width: 275px;
+}
+
+.contenido-ajuste{
+    width: 460px;
 }
 
 .contenido{

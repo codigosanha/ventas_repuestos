@@ -34,27 +34,6 @@
     <!-- Datepicker -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/template/bootstrap-datepicker/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/template/backend/css/style.css">
-    <style>
-        .highlighted
-        {
-            background-color: yellow;
-        }
-        .highlight
-        {
-            background-color: #fff34d;
-            -moz-border-radius: 5px; /* FF1+ */
-            -webkit-border-radius: 5px; /* Saf3-4 */
-            border-radius: 5px; /* Opera 10.5, IE 9, Saf5, Chrome */
-            -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* FF3.5+ */
-            -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Saf3.0+, Chrome */
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Opera 10.5+, IE 9.0 */
-        }
-        .highlight
-        {
-            padding: 1px 4px;
-            margin: 0 -4px;
-        }
-    </style>
     <!-- jQuery 3 -->
     <script src="<?php echo base_url();?>assets/template/jquery/jquery.min.js"></script>
     <script src="<?php echo base_url();?>assets/template/sweetalert/sweetalert.min.js"></script>

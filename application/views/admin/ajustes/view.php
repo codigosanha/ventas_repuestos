@@ -1,4 +1,4 @@
-<div class="contenido">
+<div class="contenido-ajuste">
 <div class="form-group text-center">
 		<label for="">Ventas Repuestos</label><br>
 		<p>

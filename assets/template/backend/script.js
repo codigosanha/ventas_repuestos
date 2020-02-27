@@ -1,70 +1,4 @@
 $(document).ready(function () {
-    function searchAndHighlight(searchTerm, selector) {
-            if (searchTerm) {               
-                var selector = selector || "#realTimeContents"; //use body as selector if none provided
-                var searchTermRegEx = new RegExp(searchTerm, "ig");
-                var matches = $(selector).text().match(searchTermRegEx);
-                if (matches != null && matches.length > 0) {
-                    $('.highlighted').removeClass('highlighted'); //Remove old search highlights 
- 
-                    //Remove the previous matches
-                    $span = $('#realTimeContents span');
-                    $span.replaceWith($span.html());
- 
-                    if (searchTerm === "&") {
-                        searchTerm = "&amp;";
-                        searchTermRegEx = new RegExp(searchTerm, "ig");
-                    }
-                    $(selector).html($(selector).html().replace(searchTermRegEx, "<span class='match'>" + searchTerm + "</span>"));
-                    $('.match:first').addClass('highlighted');
- 
-                    var i = 0;
- 
-                    $('.next_h').off('click').on('click', function () {
-                        i++;
- 
-                        if (i >= $('.match').length) i = 0;
- 
-                        $('.match').removeClass('highlighted');
-                        $('.match').eq(i).addClass('highlighted');
-                        $('.ui-mobile-viewport').animate({
-                            scrollTop: $('.match').eq(i).offset().top
-                        }, 300);
-                    });
-                    $('.previous_h').off('click').on('click', function () {
- 
-                        i--;
- 
-                        if (i < 0) i = $('.match').length - 1;
- 
-                        $('.match').removeClass('highlighted');
-                        $('.match').eq(i).addClass('highlighted');
-                        $('.ui-mobile-viewport').animate({
-                            scrollTop: $('.match').eq(i).offset().top
-                        }, 300);
-                    });
- 
- 
- 
- 
-                    if ($('.highlighted:first').length) { //if match found, scroll to where the first one appears
-                        $(window).scrollTop($('.highlighted:first').position().top);
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
- 
-        $(document).on('click', '.searchButtonClickText_h', function (event) {
- 
-            $(".highlighted").removeClass("highlighted").removeClass("match");
-            if (!searchAndHighlight($('.textSearchvalue_h').val())) {
-                alert("No results found");
-            }
- 
- 
-        });
     $(document).ready(function(){
         $(".year_from,.year_until").datepicker({
                 format: "yyyy",
@@ -394,13 +328,13 @@ $(document).ready(function () {
         $("body").prepend("<div class='loader'></div>");
    
         var url = $(this).attr("action");
-        var idproductos = $("input[name='productos[]']")
+        var idproductos = $("#tbInventarioSB").DataTable().$("input[name='productos[]']")
               .map(function(){return $(this).val();}).get();
-        var stocks_fisico = $("input[name='stocks_fisico[]']")
+        var stocks_fisico = $("#tbInventarioSB").DataTable().$("input[name='stocks_fisico[]']")
               .map(function(){return $(this).val();}).get();
-        var stocks_bd = $("input[name='stocks_bd[]']")
+        var stocks_bd = $("#tbInventarioSB").DataTable().$("input[name='stocks_bd[]']")
               .map(function(){return $(this).val();}).get();
-        var stocks_diferencia = $("input[name='stocks_diferencia[]']")
+        var stocks_diferencia = $("#tbInventarioSB").DataTable().$("input[name='stocks_diferencia[]']")
               .map(function(){return $(this).val();}).get();
         var sucursal_id = $("#sucursal").val();
         var bodega_id = $("#bodega").val();
@@ -449,8 +383,50 @@ $(document).ready(function () {
             data: dataForm,
             dataType: "json",
             success: function(data){
+                $('#tbInventarioSB').dataTable( {
+                    "aaData": data,
+                    "destroy": true,
+                    "columns": [
+                        { "data": "codigo_barras" },
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var input = '<input type="hidden" name="productos[]" value="'+row.producto_id+'">';
+                               
+                                return input + row.nombre;
+                            }
+                        },
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var input = '<input type="hidden" name="stocks_bd[]" value="'+row.stock+'">';
+                               
+                                return input + row.stock;
+                            }
+                        },
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var input = '<input type="text" name="stocks_fisico[]" class="form-control stocks_fisico" value="'+row.stock+'">';
+                               
+                                return input;
+                            }
+                        },
+                        {
+                            mRender: function (data, type, row) {
+                                
+                                var input = '<input type="text" name="stocks_diferencia[]" class="form-control" value="0" readonly="readonly">';
+                               
+                                return input;
+                            }
+                        },
+                    ],
+                    "pageLength": 25,
+                    "language": datatable_spanish,
+                    "order": [[ 1, "asc" ]]
+                });
    
-                html = "";
+                /*html = "";
                 $.each(data, function(key, value){
                         html +='<tr><td>';
                         html += value.codigo_barras;
@@ -469,13 +445,13 @@ $(document).ready(function () {
                         html +='<td>';
                         html +='<input type="text" name="stocks_diferencia[]" class="form-control" value="0" readonly="readonly">';
                         html +='</td></tr>';
-                });
-                if (!html) {
+                });*/
+                if (!data.length) {
                     $("#btn-inventario").attr("disabled","disabled");
                 } else{
                     $("#btn-inventario").removeAttr("disabled");
                 }
-                $("#tbInventarioSB tbody").html(html);
+                //$("#tbInventarioSB tbody").html(html);
             }
         });
     });
