@@ -188,4 +188,8 @@ class Inventario_model extends CI_Model {
        return $last_row->id;
     }
 
+    public function saveInventario($data){
+        return $this->db->insert_batch('bodega_sucursal_producto', $data); 
+    }
+
 }

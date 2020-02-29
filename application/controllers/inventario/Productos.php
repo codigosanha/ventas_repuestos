@@ -132,22 +132,22 @@ class Productos extends CI_Controller {
 		$bodega_id = $this->input->post("bodega_id");
 		$sucursal_id = $this->input->post("sucursal_id");
 		$idProductos = $this->input->post("idProductos");
-
+		$data = [];
+		
 		for ($i=0; $i < count($idProductos); $i++) { 
-			$existe_producto = $this->Comun_model->get_record("bodega_sucursal_producto","bodega_id='$bodega_id' and sucursal_id='$sucursal_id' and producto_id='$idProductos[$i]'");
-			if (!$existe_producto) {
-				$data  = array(
-					"bodega_id" => $bodega_id, 
-					"sucursal_id" => $sucursal_id,
-					"producto_id" => $idProductos[$i],
-					"estado" => "1"
-				);
-				$this->Comun_model->insert("bodega_sucursal_producto",$data);		
-			}
+			$data[] = [
+				"bodega_id" => $bodega_id, 
+				"sucursal_id" => $sucursal_id,
+				"producto_id" => $idProductos[$i],
+				"estado" => "1"
+			]; 
+		}
+
+		if (!empty($data)) {
+			$this->Inventario_model->saveInventario($data);
 		}
 
 		redirect(base_url()."inventario/productos");
-
 	}
 
 	public function edit($id){
