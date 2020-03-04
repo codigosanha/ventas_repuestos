@@ -649,6 +649,7 @@ $(document).ready(function () {
     $(document).on("change", "#preciosVentas", function(){
         precio_venta = $(this).val();
         cantidad = $(this).closest("tr").children("td:eq(7)").find("input").val();
+        stock = $(this).closest("tr").children("td:eq(6)").text();
         importe = precio_venta*cantidad;
         $(this).closest("tr").children("td:eq(5)").find("input").val(precio_venta);
         $(this).closest("tr").children("td:eq(8)").find("input").val(importe.toFixed(2));
@@ -849,7 +850,12 @@ $(document).ready(function () {
                         });
                     }else{
                         html = "<tr>";
-                        html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
+                        if (Number(data.stock) > 0) {
+                            html +="<td><input type='hidden' name='idProductos[]' value='"+data.producto_id+"'>"+data.codigo_barras+"</td>";
+                        }else{
+                            html +="<td>"+data.codigo_barras+"</td>";
+                        }
+                        
                         html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+data.nombre+"*"+data.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+data.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
                         html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+data.producto_id+"' class='btn-info-producto'>"+data.nombre+"</a></td>";                        
                         html +="<td>"+data.localizacion+"</td>";
@@ -870,11 +876,30 @@ $(document).ready(function () {
                             precios += "<option value='"+value.precio_venta+"' "+selected+">"+value.nombre+"</option>";
                         });
                         html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
-                        html +="<td><input type='text' name='precios[]'  style='width:60px;' value='"+precio+"'></td>";
+                        
+                        if (Number(data.stock) > 0) {
+                            html +="<td><input type='text' name='precios[]'  style='width:60px;' value='"+precio+"'></td>";
+                        }else{
+                            html +="<td><input type='text'  style='width:60px;' value='"+precio+"'></td>";
+                        }
 
                         html +="<td>"+data.stock+"</td>";
-                        html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;'></td>";
-                        html +="<td><input type='hidden' name='importes[]'><p></p></td>";
+                        
+                        if (Number(data.stock) > 0) {
+                            html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;' value='"+cantidad+"'></td>";
+                        }else{
+                            html +="<td><input type='text' style='width:60px;' value='0' disabled></td>";
+                        }
+                        importe = 0.00;
+                        if (precio != '') {
+                            importe = Number(precio) * Number(cantidad);
+                        }
+                        if (Number(data.stock) > 0) {
+                            html +="<td><input type='hidden' name='importes[]' value='"+importe.toFixed(2)+"'><p>"+importe.toFixed(2)+"</p></td>";
+                        }else{
+                            html +="<td><p>0.00</p></td>";
+                        }
+                        
                         html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
                         html +="</tr>"
 
@@ -1826,8 +1851,11 @@ $(document).ready(function () {
                 {"data" : "modelo"},
                 {
                     mRender: function (data, type, row) {
-                        
-                        var button = "<button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(row)+"'><span class='fa fa-check'></span></button>";
+                        var button = '';
+                        if (row.stock > 0) {
+                            button = "<button type='button' class='btn btn-success btn-sm btn-selected' value='"+JSON.stringify(row)+"'><span class='fa fa-check'></span></button>";
+                        }
+                         
                         return button;
                     }
                 }
@@ -2016,7 +2044,12 @@ $(document).ready(function () {
         minLength:2,
         select:function(event, ui){
             html = "<tr>";
-            html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
+            if (Number(ui.item.stock) > 0) {
+                html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
+            }else{
+                html +="<td>"+ui.item.codigo_barras+"</td>";
+            }
+            
             html +="<td><a href='#modal-image' data-toggle='modal' class='show-image' data-href='"+ui.item.nombre+"*"+ui.item.imagen+"'><img src='"+base_url+"assets/imagenes_productos/"+ui.item.imagen+"' class='img-responsive' style='width:50px;'></a></td>";
             html +="<td><a href='#modal-info-producto' data-toggle='modal' data-href='"+ui.item.producto_id+"' class='btn-info-producto'>"+ui.item.nombre+"</a></td>";
             html +="<td>"+ui.item.localizacion+"</td>";
@@ -2036,14 +2069,30 @@ $(document).ready(function () {
                 precios += "<option value='"+value.precio_venta+"' "+selected+">"+value.nombre+"</option>";
             });
             html +="<td><select class='form-control' id='preciosVentas'>"+precios+"</select></td>";
-            html +="<td><input type='text' name='precios[]'  style='width:60px;' value='"+precio+"'></td>";
+            if (Number(ui.item.stock) > 0) {
+                html +="<td><input type='text' name='precios[]'  style='width:60px;' value='"+precio+"'></td>";
+            }else{
+                html +="<td><input type='text' style='width:60px;' value='"+precio+"'></td>";
+            }
+            
             html +="<td>"+ui.item.stock+"</td>";
-            html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;' value='"+cantidad+"'></td>";
-            importe = '';
+            if (Number(ui.item.stock) > 0) {
+                html +="<td><input type='text' name='cantidades[]' class='cantidadesVenta' style='width:60px;' value='"+cantidad+"'></td>";
+            }else{
+                html +="<td><input type='text'  style='width:60px;' value='0' disabled></td>";
+            }
+            
+            importe = 0.00;
             if (precio != '') {
                 importe = Number(precio) * Number(cantidad);
             }
-            html +="<td><input type='hidden' name='importes[]' value='"+importe.toFixed(2)+"'><p>"+importe.toFixed(2)+"</p></td>";
+
+            if (Number(ui.item.stock) > 0) {
+                html +="<td><input type='hidden' name='importes[]' value='"+importe.toFixed(2)+"'><p>"+importe.toFixed(2)+"</p></td>";
+            }else{
+                html +="<td><input type='hidden' value='0.00'><p>0.00</p></td>";
+            }
+            
             html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
             html +="</tr>"
 

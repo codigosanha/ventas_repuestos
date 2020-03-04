@@ -141,7 +141,7 @@ class Ventas_model extends CI_Model {
 		$this->db->join("productos p", "bsp.producto_id = p.id");
 		$this->db->where("bsp.sucursal_id",$sucursal);
 		$this->db->where("bsp.bodega_id",$bodega);
-		$this->db->where("bsp.stock >=",1);
+		$this->db->where("bsp.stock >=",0);
 		$this->db->where("bsp.estado",1);
 		$this->db->like("CONCAT(p.codigo_barras,'',p.nombre)",$valor);
 		$resultados = $this->db->get();
@@ -164,7 +164,8 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.sucursal_id", $sucursal_id);
 		$this->db->where("bsp.bodega_id", $bodega_id);
 		$this->db->where("p.codigo_barras", $codigo_barra);
-		$this->db->where("bsp.stock > ",0);
+		$this->db->where("bsp.stock >= ",0);
+		$this->db->where("bsp.estado",1);
 		$resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->row();
@@ -397,7 +398,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");
 		$this->db->where("bsp.estado","1");
-		$this->db->where("bsp.stock >=", 1);
+		$this->db->where("bsp.stock >=", 0);
 		if (!empty($year)) {
 			$this->db->like("c.concat_year",$year);
 		}
@@ -427,7 +428,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");
 		$this->db->where("bsp.estado","1");
-		$this->db->where("bsp.stock >=", 1);
+		$this->db->where("bsp.stock >=", 0);
 		if (!empty($year)) {
 			$this->db->like("c.concat_year",$year);
 		}
@@ -467,7 +468,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");
 		$this->db->where("bsp.estado","1");
-		$this->db->where("bsp.stock >=", 1);
+		$this->db->where("bsp.stock >=", 0);
 		if (!empty($year)) {
 			$this->db->like("c.concat_year",$year);
 		}
@@ -510,7 +511,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.bodega_id",$bodega_id);
 		$this->db->where("p.estado","1");
 		$this->db->where("bsp.estado","1");
-		$this->db->where("bsp.stock >=", 1);
+		$this->db->where("bsp.stock >=", 0);
 		if (!empty($year)) {
 			$this->db->like("c.concat_year",$year);
 		}

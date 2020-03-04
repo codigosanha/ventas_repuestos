@@ -85,7 +85,7 @@
 
 
 <table class="table table-bordered table-striped">
-	<caption class="text-center"><strong>Existencia en otras sucursales/bodegas</strong></caption>
+	<caption class="text-center"><strong>Existencia en sucursales/bodegas</strong></caption>
 	<thead>
 		<tr>
 			<th>Sucursal</th>
