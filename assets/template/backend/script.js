@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    $("#reestablecer-filtro").on("click", function(){
+        $("#year").val(null);
+        $("#marca").val(null);
+        $("#modelo").val(null);
+        cargarProductos();
+
+    });
     $(document).ready(function(){
         $(".year_from,.year_until").datepicker({
                 format: "yyyy",

@@ -514,8 +514,9 @@ class Ventas extends CI_Controller {
 	public function infoProducto($producto_id){
 		$data  = array(
 			"producto" => $this->Comun_model->get_record("productos", "id=$producto_id"), 
+			"existencias" => $this->Ventas_model->getExistenciasProducto($producto_id)
 		);
-		$this->load->view("admin/productos/view",$data);
+		$this->load->view("admin/ventas/infoProducto",$data);
 	}
 
 	public function savecliente(){

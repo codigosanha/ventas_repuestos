@@ -509,6 +509,9 @@
 
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-danger" id="reestablecer-filtro">Reestablecer Valores</button>
+                </div>
             </div>
         </form>
         <div class="table-responsive">

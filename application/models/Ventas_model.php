@@ -142,6 +142,7 @@ class Ventas_model extends CI_Model {
 		$this->db->where("bsp.sucursal_id",$sucursal);
 		$this->db->where("bsp.bodega_id",$bodega);
 		$this->db->where("bsp.stock >=",1);
+		$this->db->where("bsp.estado",1);
 		$this->db->like("CONCAT(p.codigo_barras,'',p.nombre)",$valor);
 		$resultados = $this->db->get();
 		return $resultados->result();
@@ -536,6 +537,18 @@ class Ventas_model extends CI_Model {
             return null;
         }
     } 
+
+    public function getExistenciasProducto($producto_id){
+    	$this->db->select("bsp.*, b.nombre as bodega, s.nombre as sucursal");
+    	$this->db->from("bodega_sucursal_producto bsp");
+    	$this->db->join("bodegas b", "bsp.bodega_id = b.id");
+    	$this->db->join("sucursales s", "bsp.sucursal_id = s.id");
+    	$this->db->where("bsp.producto_id", $producto_id);
+    	$this->db->where("bsp.estado", "1");
+    	$this->db->order_by("bsp.sucursal_id");
+    	$resultados = $this->db->get();
+    	return $resultados->result();
+    }
 
 
 }
