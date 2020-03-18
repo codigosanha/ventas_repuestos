@@ -31,11 +31,12 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre Cliente</th>
+                                    <th>Cliente</th>
                                     <th>Tipo Comprobante</th>
-                                    <th>Numero del Comprobante</th>
+                                    <th>Nro. Comprobante</th>
                                     <th>Fecha</th>
                                     <th>Total</th>
+                                    <th>Forma de Pago</th>
                                     <th>Estado</th>
                                     <th>Sucursal</th>
                                     <th>Opciones</th>
@@ -56,6 +57,15 @@
                                                 <td><?php echo $venta->fecha;?></td>
                                                 <td><?php echo $venta->total;?></td>
                                                 <td>
+                                                    <?php 
+                                                        $forma_pagos = ['Efectivo', 'Tarjeta de Crédito', 'Pago Mixto', 'Crédito'];
+
+                                                        $color_pagos = ['success', 'primary', 'warning', 'danger']; 
+                                                    ?>
+
+                                                    <span class="label label-<?php echo $color_pagos[$venta->tipo_pago-1] ?>"><?php echo $forma_pagos[$venta->tipo_pago-1] ?></span>
+                                                </td>
+                                                <td>
                                                     <?php if ($venta->estado == "1") {
                                                         echo '<span class="label label-success">Procesada</span>';
                                                     } else {
@@ -71,12 +81,12 @@
 
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-info btn-info-venta" value="<?php echo $venta->id;?>" data-toggle="modal" data-target="#modal-venta"><span class="fa fa-search"></span></button>
+                                                    <button type="button" class="btn btn-info btn-info-venta btn-sm" value="<?php echo $venta->id;?>" data-toggle="modal" data-target="#modal-venta"><span class="fa fa-search"></span></button>
                                                     
                                                     <?php if ($permisos->delete): ?>
                                                         <?php if ($venta->estado): ?>
                                                             <?php if ($comprobante->permitir_anular): ?>
-                                                                <a href="<?php echo base_url();?>movimientos/ventas/anular/<?php echo $venta->id;?>" class="btn btn-danger btn-anular-venta"><span class="fa fa-remove"></span></a>
+                                                                <a href="<?php echo base_url();?>movimientos/ventas/anular/<?php echo $venta->id;?>" class="btn btn-danger btn-anular-venta btn-sm"><span class="fa fa-remove"></span></a>
                                                             <?php endif ?>
                                                         <?php endif ?>
                                                     <?php endif ?>

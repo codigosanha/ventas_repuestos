@@ -25,7 +25,15 @@
         <?php $cliente = get_record("clientes","id=".$venta->cliente_id);?>
 		<b>Cliente: </b><?php echo $cliente->nombres;?><br>
 		<b>No. Cedula: </b><?php echo $cliente->cedula;?><br>
-		<b>Fecha: </b><?php echo $venta->fecha;?></p>
+		<b>Fecha: </b><?php echo $venta->fecha;?><br>	
+		<?php 
+            $forma_pagos = ['Efectivo', 'Tarjeta de Crédito', 'Pago Mixto', 'Crédito'];
+
+            $color_pagos = ['success', 'primary', 'warning', 'danger']; 
+        ?>
+		<b>Forma de Pago:</b> <span class="label label-<?php echo $color_pagos[$venta->tipo_pago-1] ?>"><?php echo $forma_pagos[$venta->tipo_pago-1] ?></span>
+	</p>
+
 	</div>
 
 	<div class="form-group">
