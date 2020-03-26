@@ -47,7 +47,7 @@
                     </div>
                     </form>
                 </div>
-                <form action="<?php echo base_url() ?>inventario/traslados/store" method="POST">
+                <form action="<?php echo base_url() ?>inventario/traslados/store" method="POST" id="form-save-traslado">
                     <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">Información del traslado</h3>
@@ -96,6 +96,7 @@
                         <button type="button" id="check-all-productos-traslado" class="btn btn-primary pull-right">Marcar todos</button></p>
                         <input type="hidden" id="id_sucursal_envio" name="id_sucursal_envio">
                         <input type="hidden" id="id_bodega_envio" name="id_bodega_envio">
+                        <input type="hidden" id="status-check-all-productos-traslado"  value="0">
                         <table class="table table-bordered" id="tbTraslados">
                             <thead>
                                 <tr>

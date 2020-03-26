@@ -63,10 +63,18 @@ $(document).ready(function () {
 
     });
 
-    $("#btn-guardar-traslado").on("click", function(){
-        if ($("#tbTraslado tbody tr").length == 0) {
-            swal("Error", "Debe indicar al menos un producto en el detalle del traslado","error");
+    $("#form-save-traslado").submit(function(e){
+        e.preventDefault();
+        if ($("#productos_trasladados input").length == 0) {
+            swal("Error", "Debe indicar al menos un producto para el traslado","error");
             return false;
+        }else{
+            var idproductos = $("input[name='productos[]']")
+              .map(function(){return $(this).val();}).get();
+            var cantidades = $("input[name='cantidades[]']")
+              .map(function(){return $(this).val();}).get();
+            var sucursal_envio = $("#id_sucursal_envio").val();
+            var bodega_envio = $("#id_bodega_envio").val();
         }
     });
 
@@ -272,47 +280,42 @@ $(document).ready(function () {
     });
 
     $("#check-all-productos-traslado").on("click", function(){
+        $("#productos_trasladados").html(null);
         var idProductos = $(this).val();
         var dataProductos = idProductos.split(',');
-        console.log(dataProductos);
+        
         dataProductos.forEach( function(valor, indice, array) {
-
             var inputProducto = "<input type='hidden' name='productos[]' id='p-"+valor+"' value='"+valor+"'>";
             var inputCantidad = "<input type='hidden' name='cantidades[]' id='c-"+valor+"' value='0'>";
             $("#productos_trasladados").append(inputProducto + inputCantidad);
+            $(".check-producto-traslado").prop('checked', true);  
+            $(".cantidad-traslado").val('0');
+            $(".cantidad-traslado").removeAttr('disabled');
         });
+        $("#status-check-all-productos-traslado").val(1);
     });
-    $("#searchProductoTraslado").autocomplete({
-        source:function(request, response){
-            var sucursal = $("#sucursal_envio").val();
-            var bodega = $("#bodega_envio").val();
-            $.ajax({
-                url: base_url+"inventario/traslados/getProductos",
-                type: "POST",
-                dataType:"json",
-                data:{ valor: request.term, sucursal_id:sucursal, bodega_id:bodega},
-                success:function(data){
-                    response(data);
-                }
-            });
-        },
-        minLength:2,
-        select:function(event, ui){
-            
-            html = "<tr>";
-            html +="<td><input type='hidden' name='idProductos[]' value='"+ui.item.producto_id+"'>"+ui.item.codigo_barras+"</td>";
-            html +="<td>"+ui.item.nombre+"</td>";
-            html +="<td><input type='text' name='cantidades[]'  style='width:60px;'></td>";
-            html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
-            html +="</tr>"
 
-            $("#tbTraslado tbody").append(html);
-            //sumarCompra();
-            this.value = "";
-            return false;
-
-        },
+    $(document).on("keyup",".cantidad-traslado", function(){
+        var cantidad = $(this).val();
+        var producto_id = $(this).closest("tr").children("td:eq(0)").find("input").val();
+        $("#c-"+producto_id).val(cantidad);
     });
+    $(document).on("change", ".check-producto-traslado", function(){
+        var producto_id = $(this).val();
+        if($(this).is(':checked')) {  
+            var inputProducto = "<input type='hidden' name='productos[]' id='p-"+producto_id+"' value='"+producto_id+"'>";
+            var inputCantidad = "<input type='hidden' name='cantidades[]' id='c-"+producto_id+"' value='0'>";
+            $("#productos_trasladados").append(inputProducto + inputCantidad);
+            $(this).closest("tr").children("td:eq(3)").find("input").removeAttr("disabled");
+            $(this).closest("tr").children("td:eq(3)").find("input").val('0');
+        }else{
+            $("#p-"+producto_id).remove();
+            $("#c-"+producto_id).remove();
+            $(this).closest("tr").children("td:eq(3)").find("input").attr("disabled", "disabled");
+            $(this).closest("tr").children("td:eq(3)").find("input").val(null);
+        }
+    });
+
     $(document).on("change", "#sucursal_envio", function(){
         var sucursal_id = $(this).val();
         $.ajax({
@@ -1921,8 +1924,20 @@ $(document).ready(function () {
             columns: [
                 {
                     mRender: function (data, type, row) {
-                        
-                        var checkbox = "<input type='checkbox' value='"+row.producto_id+"' class='check-producto'>";
+                        var status_check_all_productos = $("#status-check-all-productos-traslado").val();
+                        var checked = '';
+
+                        if (status_check_all_productos == '1') {
+                            checked = 'checked';
+                        }
+
+                        if ($("#p-"+row.producto_id).length) {
+                            checked = 'checked';
+                        }else{
+                            checked = '';
+                        }
+
+                        var checkbox = "<input type='checkbox' value='"+row.producto_id+"' class='check-producto-traslado' "+checked+">";
                         return checkbox;
                     }
                 },
@@ -1930,8 +1945,22 @@ $(document).ready(function () {
                 {"data" : "nombre"},
                 {
                     mRender: function (data, type, row) {
-                        
-                        var input = '<input type="text" class="form-control" class="cantidad" disabled>';
+                        var status_check_all_productos = $("#status-check-all-productos-traslado").val();
+                        var disabled = 'disabled';
+                        var value = '';
+                        if (status_check_all_productos == '1') {
+                            disabled = '';
+                            value = '0';
+                        }
+
+                        if ($("#p-"+row.producto_id).length) {
+                            disabled = '';
+                            value = '0';
+                        }else{
+                            disabled = 'disabled';
+                            value = '';
+                        }
+                        var input = '<input type="text" style="width: 80px;" class="form-control cantidad-traslado" '+disabled+' value="'+value+'">';
                         return input;
                     }
                 }
