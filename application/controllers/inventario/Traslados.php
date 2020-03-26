@@ -9,7 +9,7 @@ class Traslados extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		$this->load->model("Compras_model");
-		
+		$this->load->model("Traslados_model");
 	}
 
 	public function index()
@@ -197,24 +197,68 @@ class Traslados extends CI_Controller {
 		}
 		echo json_encode($data);
 	}
-	public function getProductos(){
-		$valor = $this->input->post("valor");
-		$sucursal_id = $this->input->post("sucursal_id");
-		$bodega_id = $this->input->post("bodega_id");
-		$productos = $this->Compras_model->getProductos($sucursal_id,$bodega_id, $valor);
-		$data = array();
-		foreach ($productos as $p) {
-			$producto = get_record("productos", "id=".$p->producto_id);
-			$data[] = array(
-				"producto_id" => $p->producto_id,
-				"label" => $producto->codigo_barras ." - ".$producto->nombre,
-				"nombre" => $producto->nombre,
-				"codigo_barras" => $producto->codigo_barras,
-				"stock" => $p->stock,
-				"precios" => $this->Compras_model->getPrecios($p->producto_id),
-			);
-		}
-		echo json_encode($data);
 
+	public function searchProductos()
+	{
+
+		$columns = array( 
+                        0 =>'p.producto_id', 
+                        1=> 'p.codigo_barras',
+                        2=> 'p.nombre',
+                        3=> 'b.nombre',
+                    );
+		$sucursal_id = $this->input->post("sucursal");
+		$bodega_id = $this->input->post("bodega");
+
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Traslados_model->allproducts_count($sucursal_id,$bodega_id);
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Traslados_model->allproducts($limit,$start,$order,$dir,$sucursal_id,$bodega_id);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Traslados_model->products_search($limit,$start,$search,$order,$dir,$sucursal_id,$bodega_id);
+
+            $totalFiltered = $this->Traslados_model->products_search_count($search,$sucursal_id,$bodega_id);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+        	foreach ($productos as $p) {
+				$data[] = array(
+					"producto_id" => $p->producto_id,
+					"nombre" => $p->nombre,
+					"codigo_barras" => $p->codigo_barras,			
+				);
+			}
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
+	}
+
+	public function getIdProductosSBE(){
+		$bodega_id = $this->input->post("bodega");
+		$sucursal_id = $this->input->post("sucursal");
+
+		$idProductos = $this->Traslados_model->getIdProductosSBE($bodega_id,$sucursal_id);
+
+		echo json_encode($idProductos);
 	}
 }

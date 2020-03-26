@@ -258,6 +258,30 @@ $(document).ready(function () {
         html += "</tr>";
         $("#tbDevolucion").append(html);
     });
+
+    $("#form-consultar-productos-sb-envio").submit(function(e){
+        e.preventDefault();
+        var sucursal = $("#sucursal_envio").val();
+        var bodega = $("#bodega_envio").val();
+
+        $("#id_sucursal_envio").val(sucursal);
+        $("#id_bodega_envio").val(bodega);
+
+        cargarProductosTraslados();
+
+    });
+
+    $("#check-all-productos-traslado").on("click", function(){
+        var idProductos = $(this).val();
+        var dataProductos = idProductos.split(',');
+        console.log(dataProductos);
+        dataProductos.forEach( function(valor, indice, array) {
+
+            var inputProducto = "<input type='hidden' name='productos[]' id='p-"+valor+"' value='"+valor+"'>";
+            var inputCantidad = "<input type='hidden' name='cantidades[]' id='c-"+valor+"' value='0'>";
+            $("#productos_trasladados").append(inputProducto + inputCantidad);
+        });
+    });
     $("#searchProductoTraslado").autocomplete({
         source:function(request, response){
             var sucursal = $("#sucursal_envio").val();
@@ -1872,6 +1896,67 @@ $(document).ready(function () {
 
         });
        
+    }
+
+    function cargarProductosTraslados(){
+        
+        sucursal = $("#id_sucursal_envio").val();
+        bodega = $("#id_bodega_envio").val();
+        //obteniendo los id de los productos de la sucursal - bodega de envio
+        getIdProductosSBE(sucursal, bodega);
+
+        $('#tbTraslados').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "destroy": true,
+            "ajax":{
+                "url": base_url + "inventario/traslados/searchProductos",
+                "dataType": "json",
+                "type": "POST",
+                "data": {
+                    bodega:bodega, 
+                    sucursal:sucursal,
+                }
+            },
+            columns: [
+                {
+                    mRender: function (data, type, row) {
+                        
+                        var checkbox = "<input type='checkbox' value='"+row.producto_id+"' class='check-producto'>";
+                        return checkbox;
+                    }
+                },
+                {"data" : "codigo_barras"},
+                {"data" : "nombre"},
+                {
+                    mRender: function (data, type, row) {
+                        
+                        var input = '<input type="text" class="form-control" class="cantidad" disabled>';
+                        return input;
+                    }
+                }
+
+            ],
+            "language": datatable_spanish,
+            "order": [[ 2, "asc" ]],
+            "pageLength": 50,
+        });
+       
+    }
+
+    function getIdProductosSBE(sucursal, bodega){
+        $.ajax({
+            url: base_url + "inventario/traslados/getIdProductosSBE",
+            type: "POST",
+            data: {
+                bodega:bodega,
+                sucursal:sucursal
+            },
+            dataType:'json',
+            success: function(resp){
+                $("#check-all-productos-traslado").val(resp);
+            }
+        });
     }
 
     $(document).on('show.bs.modal', '.modal', function () {
