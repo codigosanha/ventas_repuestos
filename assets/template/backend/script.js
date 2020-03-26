@@ -75,6 +75,21 @@ $(document).ready(function () {
               .map(function(){return $(this).val();}).get();
             var sucursal_envio = $("#id_sucursal_envio").val();
             var bodega_envio = $("#id_bodega_envio").val();
+
+            $.ajax({
+                url: base_url + "inventario/traslados/store",
+                type:"POST",
+                data:{
+                    idproductos,
+                    cantidades,
+                    sucursal_envio,
+                    bodega_envio
+                },
+                dataType: "json",
+                success:function(resp){
+                    
+                }
+            });
         }
     });
 
