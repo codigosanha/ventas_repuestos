@@ -45,9 +45,11 @@ class Traslados extends CI_Controller {
 		$bodega_envio = $this->input->post("bodega_envio");
 		$sucursal_recibe = $this->input->post("sucursal_recibe");
 		$bodega_recibe = $this->input->post("bodega_recibe");
-		$productos = $this->input->post("idProductos");
-		$cantidades = $this->input->post("cantidades");
-
+		$productos = json_decode($this->input->post("productos"));
+		$productos_nuevos = json_decode($this->input->post("productos_nuevos"));
+		$cantidades_nuevas = json_decode($this->input->post("cantidades_nuevas"));
+		$productos_existentes = json_decode($this->input->post("productos_existentes"));
+		$cantidades_existentes = json_decode($this->input->post("cantidades_existentes"));
 
 		$data  = array(
 			"sucursal_envio" => $sucursal_envio, 
@@ -60,35 +62,67 @@ class Traslados extends CI_Controller {
 		);
 		$traslado = $this->Comun_model->insert("traslados", $data);
 		if ($traslado) {
-			for ($i=0; $i < count($productos); $i++) { 
-				$data_traslados = array(
-					"producto_id" => $productos[$i],
+			$traslados_nuevos_productos = [];
+			$traslados_productos_existentes = [];
+			$dataDetalleTraslado = [];
+			//Guardar Detalle traslados
+
+			//Guardar nuevos productos
+			for ($i=0; $i < count($productos_nuevos); $i++) { 
+				$data_producto_nuevos = array(
+					"bodega_id" => $bodega_recibe,
+					"sucursal_id" => $sucursal_recibe,
+					"producto_id" => $productos_nuevos[$i],
+					"stock" => $cantidades_nuevas[$i],
+					'estado'=> 1
+				);
+				$detalleTraslado = array(
+					"producto_id" => $productos_nuevos[$i],
 					"traslado_id" => $traslado->id,
-					"cantidad" => $cantidades[$i]
+					"cantidad" => $cantidades_nuevas[$i]
 				);
-				$this->Comun_model->insert("traslados_productos",$data_traslados);
-				$existe_producto_bodega_recibe = $this->Comun_model->get_record("bodega_sucursal_producto","bodega_id='$bodega_recibe' and sucursal_id='$sucursal_recibe' and producto_id='$productos[$i]'");
-				if ($existe_producto_bodega_recibe) {
-					$data_producto_bodega_recibe = array(
-						"stock" => $existe_producto_bodega_recibe->stock + $cantidades[$i]
-					);
-					$this->Comun_model->update("bodega_sucursal_producto", "id='$existe_producto_bodega_recibe->id'",$data_producto_bodega_recibe);
-				}else{
-					$data_add_producto_bodega_recibe = array(
-						"bodega_id" => $bodega_recibe,
-						"sucursal_id" => $sucursal_recibe,
-						"producto_id" => $productos[$i],
-						"stock" => $cantidades[$i],
-					);
-					$this->Comun_model->insert("bodega_sucursal_producto", $data_add_producto_bodega_recibe);
-				}
-				$producto_bodega_envio = $this->Comun_model->get_record("bodega_sucursal_producto","bodega_id='$bodega_envio' and sucursal_id='$sucursal_envio' and producto_id='$productos[$i]'");
-				$data_producto_bodega_envio = array(
-					"stock" => $producto_bodega_envio->stock - $cantidades[$i]
-				);
-				$this->Comun_model->update("bodega_sucursal_producto","id='$producto_bodega_envio->id'",$data_producto_bodega_envio);
+				$traslados_nuevos_productos[] = $data_producto_nuevos;
+				$dataDetalleTraslado[] = $detalleTraslado;
 			}
-			redirect(base_url()."inventario/traslados");
+
+			//Guardar productos existentes
+			for ($i=0; $i < count($productos_existentes); $i++) { 
+				$cantidad = 0;
+				$bsp_id = '';
+				for ($j=0; $j < count($productos); $j++) { 
+					$producto_existente = $productos[$j];
+					$dataProductoExistente = explode('-', $producto_existente);
+					if ($productos_existentes[$i] == $dataProductoExistente[0] ) {
+						$cantidad = $dataProductoExistente[2];
+						$bsp_id = $dataProductoExistente[1];
+						break;
+					}
+				}
+				$data_producto_existentes = array(
+					'id' => $bsp_id,
+					"stock" => $cantidades_existentes[$i] + $cantidad,
+					'estado'=> 1
+				);
+				$detalleTraslado = array(
+					"producto_id" => $productos_existentes[$i],
+					"traslado_id" => $traslado->id,
+					"cantidad" => $cantidades_existentes[$i]
+				);
+				$traslados_productos_existentes[] = $data_producto_existentes;
+				$dataDetalleTraslado[] = $detalleTraslado;
+			}
+			if (!empty($dataDetalleTraslado)) {
+				$this->Traslados_model->saveDetalleTraslado($dataDetalleTraslado);
+			}
+			if (!empty($traslados_nuevos_productos)) {
+				$this->Traslados_model->saveTrasladosNuevosProductos($traslados_nuevos_productos);
+			}
+			if (!empty($traslados_productos_existentes)) {
+				$this->Traslados_model->updateTrasladosProductosExistentes($traslados_productos_existentes);
+			}
+			
+			
+			echo "inventario/traslados";
 		}
 		else{
 			$this->session->set_flashdata("error","No se pudo guardar la informacion");
@@ -209,6 +243,8 @@ class Traslados extends CI_Controller {
                     );
 		$sucursal_id = $this->input->post("sucursal");
 		$bodega_id = $this->input->post("bodega");
+		$sucursal_recibe = $this->input->post("sucursal_recibe");
+		$bodega_recibe = $this->input->post("bodega_recibe");
 
 		$limit = $this->input->post('length');
         $start = $this->input->post('start');
@@ -235,10 +271,21 @@ class Traslados extends CI_Controller {
         if(!empty($productos))
         {
         	foreach ($productos as $p) {
+
+        		$checkProductoSucursalBodega = $this->Comun_model->get_record("bodega_sucursal_producto", "producto_id='$p->producto_id' AND bodega_id='$bodega_recibe' AND sucursal_id='$sucursal_recibe'");
+        		$stock = 0;
+        		$bsp_id = '';
+        		if ($checkProductoSucursalBodega) {
+        			$bsp_id = $checkProductoSucursalBodega->id;
+        			$stock = $checkProductoSucursalBodega->stock;
+        		}
+
 				$data[] = array(
 					"producto_id" => $p->producto_id,
 					"nombre" => $p->nombre,
-					"codigo_barras" => $p->codigo_barras,			
+					"codigo_barras" => $p->codigo_barras,
+					'bsp_id' => $bsp_id,
+					'stock' => $stock
 				);
 			}
         }
@@ -256,9 +303,44 @@ class Traslados extends CI_Controller {
 	public function getIdProductosSBE(){
 		$bodega_id = $this->input->post("bodega");
 		$sucursal_id = $this->input->post("sucursal");
+		$bodega_recibe = $this->input->post("bodega_recibe");
+		$sucursal_recibe = $this->input->post("sucursal_recibe");
 
-		$idProductos = $this->Traslados_model->getIdProductosSBE($bodega_id,$sucursal_id);
+		$idProductosSBE = $this->Traslados_model->getProductosBySB($bodega_id,$sucursal_id);
+		$idProductosSBR = $this->Traslados_model->getProductosBySB($bodega_recibe,$sucursal_recibe);
 
-		echo json_encode($idProductos);
+		$productos_existentes = [];
+		$productos_no_existentes = [];
+
+		$bsp_ids = [];
+		$stocks = [];
+
+		for ($i=0; $i < count($idProductosSBE); $i++) { 
+			$check = 0;
+			$k = 0;
+			for ($j=0; $j < count($idProductosSBR) ; $j++) { 
+				if ($idProductosSBE[$i]['producto'] == $idProductosSBR[$j]['producto']) {
+					$check = 1;
+					$k=$j;
+					break;
+				}
+			}
+
+			if ($check) {
+				$productos_existentes[] = $idProductosSBE[$i]['producto'];
+				$bsp_ids[] = $idProductosSBR[$k]['bsp_id'];
+				$stocks[] = $idProductosSBR[$k]['stock'];
+
+			}else{
+				$productos_no_existentes[] = $idProductosSBE[$i]['producto'];
+			}
+		}
+
+		echo json_encode([
+			"productos_existentes" => $productos_existentes,
+			"productos_no_existentes" => $productos_no_existentes,
+			"bsp_ids" => $bsp_ids,
+			"stocks" => $stocks,
+		]);
 	}
 }

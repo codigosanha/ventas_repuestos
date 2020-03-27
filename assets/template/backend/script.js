@@ -65,29 +65,49 @@ $(document).ready(function () {
 
     $("#form-save-traslado").submit(function(e){
         e.preventDefault();
-        if ($("#productos_trasladados input").length == 0) {
+        if ($("#content-productos-nuevos input").length == 0 && $("#content-productos-existentes input").length == 0 ) {
             swal("Error", "Debe indicar al menos un producto para el traslado","error");
             return false;
         }else{
-            var idproductos = $("input[name='productos[]']")
+            var productos_nuevos = $("input[name='productos_nuevos[]']")
               .map(function(){return $(this).val();}).get();
-            var cantidades = $("input[name='cantidades[]']")
+            var cantidades_nuevas = $("input[name='cantidades_nuevas[]']")
+              .map(function(){return $(this).val();}).get();
+            var productos_existentes = $("input[name='productos_existentes[]']")
+              .map(function(){return $(this).val();}).get();
+            var cantidades_existentes = $("input[name='cantidades_existentes[]']")
+              .map(function(){return $(this).val();}).get();
+            var productos = $("input[name='productos[]']")
               .map(function(){return $(this).val();}).get();
             var sucursal_envio = $("#id_sucursal_envio").val();
             var bodega_envio = $("#id_bodega_envio").val();
+            var sucursal_recibe = $("#sucursal_recibe").val();
+            var bodega_recibe = $("#bodega_recibe").val();
 
             $.ajax({
                 url: base_url + "inventario/traslados/store",
                 type:"POST",
                 data:{
-                    idproductos,
-                    cantidades,
+                    productos_nuevos:JSON.stringify(productos_nuevos),
+                    cantidades_nuevas:JSON.stringify(cantidades_nuevas),
+                    productos_existentes:JSON.stringify(productos_existentes),
+                    cantidades_existentes:JSON.stringify(cantidades_existentes),
+                    productos:JSON.stringify(productos),
                     sucursal_envio,
-                    bodega_envio
+                    bodega_envio,
+                    sucursal_recibe,
+                    bodega_recibe
                 },
-                dataType: "json",
+                //dataType: "json",
                 success:function(resp){
-                    
+                    swal({
+                        title: "Proceso Terminado",
+                        text: "El traslado se realizó con éxito",
+                        timer: 3000,
+                        showConfirmButton: false,
+                        type: 'success'
+                    });
+                    window.location.href = base_url + resp;
                 }
             });
         }
@@ -295,37 +315,79 @@ $(document).ready(function () {
     });
 
     $("#check-all-productos-traslado").on("click", function(){
-        $("#productos_trasladados").html(null);
-        var idProductos = $(this).val();
-        var dataProductos = idProductos.split(',');
+        $("#content-productos-nuevos").html(null);
+        $("#content-productos-existentes").html(null);
+        var productos_existentes = $("#productos_existentes").val();
+        var productos_no_existentes =$("#productos_no_existentes").val();
+        var stocks = $("#stocks").val();
+        var bsp_ids = $("#bsp_ids").val();
+        var data_productos_existentes = productos_existentes.split(',');
+        var data_productos_no_existentes = productos_no_existentes.split(',');
+        var data_stocks = stocks.split(',');
+        var data_bsp_ids = bsp_ids.split(',');
+
         
-        dataProductos.forEach( function(valor, indice, array) {
-            var inputProducto = "<input type='hidden' name='productos[]' id='p-"+valor+"' value='"+valor+"'>";
-            var inputCantidad = "<input type='hidden' name='cantidades[]' id='c-"+valor+"' value='0'>";
-            $("#productos_trasladados").append(inputProducto + inputCantidad);
-            $(".check-producto-traslado").prop('checked', true);  
-            $(".cantidad-traslado").val('0');
-            $(".cantidad-traslado").removeAttr('disabled');
+        data_productos_no_existentes.forEach( function(valor, indice, array) {
+            var inputProducto = "<input type='hidden' name='productos_nuevos[]' id='np-"+valor+"' value='"+valor+"'>";
+            var inputCantidad = "<input type='hidden' name='cantidades_nuevas[]' id='nc-"+valor+"' value='0'>";
+            $("#content-productos-nuevos").append(inputProducto + inputCantidad);
+            $(".check-nuevo-producto-traslado").prop('checked', true);
+            $(".check-update-producto-traslado").prop('checked', true);  
+            $(".cantidad-traslado-nuevos").val('0');
+            $(".cantidad-traslado-nuevos").removeAttr('disabled');
+            $(".cantidad-traslado-existentes").val('0');
+            $(".cantidad-traslado-existentes").removeAttr('disabled');
+        });
+        data_productos_existentes.forEach( function(valor, indice, array) {
+            var inputProducto = "<input type='hidden' name='productos_existentes[]' id='pe-"+valor+"' value='"+valor+"'>";
+            var inputCantidad = "<input type='hidden' name='cantidades_existentes[]' id='ce-"+valor+"' value='0'>";
+            
+            
+            $("#content-productos-existentes").append(inputProducto + inputCantidad);
+           
+              
+            
         });
         $("#status-check-all-productos-traslado").val(1);
     });
 
-    $(document).on("keyup",".cantidad-traslado", function(){
+    $(document).on("keyup",".cantidad-traslado-nuevos", function(){
         var cantidad = $(this).val();
         var producto_id = $(this).closest("tr").children("td:eq(0)").find("input").val();
-        $("#c-"+producto_id).val(cantidad);
+        $("#nc-"+producto_id).val(cantidad);
     });
-    $(document).on("change", ".check-producto-traslado", function(){
+    $(document).on("keyup",".cantidad-traslado-existentes", function(){
+        var cantidad = $(this).val();
+        var producto_id = $(this).closest("tr").children("td:eq(0)").find("input").val();
+        $("#ce-"+producto_id).val(cantidad);
+    });
+    $(document).on("change", ".check-nuevo-producto-traslado", function(){
         var producto_id = $(this).val();
         if($(this).is(':checked')) {  
-            var inputProducto = "<input type='hidden' name='productos[]' id='p-"+producto_id+"' value='"+producto_id+"'>";
-            var inputCantidad = "<input type='hidden' name='cantidades[]' id='c-"+producto_id+"' value='0'>";
-            $("#productos_trasladados").append(inputProducto + inputCantidad);
+            var inputProducto = "<input type='hidden' name='productos_nuevos[]' id='np-"+producto_id+"' value='"+producto_id+"'>";
+            var inputCantidad = "<input type='hidden' name='cantidades_nuevas[]' id='nc-"+producto_id+"' value='0'>";
+            $("#content-productos-nuevos").append(inputProducto + inputCantidad);
             $(this).closest("tr").children("td:eq(3)").find("input").removeAttr("disabled");
             $(this).closest("tr").children("td:eq(3)").find("input").val('0');
         }else{
-            $("#p-"+producto_id).remove();
-            $("#c-"+producto_id).remove();
+            $("#np-"+producto_id).remove();
+            $("#nc-"+producto_id).remove();
+            $(this).closest("tr").children("td:eq(3)").find("input").attr("disabled", "disabled");
+            $(this).closest("tr").children("td:eq(3)").find("input").val(null);
+        }
+    });
+
+    $(document).on("change", ".check-update-producto-traslado", function(){
+        var producto_id = $(this).val();
+        if($(this).is(':checked')) {  
+            var inputProducto = "<input type='hidden' name='productos_existentes[]' id='pe-"+producto_id+"' value='"+producto_id+"'>";
+            var inputCantidad = "<input type='hidden' name='cantidades_existentes[]' id='ce-"+producto_id+"' value='0'>";
+            $("#content-productos-existentes").append(inputProducto + inputCantidad);
+            $(this).closest("tr").children("td:eq(3)").find("input").removeAttr("disabled");
+            $(this).closest("tr").children("td:eq(3)").find("input").val('0');
+        }else{
+            $("#pe-"+producto_id).remove();
+            $("#ce-"+producto_id).remove();
             $(this).closest("tr").children("td:eq(3)").find("input").attr("disabled", "disabled");
             $(this).closest("tr").children("td:eq(3)").find("input").val(null);
         }
@@ -1920,8 +1982,11 @@ $(document).ready(function () {
         
         sucursal = $("#id_sucursal_envio").val();
         bodega = $("#id_bodega_envio").val();
+
+        sucursal_recibe = $("#sucursal_recibe").val();
+        bodega_recibe = $("#bodega_recibe").val();
         //obteniendo los id de los productos de la sucursal - bodega de envio
-        getIdProductosSBE(sucursal, bodega);
+        getIdProductosSBE(sucursal, bodega, sucursal_recibe,bodega_recibe);
 
         $('#tbTraslados').DataTable({
             "processing": true,
@@ -1934,6 +1999,8 @@ $(document).ready(function () {
                 "data": {
                     bodega:bodega, 
                     sucursal:sucursal,
+                    sucursal_recibe,
+                    bodega_recibe
                 }
             },
             columns: [
@@ -1945,14 +2012,24 @@ $(document).ready(function () {
                         if (status_check_all_productos == '1') {
                             checked = 'checked';
                         }
+                        var id_check = "#np-"+row.producto_id;
+                        if (row.bsp_id !='') {
+                            id_check = "#pe-"+row.producto_id;
+                        }
 
-                        if ($("#p-"+row.producto_id).length) {
+                        if ($(id_check).length) {
                             checked = 'checked';
                         }else{
                             checked = '';
+                        }   
+
+                        var class_checkbox = 'check-nuevo-producto-traslado';
+
+                        if (row.bsp_id != '') {
+                            var class_checkbox = 'check-update-producto-traslado';
                         }
 
-                        var checkbox = "<input type='checkbox' value='"+row.producto_id+"' class='check-producto-traslado' "+checked+">";
+                        var checkbox = "<input type='checkbox' value='"+row.producto_id+"' class='"+class_checkbox+"' "+checked+">";
                         return checkbox;
                     }
                 },
@@ -1968,6 +2045,8 @@ $(document).ready(function () {
                             value = '0';
                         }
 
+
+
                         if ($("#p-"+row.producto_id).length) {
                             disabled = '';
                             value = '0';
@@ -1975,7 +2054,29 @@ $(document).ready(function () {
                             disabled = 'disabled';
                             value = '';
                         }
-                        var input = '<input type="text" style="width: 80px;" class="form-control cantidad-traslado" '+disabled+' value="'+value+'">';
+
+                        var class_input_cantidad = 'cantidad-traslado-nuevos';
+
+                        if (row.bsp_id != '') {
+                            var class_input_cantidad = 'cantidad-traslado-existentes';
+                            if ($("#pe-"+row.producto_id).length) {
+                                disabled = '';
+                                value = $("#ce-"+row.producto_id).val();
+                            }else{
+                                disabled = 'disabled';
+                                value = '';
+                            }
+                        }else{
+                            if ($("#np-"+row.producto_id).length) {
+                                disabled = '';
+                                value = $("#nc-"+row.producto_id).val();
+                            }else{
+                                disabled = 'disabled';
+                                value = '';
+                            }
+                        }
+
+                        var input = '<input type="text" style="width: 80px;" class="form-control '+class_input_cantidad+'" '+disabled+' value="'+value+'">';
                         return input;
                     }
                 }
@@ -1988,17 +2089,35 @@ $(document).ready(function () {
        
     }
 
-    function getIdProductosSBE(sucursal, bodega){
+    function getIdProductosSBE(sucursal, bodega,sucursal_recibe, bodega_recibe){
         $.ajax({
             url: base_url + "inventario/traslados/getIdProductosSBE",
             type: "POST",
             data: {
                 bodega:bodega,
-                sucursal:sucursal
+                sucursal:sucursal,
+                bodega_recibe:bodega_recibe,
+                sucursal_recibe:sucursal_recibe
             },
             dataType:'json',
             success: function(resp){
-                $("#check-all-productos-traslado").val(resp);
+                $("#productos_no_existentes").val(resp.productos_no_existentes);
+                $("#productos_existentes").val(resp.productos_existentes);
+
+
+                $("#bsp_ids").val(resp.bsp_ids);
+                $("#stocks").val(resp.stocks);
+                stocks = resp.stocks;
+                bsp_ids = resp.bsp_ids;
+                html = '';
+                $.each(resp.productos_existentes,function(key, value){
+                    console.log(key);
+                    html += "<input type='hidden' name='productos[]' value='"+value+"-"+bsp_ids[key]+'-'+stocks[key]+"'>";
+            
+                    
+                });
+                $("#infoProducto").html(html);
+                $("#buttons").show();
             }
         });
     }

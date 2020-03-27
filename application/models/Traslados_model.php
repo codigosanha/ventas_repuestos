@@ -96,8 +96,8 @@ class Traslados_model extends CI_Model {
         }
     } 
 
-    public function getIdProductosSBE($bodega_id, $sucursal_id){
-    	$this->db->select("p.id");
+    public function getProductosBySB($bodega_id, $sucursal_id){
+    	$this->db->select("bsp.producto_id,bsp.stock,bsp.id");
     	$this->db->from("bodega_sucursal_producto bsp");
 		$this->db->join("productos p","bsp.producto_id = p.id");
 		$this->db->where("bsp.sucursal_id",$sucursal_id);
@@ -108,11 +108,27 @@ class Traslados_model extends CI_Model {
 		$query = $this->db->get();
 
 		$array = [];
-		foreach ($query->result() as $producto) {
-			$array[] = $producto->id;
+		foreach ($query->result() as $bsp) {
+			$array[] = [
+				'producto' => $bsp->producto_id,
+				'stock' => $bsp->stock,
+				'bsp_id' => $bsp->id,
+			];
 		}
 		
 
 		return $array;
+    }
+
+
+    public function saveDetalleTraslado($dataDetalleTraslado){
+    	return $this->db->insert_batch('traslados_productos', $dataDetalleTraslado); 
+    }
+
+    public function saveTrasladosNuevosProductos($traslados_nuevos_productos){
+    	return $this->db->insert_batch('bodega_sucursal_producto', $traslados_nuevos_productos); 
+    }
+    public function updateTrasladosProductosExistentes($traslados_productos_existentes){
+    	$this->db->update_batch('bodega_sucursal_producto',$traslados_productos_existentes, 'id');
     }
 }
