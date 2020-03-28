@@ -71,8 +71,9 @@ class Productos_model extends CI_Model {
     	$this->db->from("productos p");
     	$this->db->join("calidades c", "p.calidad_id = c.id");
     	$this->db->like("p.nombre", $search);
-    	$this->db->or_like("p.stock_minimo", $search);
-    	$this->db->or_like("c.nombre", $search);
+        $this->db->or_like("p.codigo_barras", $search);
+        $this->db->or_like("p.stock_minimo", $search);
+        $this->db->or_like("c.nombre", $search);
     	
     	$query = $this->db->get();
         return $query->num_rows();
