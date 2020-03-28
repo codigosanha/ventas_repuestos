@@ -206,22 +206,23 @@ $(document).ready(function () {
     });
     });
     $(document).on("click", ".btn-check-all-products", function(){
+        $("#productos_nuevos").html(null);
         productos = $(this).val();
         infoRestantes = productos.split(",");
         for (i=0; i < infoRestantes.length;i++) {
-            $('#tableSimple').DataTable().$("#p"+infoRestantes[i]).prop('checked', true);
-            input = "<input type='hidden' name='idProductos[]' value='"+infoRestantes[i]+"' id='pa"+infoRestantes[i]+"'>";
-            $("#productos-seleccionados").append(input);
+            $(".checkProductoNuevo").prop('checked', true);
+            input = "<input type='hidden' name='idProductos[]' value='"+infoRestantes[i]+"' id='pn-"+infoRestantes[i]+"'>";
+            $("#productos_nuevos").append(input);
         }
     });
-    $(document).on("click", ".checkProducto", function(){
+    $(document).on("change", ".checkProductoNuevo", function(){
         idProducto = $(this).val();
         if ($(this).is(":checked")) {
             
-            input = "<input type='hidden' name='idProductos[]' value='"+idProducto+"' id='pa"+idProducto+"'>";
-            $("#productos-seleccionados").append(input);
+            input = "<input type='hidden' name='idProductos[]' value='"+idProducto+"' id='pn-"+idProducto+"'>";
+            $("#productos_nuevos").append(input);
         }else{
-            $("#pa"+idProducto).remove();
+            $("#pn-"+idProducto).remove();
         }
         
     });
@@ -849,9 +850,39 @@ $(document).ready(function () {
     });
 
     $(document).on("change", "#bodega", function(){
-        var bodega_id = $(this).val();
-        var sucursal_id = $("#sucursal").val();
+        //cargarProductosInventario();
+
+
+        $("#productos_nuevos").html(null);
+        sucursal = $("#sucursal").val();
+        bodega = $("#bodega").val();
+        if (bodega == '') {
+            $(".btn-check-all-products").attr("disabled");
+        }else{
+            $(".btn-check-all-products").removeAttr("disabled");
+        }
         $.ajax({
+            url: base_url + "inventario/productos/getIdProductos",
+            type: "POST",
+            data: {
+                bodega:bodega,
+                sucursal:sucursal
+            },
+            dataType:'json',
+            success: function(resp){
+                html = '';
+                $.each(resp.productos_registrados,function(key, value){
+                    html += "<input type='hidden' name='productos[]' value='"+value.producto+"' id='pr-"+value.producto+"'>";
+                });
+                $("#productos_registrados").html(html);
+                $(".btn-check-all-products").val(resp.productos_no_registrados);
+            }
+        });
+        
+        table
+        .search( '' )
+        .draw();
+        /*$.ajax({
             url: base_url + "inventario/productos/getProductos",
             type: "POST",
             data:{idBodega:bodega_id,idSucursal:sucursal_id},
@@ -875,7 +906,7 @@ $(document).ready(function () {
 
                 $("#tbProductosExistentes tbody").html(productos);
             }
-        });
+        });*/
     });
 
     $(document).on("click",".btn-view-barcode", function(){
@@ -1905,6 +1936,58 @@ $(document).ready(function () {
             });
     }
 
+    if ($("#tbProductosInventario").length) {
+        
+         var table = $('#tbProductosInventario').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "destroy": true,
+                "ajax":{
+                    "url": base_url + "inventario/productos/getProductosRegistrados",
+                    "dataType": "json",
+                    "type": "POST",
+                },
+                columns: [
+                    {
+                        mRender: function (data, type, row) {
+                            var checked = '';
+                            var disabled = 'disabled';
+                            var class_checkbox = 'checkProductoRegistrado';
+
+                            if ($("#bodega").val() == '') {
+                                 checked = '';
+                                 disabled = 'disabled';
+                            }else {
+                                if ($("#pr-"+row.id).length > 0) {
+                                    checked = 'checked';
+                                    disabled = 'disabled';
+                                    class_checkbox = 'checkProductoRegistrado';
+                                }else{
+                                    if ($("#pn-"+row.id).length) {
+                                        checked = 'checked';
+                                        disabled = '';
+                                        class_checkbox = 'checkProductoNuevo';
+                                    }else{
+                                        checked = '';
+                                        disabled = '';
+                                        class_checkbox = 'checkProductoNuevo';
+                                    }
+                                }
+                            }
+                            var input_checkbox = '<input type="checkbox" name="checkProducto" id="p-'+row.id+'" value="'+row.id+'"  class="'+class_checkbox+'" '+disabled  +' '+checked+' >';
+                            
+                            return input_checkbox;
+                        }
+                    },
+                    {"data" : "codigo_barras"},
+                    {"data" : "nombre"},
+                ],
+                "language": datatable_spanish,
+                "order": [[ 2, "asc" ]],
+                "pageLength": 50,
+            });
+    }
+
     function cargarProductos(){
       $.fn.DataTable.ext.pager.numbers_length = 10;
         bodega = $("#bodega").val();
@@ -1975,6 +2058,115 @@ $(document).ready(function () {
             
 
         });
+       
+    }
+
+    function cargarProductosInventario(){
+        
+        sucursal = $("#sucursal").val();
+        bodega = $("#bodega").val();
+
+        //obteniendo los id de los productos de la sucursal - bodega de envio
+        getIdProductosInventario(sucursal, bodega);
+
+        /*$('#tbTraslados').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "destroy": true,
+            "ajax":{
+                "url": base_url + "inventario/traslados/searchProductos",
+                "dataType": "json",
+                "type": "POST",
+                "data": {
+                    bodega:bodega, 
+                    sucursal:sucursal,
+                    sucursal_recibe,
+                    bodega_recibe
+                }
+            },
+            columns: [
+                {
+                    mRender: function (data, type, row) {
+                        var status_check_all_productos = $("#status-check-all-productos-traslado").val();
+                        var checked = '';
+
+                        if (status_check_all_productos == '1') {
+                            checked = 'checked';
+                        }
+                        var id_check = "#np-"+row.producto_id;
+                        if (row.bsp_id !='') {
+                            id_check = "#pe-"+row.producto_id;
+                        }
+
+                        if ($(id_check).length) {
+                            checked = 'checked';
+                        }else{
+                            checked = '';
+                        }   
+
+                        var class_checkbox = 'check-nuevo-producto-traslado';
+
+                        if (row.bsp_id != '') {
+                            var class_checkbox = 'check-update-producto-traslado';
+                        }
+
+                        var checkbox = "<input type='checkbox' value='"+row.producto_id+"' class='"+class_checkbox+"' "+checked+">";
+                        return checkbox;
+                    }
+                },
+                {"data" : "codigo_barras"},
+                {"data" : "nombre"},
+                {
+                    mRender: function (data, type, row) {
+                        var status_check_all_productos = $("#status-check-all-productos-traslado").val();
+                        var disabled = 'disabled';
+                        var value = '';
+                        if (status_check_all_productos == '1') {
+                            disabled = '';
+                            value = '0';
+                        }
+
+
+
+                        if ($("#p-"+row.producto_id).length) {
+                            disabled = '';
+                            value = '0';
+                        }else{
+                            disabled = 'disabled';
+                            value = '';
+                        }
+
+                        var class_input_cantidad = 'cantidad-traslado-nuevos';
+
+                        if (row.bsp_id != '') {
+                            var class_input_cantidad = 'cantidad-traslado-existentes';
+                            if ($("#pe-"+row.producto_id).length) {
+                                disabled = '';
+                                value = $("#ce-"+row.producto_id).val();
+                            }else{
+                                disabled = 'disabled';
+                                value = '';
+                            }
+                        }else{
+                            if ($("#np-"+row.producto_id).length) {
+                                disabled = '';
+                                value = $("#nc-"+row.producto_id).val();
+                            }else{
+                                disabled = 'disabled';
+                                value = '';
+                            }
+                        }
+
+                        var input = '<input type="text" style="width: 80px;" class="form-control '+class_input_cantidad+'" '+disabled+' value="'+value+'">';
+                        return input;
+                    }
+                }
+
+            ],
+            "language": datatable_spanish,
+            "order": [[ 2, "asc" ]],
+            "pageLength": 50,
+        });*/
        
     }
 
@@ -2118,6 +2310,24 @@ $(document).ready(function () {
                 });
                 $("#infoProducto").html(html);
                 $("#buttons").show();
+            }
+        });
+    }
+    function getIdProductosInventario(sucursal, bodega){
+        $.ajax({
+            url: base_url + "inventario/productos/getIdProductos",
+            type: "POST",
+            data: {
+                bodega:bodega,
+                sucursal:sucursal
+            },
+            dataType:'json',
+            success: function(resp){
+                html = '';
+                $.each(resp,function(key, value){
+                    html += "<input type='hidden' name='productos[]' value='"+value.producto+"' id='pr-"+value.producto+"'>";
+                });
+                $("#productos_registrados").html(html);
             }
         });
     }

@@ -192,4 +192,41 @@ class Inventario_model extends CI_Model {
         return $this->db->insert_batch('bodega_sucursal_producto', $data); 
     }
 
+    public function getProductosBySB($bodega_id, $sucursal_id){
+        $this->db->select("bsp.producto_id,bsp.stock,bsp.id");
+        $this->db->from("bodega_sucursal_producto bsp");
+        $this->db->join("productos p","bsp.producto_id = p.id");
+        $this->db->where("bsp.sucursal_id",$sucursal_id);
+        $this->db->where("bsp.bodega_id",$bodega_id);
+        $this->db->where("p.estado","1");
+        $this->db->where("bsp.estado","1");
+
+        $query = $this->db->get();
+
+        $array = [];
+        foreach ($query->result() as $bsp) {
+            $array[] = [
+                'producto' => $bsp->producto_id,
+                'stock' => $bsp->stock,
+                'bsp_id' => $bsp->id,
+            ];
+        }
+        
+
+        return $array;
+    }
+
+    public function getProductosNoRegistrados($bodega_id, $sucursal_id){
+        $sql = "SELECT id FROM productos WHERE estado='1' AND id NOT IN (SELECT producto_id FROM bodega_sucursal_producto WHERE bodega_id ='$bodega_id' AND sucursal_id='$sucursal_id')";
+
+        $query = $this->db->query($sql);
+        $array = [];
+        foreach ($query->result() as $row)
+        {
+            $array[] = $row->id;
+        }
+        return $array;
+    }
+
+
 }

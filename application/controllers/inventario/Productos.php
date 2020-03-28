@@ -9,6 +9,7 @@ class Productos extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		$this->load->model("Inventario_model");
+		$this->load->model("Productos_model");
 	}
 
 	public function index()
@@ -109,15 +110,9 @@ class Productos extends CI_Controller {
 			$bodegas = $this->Comun_model->get_records("bodega_sucursal");
 		}
 
-		if ($this->session->userdata("sucursal")) {
-			$productos = $this->Comun_model->get_records("bodega_sucursal_producto","sucursal_id=".$this->session->userdata("sucursal"));
-		}else{
-			$productos = $this->Comun_model->get_records("bodega_sucursal_producto");
-		}
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
 			"bodegas" => $bodegas,
-			"productos" => $this->Comun_model->get_records("productos"),
 			"sucursales" =>  $this->Comun_model->get_records("sucursales")
 		);
 		$contenido_externo = array(
@@ -216,6 +211,58 @@ class Productos extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function getProductosRegistrados()
+	{
+		$columns = array( 
+							0 => 'p.id', 
+                            1 => 'p.codigo_barras', 
+                            2 => 'p.nombre',
+                        );
+
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Productos_model->allproductos_count();
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Productos_model->allproductos($limit,$start,$order,$dir);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Productos_model->productos_search($limit,$start,$search,$order,$dir);
+
+            $totalFiltered = $this->Productos_model->productos_search_count($search);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+            foreach ($productos as $producto)
+            {
+
+                $nestedData['id'] = $producto->id;
+                $nestedData['nombre'] = $producto->nombre;
+                $nestedData['codigo_barras'] = $producto->codigo_barras;
+                $data[] = $nestedData;
+            }
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
+	}
+
 	public function getProductos(){
 		$sucursal_id = $this->input->post("idSucursal");
 		$bodega_id = $this->input->post("idBodega");
@@ -276,5 +323,21 @@ class Productos extends CI_Controller {
 	   	$file = Zend_Barcode::draw('code128', 'image', $barcodeOptions, array());
 	   	//$code = time().$code;
 	   	$store_image = imagepng($file,"./assets/barcode/{$codigo_barras}.png");
+	}
+
+	public function getIdProductos(){
+		$bodega_id = $this->input->post("bodega");
+		$sucursal_id = $this->input->post("sucursal");
+		//registrados en sucursal-bodega
+		$productos_registrados = $this->Inventario_model->getProductosBySB($bodega_id, $sucursal_id);
+		//total de productos registrados
+		$productos_no_registrados = $this->Inventario_model->getProductosNoRegistrados($bodega_id,$sucursal_id);
+
+		
+
+		echo json_encode([
+			"productos_registrados" => $productos_registrados,
+			"productos_no_registrados" => $productos_no_registrados
+		]);
 	}
 }
