@@ -3,12 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Inventario_model extends CI_Model {
 	public function save($data){
-		if ($this->db->insert("inventarios", $data)) {
-			return $this->db->insert_id();
-		}
-		else{
-			return false;
-		}
+		return $this->db->insert_batch("bodega_sucursal_producto", $data);
 	}
 	public function saveDetalleInventario($data){
 		return $this->db->insert("inventario_producto", $data);

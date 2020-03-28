@@ -123,26 +123,24 @@ class Productos extends CI_Controller {
 	}
 
 	public function store(){
-
-		$bodega_id = $this->input->post("bodega_id");
-		$sucursal_id = $this->input->post("sucursal_id");
-		$idProductos = $this->input->post("idProductos");
-		$data = [];
-		
-		for ($i=0; $i < count($idProductos); $i++) { 
-			$data[] = [
-				"bodega_id" => $bodega_id, 
-				"sucursal_id" => $sucursal_id,
-				"producto_id" => $idProductos[$i],
-				"estado" => "1"
-			]; 
+		$sucursal = $this->input->post("sucursal");
+		$bodega = $this->input->post("bodega");
+		$productos_nuevos = json_decode($this->input->post("productos_nuevos"));
+		$data_nuevos_producto = [];
+		for ($i=0; $i < count($productos_nuevos); $i++) { 
+			$data_producto_nuevos = array(
+				"bodega_id" => $bodega,
+				"sucursal_id" => $sucursal,
+				"producto_id" => $productos_nuevos[$i],
+				"stock" => 0,
+				'estado'=> 1
+			);
+			$data_nuevos_productos[] = $data_producto_nuevos;
 		}
-
-		if (!empty($data)) {
-			$this->Inventario_model->saveInventario($data);
+		if (!empty($data_nuevos_productos)) {
+			$this->Inventario_model->save($data_nuevos_productos);
 		}
-
-		redirect(base_url()."inventario/productos");
+		echo "inventario/productos";
 	}
 
 	public function edit($id){
@@ -218,7 +216,8 @@ class Productos extends CI_Controller {
                             1 => 'p.codigo_barras', 
                             2 => 'p.nombre',
                         );
-
+		$bodega = $this->input->post('bodega');
+		$sucursal = $this->input->post('sucursal');
 		$limit = $this->input->post('length');
         $start = $this->input->post('start');
         $order = $columns[$this->input->post('order')[0]['column']];
@@ -240,15 +239,27 @@ class Productos extends CI_Controller {
             $totalFiltered = $this->Productos_model->productos_search_count($search);
         }
 
+        $productos_no_registrados = $this->Inventario_model->getProductosNoRegistrados($bodega, $sucursal);
+        // 4-5-6  no registradps
+        // 1-2-3 registrados
+        // 1-2-3-4-5-6   total
         $data = array();
         if(!empty($productos))
         {
             foreach ($productos as $producto)
             {
-
+            	if ($bodega) {
+            		$estado = 'registrado';
+            		if (in_array($producto->id, $productos_no_registrados)) {
+					    $estado = 'no-registrado';
+					}
+            	}else{
+            		$estado = 'disabled';
+            	}
                 $nestedData['id'] = $producto->id;
                 $nestedData['nombre'] = $producto->nombre;
                 $nestedData['codigo_barras'] = $producto->codigo_barras;
+               	$nestedData['estado'] = $estado;
                 $data[] = $nestedData;
             }
         }
@@ -325,19 +336,11 @@ class Productos extends CI_Controller {
 	   	$store_image = imagepng($file,"./assets/barcode/{$codigo_barras}.png");
 	}
 
-	public function getIdProductos(){
+	public function getIdProductosNoRegistrados(){
 		$bodega_id = $this->input->post("bodega");
 		$sucursal_id = $this->input->post("sucursal");
-		//registrados en sucursal-bodega
-		$productos_registrados = $this->Inventario_model->getProductosBySB($bodega_id, $sucursal_id);
 		//total de productos registrados
 		$productos_no_registrados = $this->Inventario_model->getProductosNoRegistrados($bodega_id,$sucursal_id);
-
-		
-
-		echo json_encode([
-			"productos_registrados" => $productos_registrados,
-			"productos_no_registrados" => $productos_no_registrados
-		]);
+		echo json_encode($productos_no_registrados);
 	}
 }
