@@ -78,19 +78,21 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <table  class="table table-bordered table-hover" id="tbInventarioSB">
+                        <table  class="table table-bordered table-hover" id="tbInventarioSB" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Codigo de Barras</th>
+                                    <th width="120px">Cod. de Barras</th>
                                     <th>Producto</th>
-                                    <th>Stock BD</th>
-                                    <th>Stock Fisico</th>
-                                    <th>Diferencia de Stock</th>
+                                    <th width="100px">Localización</th>
+                                    <th width="100px">Stock BD</th>
+                                    <th width="100px">Stock Fisico</th>
+                                    <th width="150px">Diferencia de Stock</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
+                        <div id="content-productos"></div>
                      
                         <button type="submit" class="btn btn-success btn-flat" id="btn-inventario" disabled="disabled">
 

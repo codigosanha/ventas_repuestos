@@ -441,18 +441,24 @@ $(document).ready(function () {
         $("body").prepend("<div class='loader'></div>");
    
         var url = $(this).attr("action");
-        var idproductos = $("#tbInventarioSB").DataTable().$("input[name='productos[]']")
+        var bsp_ids = $("input[name='bsp_ids[]']")
               .map(function(){return $(this).val();}).get();
-        var stocks_fisico = $("#tbInventarioSB").DataTable().$("input[name='stocks_fisico[]']")
+        var idproductos = $("input[name='productos[]']")
               .map(function(){return $(this).val();}).get();
-        var stocks_bd = $("#tbInventarioSB").DataTable().$("input[name='stocks_bd[]']")
+        var localizaciones = $("input[name='localizaciones[]']")
               .map(function(){return $(this).val();}).get();
-        var stocks_diferencia = $("#tbInventarioSB").DataTable().$("input[name='stocks_diferencia[]']")
+        var stocks_fisico = $("input[name='stocks_fisico[]']")
+              .map(function(){return $(this).val();}).get();
+        var stocks_bd = $("input[name='stocks_bd[]']")
+              .map(function(){return $(this).val();}).get();
+        var stocks_diferencia = $("input[name='stocks_diferencia[]']")
               .map(function(){return $(this).val();}).get();
         var sucursal_id = $("#sucursal").val();
         var bodega_id = $("#bodega").val();
         var dataForm = {
+            bsp_ids: JSON.stringify(bsp_ids),
             productos: JSON.stringify(idproductos),
+            localizaciones: JSON.stringify(localizaciones),
             stocks_bd: JSON.stringify(stocks_bd),
             stocks_fisico: JSON.stringify(stocks_fisico),
             stocks_diferencia: JSON.stringify(stocks_diferencia),
@@ -469,7 +475,15 @@ $(document).ready(function () {
                     swal("Error!","No se pudo guardar el Ajuste");
                 }else{
                     $(".loader").hide();
-                    showAjuste(data);
+                    //showAjuste(data);
+                    swal({
+                        title: "Proceso Terminado",
+                        text: "El Ajuste del inventario se realizó con éxito",
+                        timer: 3000,
+                        showConfirmButton: false,
+                        type: 'success'
+                    });
+                    window.location.href = base_url + "inventario/ajuste";
                 }
             }
         });
@@ -477,75 +491,97 @@ $(document).ready(function () {
         
     });
     
-    $(document).on("keyup mouseup", ".stocks_fisico", function(){
-        stocks_fisico = Number($(this).val());
-        stocks_bd = Number($(this).closest("tr").find("td:eq(2)").text());
-        diferencia_stock = stocks_fisico-stocks_bd;
-        $(this).closest("tr").find("td:eq(4)").children('input').val(diferencia_stock);
-    });
-    $("#btn-ver-productos").on("click", function(){
-        var bodega_id = $("#bodega").val();
-        var sucursal_id = $("#sucursal").val();
-        var dataForm = {
-            bodega_id: bodega_id,
-            sucursal_id: sucursal_id
-        };
-        $.ajax({
-            url: base_url + "inventario/ajuste/searchProductos",
-            type: "POST",
-            data: dataForm,
-            dataType: "json",
-            success: function(data){
-                $('#tbInventarioSB').dataTable( {
-                    "aaData": data,
-                    "destroy": true,
-                    "columns": [
-                        { "data": "codigo_barras" },
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var input = '<input type="hidden" name="productos[]" value="'+row.producto_id+'">';
-                               
-                                return input + row.nombre;
-                            }
-                        },
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var input = '<input type="hidden" name="stocks_bd[]" value="'+row.stock+'">';
-                               
-                                return input + row.stock;
-                            }
-                        },
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var input = '<input type="text" name="stocks_fisico[]" class="form-control stocks_fisico" value="'+row.stock+'">';
-                               
-                                return input;
-                            }
-                        },
-                        {
-                            mRender: function (data, type, row) {
-                                
-                                var input = '<input type="text" name="stocks_diferencia[]" class="form-control" value="0" readonly="readonly">';
-                               
-                                return input;
-                            }
-                        },
-                    ],
-                    "pageLength": 25,
-                    "language": datatable_spanish,
-                    "order": [[ 1, "asc" ]]
-                });
+    $(document).on("keyup", ".stocks_fisico", function(){
 
-                if (!data.length) {
-                    $("#btn-inventario").attr("disabled","disabled");
-                } else{
-                    $("#btn-inventario").removeAttr("disabled");
-                }
-            }
-        });
+        var bsp_id = $(this).closest("tr").children("td:eq(1)").find("input").val();
+        var stocks_fisico  = Number($(this).val());
+
+        $("#sf-"+bsp_id).val(stocks_fisico);
+
+        stocks_bd = Number($(this).closest("tr").find("td:eq(3)").text());
+        diferencia_stock = stocks_fisico-stocks_bd;
+        $(this).closest("tr").find("td:eq(5)").children('input').val(diferencia_stock);
+        $("#sd-"+bsp_id).val(diferencia_stock);
+    });
+
+    if ($("#tbInventarioSB").length) {
+        
+         var table_ajuste = $('#tbInventarioSB').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "destroy": true,
+                "ajax":{
+                    "url": base_url + "inventario/ajuste/searchProductos",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": function ( d ) {
+                        d.bodega = $('#bodega').val();
+                        d.sucursal = $('#sucursal').val();
+                    }
+                },
+                "columns": [
+                    { "data": "codigo_barras" },
+                    {
+                        mRender: function (data, type, row) {
+                            
+                            var input = '<input type="hidden" value="'+row.bsp_id+'">';
+                           
+                            return input + row.nombre;
+                        }
+                    },
+                    {
+                        mRender: function (data, type, row) {
+                            var localizacion = row.localizacion;
+                            if ($("#l-"+row.bsp_id).length) {
+                                localizacion = $("#l-"+row.bsp_id).val();
+                            }
+                            
+                            var input = '<input type="text" class="form-control localizacion" value="'+localizacion+'" style="width:100px;">';
+                           
+                            return input;
+                        }
+                    },
+                    { "data": "stock" },
+                    {
+                        mRender: function (data, type, row) {
+                            var stock_fisico = row.stock;
+                            if ($("#sf-"+row.bsp_id).length) {
+                                stock_fisico = $("#sf-"+row.bsp_id).val();
+                            }
+                            var input = '<input type="text" class="form-control stocks_fisico" value="'+stock_fisico+'" style="width:80px;">';
+                           
+                            return input;
+                        }
+                    },
+                    {
+                        mRender: function (data, type, row) {
+                            var stock_diferencia = 0;
+                            if ($("#sd-"+row.bsp_id).length) {
+                                stock_diferencia = $("#sd-"+row.bsp_id).val();
+                            }
+                            var input = '<input type="text"  class="form-control" value="'+stock_diferencia+'" readonly="readonly" style="width:80px;">';
+                           
+                            return input;
+                        }
+                    },
+                ],
+                "language": datatable_spanish,
+                "order": [[ 1, "asc" ]],
+                "pageLength": 50,
+            });
+    }
+
+    $(document).on("keyup",".localizacion",function(){
+        var bsp_id = $(this).closest("tr").children("td:eq(1)").find("input").val();
+        var localizacion  = $(this).val();
+
+        $("#l-"+bsp_id).val(localizacion);
+    });
+
+    $("#btn-ver-productos").on("click", function(){
+
+        table_ajuste.search( '' ).draw();
+        getProductosAjuste();
     });
     $(document).on("click",".btn-selected", function(){
         data = JSON.parse($(this).val());
@@ -831,32 +867,30 @@ $(document).ready(function () {
 
     $(document).on("change", "#bodega", function(){
         //cargarProductosInventario();
-        table
-        .search( '' )
-        .draw();
+        if ($("#tbProductosInventario").length) {
+            table.search('').draw();
 
-        $("#productos_nuevos").html(null);
-        sucursal = $("#sucursal").val();
-        bodega = $("#bodega").val();
-        if (bodega == '') {
-            $(".btn-check-all-products").attr("disabled");
-        }else{
-            $(".btn-check-all-products").removeAttr("disabled");
-        }
-        $.ajax({
-            url: base_url + "inventario/productos/getIdProductosNoRegistrados",
-            type: "POST",
-            data: {
-                bodega:bodega,
-                sucursal:sucursal
-            },
-            dataType:'json',
-            success: function(resp){
-                $(".btn-check-all-products").val(resp);
+            $("#productos_nuevos").html(null);
+            sucursal = $("#sucursal").val();
+            bodega = $("#bodega").val();
+            if (bodega == '') {
+                $(".btn-check-all-products").attr("disabled");
+            }else{
+                $(".btn-check-all-products").removeAttr("disabled");
             }
-        });
-        
-        
+            $.ajax({
+                url: base_url + "inventario/productos/getIdProductosNoRegistrados",
+                type: "POST",
+                data: {
+                    bodega:bodega,
+                    sucursal:sucursal
+                },
+                dataType:'json',
+                success: function(resp){
+                    $(".btn-check-all-products").val(resp);
+                }
+            });
+        }
     });
 
     $(document).on("click",".btn-view-barcode", function(){
@@ -2156,6 +2190,38 @@ $(document).ready(function () {
        
     }
 
+    function getProductosAjuste(){
+        bodega = $("#bodega").val();
+        sucursal = $("#sucursal").val();
+        $.ajax({
+            url: base_url + "inventario/ajuste/productosBySucursalBodega",
+            type: "POST",
+            data: {
+                bodega:bodega,
+                sucursal:sucursal,
+            },
+            dataType:'json',
+            success: function(data){
+                
+                html = '';
+                $.each(data,function(key, value){
+                    html += '<input type="hidden" name="bsp_ids[]" class="form-control" value="'+value.id+'"  id="bsp-'+value.id+'">';
+                    html += '<input type="hidden" name="productos[]" value="'+value.producto_id+'">';
+                    html += '<input type="hidden" name="localizaciones[]" value="'+value.localizacion+'" id="l-'+value.id+'">';
+                    html += '<input type="hidden" name="stocks_bd[]" value="'+value.stock+'" id="sb-'+value.id+'">';
+                    html += '<input type="hidden" name="stocks_fisico[]" value="'+value.stock+'" id="sf-'+value.id+'">';
+                    html += '<input type="hidden" name="stocks_diferencia[]" value="0" id="sd-'+value.id+'" >';
+                });
+                if (html!='') {
+                    $("#btn-inventario").removeAttr("disabled");
+                }else{
+                    $("#btn-inventario").attr("disabled","disabled");
+                }
+                $("#content-productos").html(html);
+            }
+        });
+    }
+
     function getIdProductosSBE(sucursal, bodega,sucursal_recibe, bodega_recibe){
         $.ajax({
             url: base_url + "inventario/traslados/getIdProductosSBE",
@@ -2178,7 +2244,7 @@ $(document).ready(function () {
                 bsp_ids = resp.bsp_ids;
                 html = '';
                 $.each(resp.productos_existentes,function(key, value){
-                    console.log(key);
+        
                     html += "<input type='hidden' name='productos[]' value='"+value+"-"+bsp_ids[key]+'-'+stocks[key]+"'>";
             
                     

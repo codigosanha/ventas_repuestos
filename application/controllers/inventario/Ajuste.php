@@ -9,6 +9,7 @@ class Ajuste extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Comun_model");
 		$this->load->model("Productos_model");
+		$this->load->model("Ajuste_model");
 	}
 
 	public function index()
@@ -46,7 +47,9 @@ class Ajuste extends CI_Controller {
 	public function store(){
 		$usuario_id = $this->session->userdata("id");
 		$fecha = date("Y-m-d H:i:s");
+		$bsp_ids = json_decode($this->input->post("bsp_ids"));
 		$productos = json_decode($this->input->post("productos"));
+		$localizaciones = json_decode($this->input->post("localizaciones"));
 		$stocks_bd = json_decode($this->input->post("stocks_bd"));
 		$stocks_fisico = json_decode($this->input->post("stocks_fisico"));
 		$stocks_diferencia = json_decode($this->input->post("stocks_diferencia"));
@@ -65,7 +68,7 @@ class Ajuste extends CI_Controller {
 		if ($ajuste) {
 			ini_set('max_execution_time', 0); 
 			ini_set('memory_limit','2048M');
-			$this->saveAjusteProductos($ajuste->id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id);
+			$this->saveAjusteProductos($ajuste->id,$bsp_ids,$productos,$localizaciones,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id);
 			echo $ajuste->id;
 		}
 		else{
@@ -73,21 +76,35 @@ class Ajuste extends CI_Controller {
 		}
 	}
 
-	protected function saveAjusteProductos($ajuste_id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id){
+	protected function saveAjusteProductos($ajuste_id,$bsp_ids,$productos,$localizaciones,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id){
+
+		$dataAjusteProductos = [];
+		$dataUpdateStocks = [];
 
 		for ($i=0; $i < count($productos); $i++) { 
-			$data = array(
+			$dataAjusteProducto = array(
 				'ajuste_id' => $ajuste_id,
 				'producto_id' => $productos[$i],
 				'stock_bd' => $stocks_bd[$i],
 				'stock_fisico' => $stocks_fisico[$i],
 				'diferencia_stock' => $stocks_diferencia[$i]
 			);
-			$dataProducto = array(
-				'stock' => $stocks_fisico[$i]
+			$dataAjusteProductos = $dataAjusteProducto;
+
+			$dataStock = array(
+				'id' =>  $bsp_ids[$i],
+				'stock' => $stocks_fisico[$i],
+				'localizacion' => $localizaciones[$i]
 			);
-			$this->Comun_model->update("bodega_sucursal_producto","producto_id='".$productos[$i]."' and bodega_id='$bodega_id' and sucursal_id='$sucursal_id'", $dataProducto);
-			$this->Comun_model->insert("ajustes_productos",$data);
+			$dataUpdateStocks[] = $dataStock;
+		}
+
+		if (!empty($dataAjusteProductos)) {
+			$this->Ajuste_model->saveAjusteProductos($dataAjusteProductos);
+		}
+
+		if (!empty($dataUpdateStocks)) {
+			$this->Ajuste_model->updateStockProductos($dataUpdateStocks);
 		}
 	} 
 
@@ -154,10 +171,66 @@ class Ajuste extends CI_Controller {
 		redirect(base_url()."inventario/ajuste");
 	}
 	public function searchProductos(){
-		$sucursal_id = $this->input->post("sucursal_id");
-		$bodega_id = $this->input->post("bodega_id");
-		$productos = $this->Productos_model->getProductosBySucursalAndBodega($sucursal_id, $bodega_id);
-		
+		$columns = array( 
+                        0 =>'p.codigo_barras', 
+                        1=> 'p.nombre',
+                        2=> 'p.nombre',
+                        3=> 'p.nombre',
+                        4=> 'p.nombre',
+                    );
+		$sucursal_id = $this->input->post("sucursal");
+		$bodega_id = $this->input->post("bodega");
+
+		$limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+  
+        $totalData = $this->Ajuste_model->allproducts_count($sucursal_id,$bodega_id);
+            
+        $totalFiltered = $totalData; 
+            
+        if(empty($this->input->post('search')['value']))
+        {            
+            $productos = $this->Ajuste_model->allproducts($limit,$start,$order,$dir,$sucursal_id,$bodega_id);
+        }
+        else {
+            $search = $this->input->post('search')['value']; 
+
+            $productos =  $this->Ajuste_model->products_search($limit,$start,$search,$order,$dir,$sucursal_id,$bodega_id);
+
+            $totalFiltered = $this->Ajuste_model->products_search_count($search,$sucursal_id,$bodega_id);
+        }
+
+        $data = array();
+        if(!empty($productos))
+        {
+        	foreach ($productos as $p) {
+				$data[] = array(
+					"producto_id" => $p->producto_id,
+					"nombre" => $p->nombre,
+					"codigo_barras" => $p->codigo_barras,
+					'bsp_id' => $p->id,
+					'stock' => $p->stock,
+					'localizacion' => $p->localizacion,
+				);
+			}
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($this->input->post('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
+	}
+
+	public function productosBySucursalBodega(){
+		$sucursal_id = $this->input->post("sucursal");
+		$bodega_id = $this->input->post("bodega");
+		$productos = $this->Ajuste_model->productosBySucursalBodega($sucursal_id, $bodega_id);
 		echo json_encode($productos);
 	}
 }
