@@ -114,7 +114,7 @@ class Ajuste_model extends CI_Model {
     }
 
     public function saveAjusteProductos($data){
-    	return $this->db->insert_batch('ajustes_productos', $data); 
+    	 $this->db->insert_batch('ajustes_productos', $data); 
     }
     public function updateStockProductos($data){
     	$this->db->update_batch('bodega_sucursal_producto',$data, 'id');

@@ -94,7 +94,7 @@
                         </table>
                         <div id="content-productos"></div>
                      
-                        <button type="submit" class="btn btn-success btn-flat" id="btn-inventario" disabled="disabled">
+                        <button type="submit" class="btn btn-success btn-flat">
 
                             <span class="fa fa-save"></span>
 

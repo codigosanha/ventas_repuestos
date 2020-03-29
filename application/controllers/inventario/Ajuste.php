@@ -45,6 +45,7 @@ class Ajuste extends CI_Controller {
 	}
 
 	public function store(){
+
 		$usuario_id = $this->session->userdata("id");
 		$fecha = date("Y-m-d H:i:s");
 		$bsp_ids = json_decode($this->input->post("bsp_ids"));
@@ -56,6 +57,8 @@ class Ajuste extends CI_Controller {
 		$bodega_id = $this->input->post("bodega_id");
 		$sucursal_id = $this->input->post("sucursal_id");
 
+
+
 		$data  = array(
 			'fecha' => $fecha, 
 			'usuario_id' => $usuario_id,
@@ -66,8 +69,8 @@ class Ajuste extends CI_Controller {
 		$ajuste = $this->Comun_model->insert("ajustes", $data);
 
 		if ($ajuste) {
-			ini_set('max_execution_time', 0); 
-			ini_set('memory_limit','2048M');
+			//ini_set('max_execution_time', 0); 
+			//ini_set('memory_limit','2048M');
 			$this->saveAjusteProductos($ajuste->id,$bsp_ids,$productos,$localizaciones,$stocks_bd,$stocks_fisico,$stocks_diferencia,$bodega_id,$sucursal_id);
 			echo $ajuste->id;
 		}
@@ -89,7 +92,7 @@ class Ajuste extends CI_Controller {
 				'stock_fisico' => $stocks_fisico[$i],
 				'diferencia_stock' => $stocks_diferencia[$i]
 			);
-			$dataAjusteProductos = $dataAjusteProducto;
+			$dataAjusteProductos[] = $dataAjusteProducto;
 
 			$dataStock = array(
 				'id' =>  $bsp_ids[$i],
@@ -110,8 +113,8 @@ class Ajuste extends CI_Controller {
 
 	public function view($ajuste_id){
 		$data = array(
-			'ajuste' => $this->Comun_model->get_record("ajustes","id=".$ajuste_id),
-			'productos' => $this->Comun_model->get_records("ajustes_productos","ajuste_id=".$ajuste_id),
+			'ajuste' => $this->Comun_model->get_record("ajustes","id='$ajuste_id'"),
+			'productos' => $this->Comun_model->get_records("ajustes_productos","ajuste_id='$ajuste_id'"),
 		);
 
 		$this->load->view("admin/ajustes/view", $data);
